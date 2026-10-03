@@ -5,6 +5,7 @@
 <details>
 <summary>View Mermaid source</summary>
 
+```mermaid
 ---
 config:
   theme: dark
@@ -52,5 +53,6 @@ flowchart LR
     API -- Authorized Chat Broadcast --> SignalR
     API <-- Read / Write Application Data --> Database
     API <-- Upload / Retrieve Course Files --> BlobStorage
+```
 
 </details>
