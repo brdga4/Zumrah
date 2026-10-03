@@ -1,3 +1,10 @@
+## System Architecture
+
+![Zumrah System Architecture](./docs/Zumrah_System_Architecture.svg)
+
+<details>
+<summary>View Mermaid source</summary>
+
 ```mermaid
 ---
 config:
@@ -47,3 +54,5 @@ flowchart LR
     API <-- Read / Write Application Data --> Database
     API <-- Upload / Retrieve Course Files --> BlobStorage
 ```
+
+</details>
