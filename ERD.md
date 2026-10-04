@@ -13,69 +13,69 @@ config:
   themeVariables:
     fontFamily: '''Recursive Variable'', sans-serif'
 ---
-
 erDiagram
 
     COLLEGE {
-        int CollegeID PK
+        uuid CollegeID PK
         string CollegeName
     }
 
     MAJOR {
-        int MajorID PK
-        int CollegeID FK
+        uuid MajorID PK
+        uuid CollegeID FK
         string MajorName
     }
 
     STUDENT {
-        int StudentID PK
-        string MicrosoftObjectID
+        uuid StudentID PK
+        uuid MicrosoftObjectID
         string UniversityEmail
         string Name
-        int MajorID FK
+        uuid MajorID FK
         datetime CreatedAt
     }
 
     COURSE {
-        int CourseID PK
+        uuid CourseID PK
         string CourseCode
         string CourseName
     }
 
     MAJOR_COURSE {
-        int MajorCourseID PK
-        int MajorID FK
-        int CourseID FK
+        uuid MajorCourseID PK
+        uuid MajorID FK
+        uuid CourseID FK
     }
 
     ENROLLMENT {
-        int EnrollmentID PK
-        int StudentID FK
-        int CourseID FK
+        uuid EnrollmentID PK
+        uuid StudentID FK
+        uuid CourseID FK
         datetime EnrolledAt
     }
 
     CHAT_ROOM {
-        int ChatRoomID PK
+        uuid ChatRoomID PK
         string RoomType
-        int CourseID FK
-        int MajorID FK
+        uuid CourseID FK
+        uuid MajorID FK
+        boolean IsActive
     }
 
     MESSAGE {
-        int MessageID PK
-        int ChatRoomID FK
-        int StudentID FK
+        uuid MessageID PK
+        uuid ChatRoomID FK
+        uuid StudentID FK
         string Content
         datetime SentAt
         boolean IsDeleted
     }
 
     REPORT {
-        int ReportID PK
-        int MessageID FK
-        int StudentID FK
-        int ReviewedByAdminID FK
+        uuid ReportID PK
+        uuid MessageID FK
+        uuid StudentID FK
+        uuid ReviewedByAdminID FK
         string Reason
         string Status
         datetime CreatedAt
@@ -83,10 +83,10 @@ erDiagram
     }
 
     COURSE_FILE {
-        int FileID PK
-        int CourseID FK
-        int UploadedByStudentID FK
-        int ReviewedByAdminID FK
+        uuid FileID PK
+        uuid CourseID FK
+        uuid UploadedByStudentID FK
+        uuid ReviewedByAdminID FK
         string FileName
         string BlobPath
         string Status
@@ -95,7 +95,7 @@ erDiagram
     }
 
     ADMIN {
-        int AdminID PK
+        uuid AdminID PK
         string Username
         string Email
         string PasswordHash
