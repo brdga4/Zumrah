@@ -25,12 +25,12 @@ flowchart LR
         AdminPortal["Admin Portal<br>MVP Dashboard"]
   end
  subgraph Backend["Backend Layer"]
-        API["Backend API<br>Onboarding &amp; Authorization<br>Majors, Levels, Courses &amp; Enrollment<br>Files, Reports &amp; Moderation"]
+        API["Backend API<br>Onboarding &amp; Authorization<br>Majors, Courses &amp; Enrollment<br>Files, Reports &amp; Moderation"]
         SignalR["SignalR Hub<br>Real-Time Course Chat Rooms<br>Reconnect Handling"]
         AdminAuth["Admin Authentication<br>Email / Username + Password"]
   end
  subgraph Data["Data Layer"]
-        Database[("Application Database<br>CICS Majors, Levels &amp; Courses<br>Students, Admins &amp; Enrollments<br>Rooms, Messages, Reports &amp; File Metadata")]
+        Database[("Application Database<br>CICS Majors, Courses<br>Students, Admins &amp; Enrollments<br>Rooms, Messages, Reports &amp; File Metadata")]
         BlobStorage[("Azure Blob Storage<br>Course Materials")]
   end
  subgraph External["External Services"]
