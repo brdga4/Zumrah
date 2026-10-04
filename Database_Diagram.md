@@ -1,6 +1,6 @@
 ## Database Design
 
-![Zumrah Database Design](./docs/Zumrah_DB_Diagram.svg)
+![Zumrah Database Design](./docs/Zumrah_DB_Diagram.png)
 
 <details>
 <summary>View DBML source</summary>
