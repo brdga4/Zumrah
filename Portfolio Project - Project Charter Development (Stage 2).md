@@ -35,7 +35,7 @@ To bring together communication and resource sharing for King Saud University (K
 **In-Scope:**
 
 *   Login for verified KSU students using Microsoft OAuth (`@student.ksu.edu.sa`).
-*   Self-service enrollment process based on major and level.
+*   Self-service enrollment process based on major.
 *   Real-time, WebSocket-powered course chat rooms (SignalR).
 *   A centralized file storage system for course materials.
 *   A comprehensive Admin Portal to manage courses, audit chats, and approve files.
