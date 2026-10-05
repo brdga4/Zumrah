@@ -1,217 +1,157 @@
-# Zumrah — User Stories
+# Zumrah — User Stories and Mockups
 
 **Project:** Zumrah  
 **Team:** SAU-0226-Team 9  
+**Stage:** Stage 3 — Technical Documentation  
 **Scope:** MVP for King Saud University students
 
-## Priority Legend
+## MoSCoW Priority Legend
 
-- **Must Have** — required for the MVP to work as intended.
-- **Should Have** — important, but the MVP can still function without it.
+- **Must Have** — essential for the Zumrah MVP to satisfy its core objectives.
+- **Should Have** — important for usability, but the MVP can still function without it.
 - **Could Have** — useful enhancement if time allows.
+- **Won't Have (MVP)** — intentionally excluded from the current MVP scope.
 
 ---
 
-# Student User Stories
+# Must Have
 
-## US-01 — Sign In
+## Student User Stories
 
-**Priority:** Must Have
+### US-01 — Sign In
+> As a KSU student, I want to sign in with my university account, so that I can securely access Zumrah.
 
-> As a KSU student, I want to sign in with my university account so that I can securely access Zumrah.
+### US-02 — Create an Account
+> As a new KSU student, I want to create my Zumrah account using my university account, so that I can start using the platform.
 
----
+### US-03 — Complete Onboarding
+> As a new student, I want to choose my college and major, so that Zumrah can show me the courses and community relevant to me.
 
-## US-02 — Complete Onboarding
+### US-04 — Browse Available Courses
+> As a student, I want to browse the courses offered to my major, so that I can find the courses I am taking.
 
-**Priority:** Must Have
+### US-05 — Enroll in a Course
+> As a student, I want to add a course to my courses, so that I can access its chat and approved course materials.
 
-> As a new student, I want to choose my college and major so that Zumrah can show me the courses and community relevant to me.
+### US-06 — Leave a Course
+> As a student, I want to remove a course from my courses, so that courses I am no longer taking do not remain in my account.
 
----
+### US-07 — View My Courses
+> As a student, I want to view the courses I have joined, so that I can quickly access their communities and materials.
 
-## US-03 — View My Profile
+### US-08 — Access My Major Community
+> As a student, I want to access the general community for my major, so that I can communicate with other students in the same major.
 
-**Priority:** Should Have
+### US-09 — Access a Course Chat
+> As a student, I want to open the chat for a course I joined, so that I can discuss the course with other enrolled students.
 
-> As a student, I want to view my profile information so that I can confirm my account and academic information.
+### US-10 — Send a Message
+> As a student, I want to send text messages in communities I have access to, so that I can ask questions and participate in discussions.
 
----
+### US-11 — View Course Materials
+> As a student, I want to view approved materials for a course I joined, so that I can find useful study resources in one place.
 
-## US-04 — Browse Available Courses
+### US-12 — Download Course Materials
+> As a student, I want to download approved course materials, so that I can use them while studying.
 
-**Priority:** Must Have
+### US-13 — Upload Course Materials
+> As a student, I want to upload useful materials to a course I joined, so that other students can benefit from them after administrator approval.
 
-> As a student, I want to browse the courses available for my major so that I can find the courses I am taking.
+### US-14 — Report a Message
+> As a student, I want to report an inappropriate message, so that an administrator can review it and take action when necessary.
 
----
+### US-15 — Install Zumrah
+> As a student, I want to add Zumrah to my home screen, so that I can access it easily like an installed application.
 
-## US-05 — Enroll in a Course
+## Administrator User Stories
 
-**Priority:** Must Have
+### US-16 — Admin Sign In
+> As an administrator, I want to sign in to the Admin Portal, so that I can manage and moderate Zumrah.
 
-> As a student, I want to add a course to my courses so that I can access its chat and course materials.
+### US-17 — Manage Colleges
+> As an administrator, I want to manage colleges, so that the university structure represented in Zumrah remains accurate.
 
----
+### US-18 — Manage Majors
+> As an administrator, I want to manage majors within colleges, so that students can select the correct major during onboarding.
 
-## US-06 — Leave a Course
+### US-19 — Manage Courses
+> As an administrator, I want to manage courses, so that students can find the correct courses on Zumrah.
 
-**Priority:** Must Have
+### US-20 — Assign Courses to Majors
+> As an administrator, I want to associate courses with the majors that offer them, so that students only see courses relevant to their major.
 
-> As a student, I want to remove a course from my courses so that courses I am no longer taking do not appear in my account.
+### US-21 — Review Uploaded Materials
+> As an administrator, I want to review student-uploaded course materials, so that I can decide whether they are appropriate for other students.
 
----
+### US-22 — Approve or Reject Materials
+> As an administrator, I want to approve or reject uploaded course materials, so that only appropriate resources become available to students.
 
-## US-07 — View My Courses
+### US-23 — Review Reported Messages
+> As an administrator, I want to review reported messages and their report details, so that I can determine whether moderation is required.
 
-**Priority:** Must Have
+### US-24 — Dismiss a Report
+> As an administrator, I want to dismiss a report when no action is required, so that resolved reports no longer remain pending.
 
-> As a student, I want to see the courses I have joined so that I can quickly access the communities I use.
-
----
-
-## US-08 — Access My Major Community
-
-**Priority:** Must Have
-
-> As a student, I want to access the general community for my major so that I can communicate with other students in the same major.
-
----
-
-## US-09 — Access a Course Chat
-
-**Priority:** Must Have
-
-> As a student, I want to open the chat for a course I joined so that I can discuss the course with other enrolled students.
-
----
-
-## US-10 — Send a Message
-
-**Priority:** Must Have
-
-> As a student, I want to send messages in communities I have access to so that I can ask questions and participate in discussions.
-
----
-
-## US-11 — View Course Materials
-
-**Priority:** Must Have
-
-> As a student, I want to view approved materials for a course I joined so that I can find useful study resources in one place.
+### US-25 — Remove a Reported Message
+> As an administrator, I want to remove a reported message when it violates platform rules, so that inappropriate content is no longer visible to students.
 
 ---
 
-## US-12 — Download Course Materials
+# Should Have
 
-**Priority:** Must Have
+### US-26 — View My Profile
+> As a student, I want to view my profile information, so that I can confirm my account and academic information.
 
-> As a student, I want to download approved course materials so that I can use them while studying.
-
----
-
-## US-13 — Upload Course Materials
-
-**Priority:** Must Have
-
-> As a student, I want to upload useful materials to a course I joined so that other students can benefit from them after approval.
+### US-27 — Search Course Materials
+> As a student, I want to search course materials by file name, so that I can quickly find the resource I need.
 
 ---
 
-## US-14 — Report a Message
+# Could Have
 
-**Priority:** Must Have
-
-> As a student, I want to report an inappropriate message so that an administrator can review it.
+No additional features are currently classified as **Could Have**. We are intentionally keeping the MVP focused on its core communication, course material, moderation, and administration workflows.
 
 ---
 
-## US-15 — Install Zumrah
+# Won't Have — Current MVP
 
-**Priority:** Must Have
+The following user stories are intentionally outside the current MVP scope.
 
-> As a student, I want to add Zumrah to my home screen so that I can access it more easily like an app.
+### WH-01 — Reply to a Message
+> As a student, I want to reply directly to a message, so that I can respond to a specific point in a conversation.
 
----
+### WH-02 — React to a Message
+> As a student, I want to react to messages, so that I can respond quickly without sending another message.
 
-# Administrator User Stories
+### WH-03 — Send Chat Attachments
+> As a student, I want to attach files or images directly to chat messages, so that I can share content inside a conversation.
 
-## US-16 — Admin Sign In
+### WH-04 — Edit a Sent Message
+> As a student, I want to edit a message after sending it, so that I can correct mistakes.
 
-**Priority:** Must Have
+### WH-05 — Use a Native Mobile Application
+> As a student, I want to use a native iOS or Android application, so that I can access Zumrah as a platform-specific mobile app.
 
-> As an administrator, I want to sign in to the Admin Portal so that I can manage and moderate Zumrah.
+### WH-06 — Use Teacher or Tutor Accounts
+> As a teacher or tutor, I want to participate using a dedicated role, so that I can interact with students through Zumrah.
 
----
-
-## US-17 — Manage Colleges
-
-**Priority:** Must Have
-
-> As an administrator, I want to add, edit, and manage colleges so that the university structure in Zumrah stays accurate.
-
----
-
-## US-18 — Manage Majors
-
-**Priority:** Must Have
-
-> As an administrator, I want to add, edit, and manage majors within colleges so that students can select the correct major.
+### WH-07 — Filter Courses by Academic Level
+> As a student, I want courses to be filtered by academic level, so that I only see courses associated with my current level.
 
 ---
 
-## US-19 — Manage Courses
+# Mockups
 
-**Priority:** Must Have
+The main student-facing MVP screens have been designed in Figma. The current mockups cover the following flows:
 
-> As an administrator, I want to add, edit, and manage courses so that students can find the correct courses on Zumrah.
+1. **Sign In** — university-account sign-in screen.
+2. **Create Account** — new-account entry screen.
+3. **Onboarding / Academic Information** — college and major selection.
+4. **Course Registration** — browsing and selecting courses.
+5. **Community / Chat** — course and major community messaging interface.
+6. **Course Materials** — viewing available course documents.
+7. **Upload Material** — submitting a course file for administrator review.
 
----
+![Zumrah Mockups](./docs/Zumrah_Mockups.png)
 
-## US-20 — Assign Courses to Majors
-
-**Priority:** Must Have
-
-> As an administrator, I want to associate courses with the majors that offer them so that students only see courses relevant to their major.
-
----
-
-## US-21 — Review Uploaded Materials
-
-**Priority:** Must Have
-
-> As an administrator, I want to review student-uploaded course materials so that I can decide whether they should be available to other students.
-
----
-
-## US-22 — Approve or Reject Materials
-
-**Priority:** Must Have
-
-> As an administrator, I want to approve or reject uploaded course materials so that only appropriate resources become available to students.
-
----
-
-## US-23 — Review Reported Messages
-
-**Priority:** Must Have
-
-> As an administrator, I want to view reported messages and their report details so that I can decide whether moderation is needed.
-
----
-
-## US-24 — Dismiss a Report
-
-**Priority:** Must Have
-
-> As an administrator, I want to dismiss a report when the reported message does not require action so that resolved reports do not remain pending.
-
----
-
-## US-25 — Remove a Reported Message
-
-**Priority:** Must Have
-
-> As an administrator, I want to remove a reported message when it violates the platform rules so that inappropriate content is no longer visible to students.
-
----
+> **Admin Portal:** The MVP Admin Portal will use a simple, barebones interface. We are prioritizing its required management and moderation functionality over detailed visual styling for the current MVP.
