@@ -7,6 +7,7 @@
 
 ```mermaid
 classDiagram
+
     class RoomType {
         <<enumeration>>
         COURSE
@@ -26,7 +27,6 @@ classDiagram
         DISMISSED
         MESSAGE_REMOVED
     }
-
 
 
     class College {
@@ -89,7 +89,6 @@ classDiagram
         +Guid? MajorId
         +bool IsActive
         +DateTime CreatedAt
-        +Deactivate()
     }
 
     class Message {
@@ -140,15 +139,20 @@ classDiagram
     }
 
 
-
-    class AuthenticationService {
+    class StudentAuthenticationService {
         +AuthenticateStudent(microsoftToken)
+    }
+
+    class AdminAuthenticationService {
         +AuthenticateAdmin(identifier, password)
     }
 
+
     class StudentService {
         +GetProfile(studentId)
+        +CompleteOnboarding(microsoftObjectId, universityEmail, name, majorId)
         +UpdateProfile(studentId, name, majorId)
+        -RemoveIncompatibleEnrollments(studentId, majorId)
     }
 
     class CourseService {
@@ -165,14 +169,15 @@ classDiagram
     }
 
     class ChatHub {
-        +JoinRoom(studentId, chatRoomId)
+        +JoinRoom(chatRoomId)
         +LeaveRoom(chatRoomId)
-        +SendMessage(studentId, chatRoomId, content)
+        +SendMessage(chatRoomId, content)
     }
 
     class FileService {
         +GetApprovedFiles(studentId, courseId)
-        +SearchFiles(studentId, courseId, query)
+        +SearchApprovedFiles(studentId, courseId, query)
+        +DownloadFile(studentId, fileId)
         +UploadFile(studentId, courseId, file)
         +ApproveFile(adminId, fileId)
         +RejectFile(adminId, fileId)
@@ -195,11 +200,11 @@ classDiagram
         +AssignCourseToMajor(adminId, majorId, courseId)
     }
 
+
     class BlobStorageService {
         +UploadFile(file)
         +RetrieveFile(blobPath)
     }
-
 
 
     College "1" --> "0..*" Major : contains
@@ -212,8 +217,8 @@ classDiagram
     Student "1" --> "0..*" Enrollment : creates
     Course "1" --> "0..*" Enrollment : receives
 
-    Course "0..1" --> "0..1" ChatRoom : course chat
-    Major "0..1" --> "0..1" ChatRoom : general chat
+    Course "0..1" --> "1" ChatRoom : owns course chat
+    Major "0..1" --> "1" ChatRoom : owns general chat
 
     ChatRoom "1" --> "0..*" Message : contains
     Student "1" --> "0..*" Message : sends
@@ -229,18 +234,19 @@ classDiagram
     Admin "0..1" --> "0..*" Message : removes
 
 
-
-    ChatRoom --> RoomType
-    CourseFile --> FileStatus
-    Report --> ReportStatus
-
+    ChatRoom ..> RoomType : uses
+    CourseFile ..> FileStatus : uses
+    Report ..> ReportStatus : uses
 
 
-    AuthenticationService ..> Student
-    AuthenticationService ..> Admin
+    StudentAuthenticationService ..> Student
+
+    AdminAuthenticationService ..> Admin
 
     StudentService ..> Student
     StudentService ..> Major
+    StudentService ..> Enrollment
+    StudentService ..> MajorCourse
 
     CourseService ..> Student
     CourseService ..> Course
@@ -248,6 +254,7 @@ classDiagram
     CourseService ..> Enrollment
 
     ChatHub ..> ChatService
+
     ChatService ..> ChatRoom
     ChatService ..> Message
     ChatService ..> Enrollment
@@ -264,6 +271,14 @@ classDiagram
     AcademicManagementService ..> Major
     AcademicManagementService ..> Course
     AcademicManagementService ..> MajorCourse
+    AcademicManagementService ..> ChatRoom
+
+
+    note for ChatRoom "Exactly one owner must exist: CourseId OR MajorId, never both."
+
+    note for StudentService "If MajorId changes, enrollments unavailable to the new major are automatically removed."
+
+    note for AcademicManagementService "Creating a Major creates its general chat room. Creating a Course creates its course chat room."
 ```
 
 </details>
