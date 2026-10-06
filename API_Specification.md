@@ -119,8 +119,7 @@ Common status codes:
 | `POST` | `/api/auth/student` | Authenticate a KSU student | Public |
 | `POST` | `/api/auth/admin` | Authenticate an administrator | Public |
 | `POST` | `/api/onboarding` | Create a new student account | Public with valid Microsoft token |
-| `GET` | `/api/colleges` | List colleges | Public |
-| `GET` | `/api/colleges/{collegeId}/majors` | List majors in a college | Public |
+| `GET` | `/api/colleges` | List colleges with their majors | Public |
 | `GET` | `/api/students/me` | View current student profile | Student |
 | `PATCH` | `/api/students/me` | Update current student profile | Student |
 | `GET` | `/api/courses/available` | List courses offered to the student's major | Student |
@@ -305,11 +304,13 @@ The backend:
 
 # 5. Academic Reference Data
 
-## 5.1 List Colleges
+## 5.1 List Colleges and Majors
 
 **Method:** `GET`  
 **Path:** `/api/colleges`  
 **Access:** Public
+
+Returns all colleges together with their majors. The onboarding interface loads this data once, then filters the majors locally when the student selects a college.
 
 ### Response — `200 OK`
 
@@ -318,41 +319,33 @@ The backend:
   "colleges": [
     {
       "collegeId": "21af367d-40c7-4d2b-b714-d3447726b4eb",
-      "collegeName": "College of Computer and Information Sciences"
-    }
-  ]
-}
-```
-
----
-
-## 5.2 List Majors in a College
-
-**Method:** `GET`  
-**Path:** `/api/colleges/{collegeId}/majors`  
-**Access:** Public
-
-### Response — `200 OK`
-
-```json
-{
-  "collegeId": "21af367d-40c7-4d2b-b714-d3447726b4eb",
-  "majors": [
-    {
-      "majorId": "61446afc-660e-4eb2-aa0a-626ae522189d",
-      "majorName": "Computer Science"
+      "collegeName": "College of Computer and Information Sciences",
+      "majors": [
+        {
+          "majorId": "61446afc-660e-4eb2-aa0a-626ae522189d",
+          "majorName": "Computer Science"
+        },
+        {
+          "majorId": "136e60ec-d1d7-4914-97e1-86adf635f897",
+          "majorName": "Software Engineering"
+        }
+      ]
     },
     {
-      "majorId": "136e60ec-d1d7-4914-97e1-86adf635f897",
-      "majorName": "Software Engineering"
+      "collegeId": "15e279c2-b851-426e-a52e-a732f6571092",
+      "collegeName": "College of Engineering",
+      "majors": [
+        {
+          "majorId": "9804c733-d74e-42b4-b971-b94fc5490ef2",
+          "majorName": "Computer Engineering"
+        }
+      ]
     }
   ]
 }
 ```
 
-### Important Errors
-
-- `404 Not Found` — College does not exist.
+The selected `collegeId` is used only by the frontend to organize the onboarding choices. The `STUDENT` record stores only the selected `majorId`; the college is derived through the major.
 
 ---
 
