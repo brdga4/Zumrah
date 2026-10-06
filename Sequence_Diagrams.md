@@ -25,7 +25,7 @@ sequenceDiagram
     PWA->>Microsoft: Authenticate with KSU account
     Microsoft-->>PWA: Return Microsoft identity token
 
-    PWA->>API: Send identity token
+    PWA->>API: Send Microsoft identity token
     API->>Microsoft: Validate identity token
     Microsoft-->>API: Return validated identity
 
@@ -33,22 +33,30 @@ sequenceDiagram
     DB-->>API: Student account result
 
     alt Existing student
-        API-->>PWA: Return authorized session and profile
+        API-->>PWA: Return Zumrah JWT + student profile
         PWA-->>Student: Open Zumrah
+
     else New student
-        API-->>PWA: Onboarding required
-        PWA-->>Student: Show college and major selection
+        API-->>PWA: onboardingRequired = true
+
+        PWA->>API: Request colleges and majors
+        API->>DB: Read colleges and majors
+        DB-->>API: Return colleges and majors
+        API-->>PWA: Return colleges with nested majors
 
         Student->>PWA: Select college and major
-        PWA->>API: Submit onboarding information
+        PWA->>API: Submit Microsoft token + majorId
+
+        API->>Microsoft: Validate Microsoft token again
+        Microsoft-->>API: Return validated identity
 
         API->>DB: Validate selected major
         DB-->>API: Major is valid
 
-        API->>DB: Create student account
+        API->>DB: Create STUDENT account
         DB-->>API: Student created
 
-        API-->>PWA: Return authorized session and profile
+        API-->>PWA: Return Zumrah JWT + student profile
         PWA-->>Student: Open Zumrah
     end
 ```
