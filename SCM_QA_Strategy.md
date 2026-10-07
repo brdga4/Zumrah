@@ -1,4 +1,4 @@
-# Stage 5 — SCM and QA Strategy
+# SCM and QA Strategy
 
 **Project:** Zumrah  
 **Team:** SAU-0226-Team 9  
