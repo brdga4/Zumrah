@@ -58,7 +58,7 @@ Test from small units outward, then verify complete student and administrator wo
 | End-to-end | High-value user journeys across the PWA, portal, API, and data | Student sign-in/onboarding → browse and enroll → course chat → upload material; administrator sign-in → approve/reject material → student sees/downloads approved file |
 | Manual | Usability, responsive behavior, browser/PWA behavior, and exploratory checks | Review key student and administrator flows, installation/offline presentation as implemented, validation messages, and navigation on supported browsers/devices |
 
-Choose unit and E2E frameworks to match the eventual implementation. Postman is the specified tool for API checks; avoid assuming any framework or hosted deployment service before the team selects and configures it.
+The planned testing tools are xUnit for backend unit and integration tests, Vitest with React Testing Library for frontend unit/component tests, Postman for REST API verification, and Playwright for end-to-end testing of critical student and administrator workflows.
 
 ### 3.1 File upload and moderation checks
 
@@ -97,7 +97,10 @@ Do not promote when required checks fail or acceptance criteria are unmet. Verif
 | Git | Local version history and branching |
 | GitHub | Central repository, Pull Requests, review, and issue/task traceability |
 | GitHub Actions | CI checks and the planned staging/production workflow, once configured |
-| Postman | REST API request and response verification |
+| xUnit | Backend unit and integration testing for ASP.NET/C# |
+| Vitest + React Testing Library | React PWA and Admin Portal unit/component testing |
+| Postman | REST API request, response, validation, and authorization testing |
+| Playwright | End-to-end testing of critical student and administrator workflows |
 | MySQL | Application database and isolated integration-test data |
 | SignalR | Real-time chat transport tested at hub and user-flow levels |
 | Azure Blob Storage | Course-material storage tested through a non-production configuration |
