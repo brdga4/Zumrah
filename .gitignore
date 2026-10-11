@@ -1,0 +1,85 @@
+# ============================================================
+# Zumrah — ASP.NET Core Minimal API + React/Vite + MySQL
+# Place this file at the root of the Zumrah repository.
+# ============================================================
+
+# --- .NET / C# build outputs ---
+[Bb]in/
+[Oo]bj/
+artifacts/
+*.dll
+*.exe
+*.pdb
+
+# --- IDE and editor user settings ---
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.rsuser
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# --- Node.js / Vite / React ---
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.tsbuildinfo
+.npm/
+.pnpm-store/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# --- Test results and coverage ---
+TestResults/
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+*.coverage
+*.coveragexml
+
+# --- Environment variables and local configuration ---
+.env
+.env.*
+!.env.example
+!.env.*.example
+**/appsettings.Local.json
+**/appsettings.*.Local.json
+**/appsettings.local.json
+**/appsettings.*.local.json
+
+# --- Secrets and private certificates ---
+*.pfx
+*.p12
+*.pem
+*.key
+
+# --- Logs and temporary files ---
+*.log
+logs/
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# --- Local Docker / database volumes (if used) ---
+/.local/
+/mysql-data/
+
+# --- Operating system files ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Intentionally tracked ---
+# Keep: .gitkeep, docs/, public/ PWA icons and manifest, EF Core
+# Migrations/, *.csproj, *.slnx, package-lock.json, compose.yaml,
+# appsettings.json, and non-secret appsettings.Development.json.
