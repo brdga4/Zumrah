@@ -1,0 +1,16 @@
+
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: zumrah_dev
+      MYSQL_USER: zumrah_user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - zumrah_data:/var/lib/mysql
+
+volumes:
+  zumrah_data:
