@@ -1,0 +1,61 @@
+
+name: CI
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+    branches: [main, development]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Build and lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build backend
+        run: dotnet build Zumrah.slnx --configuration Release
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            frontend/student-pwa/package-lock.json
+            frontend/admin-portal/package-lock.json
+
+      - name: Install student dependencies
+        working-directory: frontend/student-pwa
+        run: npm ci
+
+      - name: Lint student app
+        working-directory: frontend/student-pwa
+        run: npm run lint
+
+      - name: Build student app
+        working-directory: frontend/student-pwa
+        run: npm run build
+
+      - name: Install admin dependencies
+        working-directory: frontend/admin-portal
+        run: npm ci
+
+      - name: Lint admin portal
+        working-directory: frontend/admin-portal
+        run: npm run lint
+
+      - name: Build admin portal
+        working-directory: frontend/admin-portal
+        run: npm run build
