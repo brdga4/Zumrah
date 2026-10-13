@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import { API_BASE_URL } from './config'
 
 function App() {
   const [message, setMessage] = useState('')
 
   async function getMessage() {
-    const response = await fetch('/api/example')
+    const response = await fetch(`${API_BASE_URL}/api/example`)
     setMessage(await response.text())
   }
 
