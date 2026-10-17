@@ -13,4 +13,6 @@ public class Student
     public Guid MajorId { get; set; }
 
     public DateTime CreatedAt { get; set; }
+
+    public Major Major { get; set; } = null!;
 }

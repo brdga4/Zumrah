@@ -8,6 +8,8 @@ public class Message
 
     public Guid StudentId { get; set; }
 
+    public Student Student { get; set; } = null!;
+
     public string Content { get; set; } = string.Empty;
 
     public DateTime SentAt { get; set; }

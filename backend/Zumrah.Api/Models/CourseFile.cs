@@ -8,7 +8,11 @@ public class CourseFile
 
     public Guid CourseId { get; set; }
 
+    public Course Course { get; set; } = null!;
+
     public Guid UploadedByStudentId { get; set; }
+
+    public Student UploadedByStudent { get; set; } = null!;
 
     public string FileName { get; set; } = string.Empty;
 
