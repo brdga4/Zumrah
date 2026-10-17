@@ -8,7 +8,11 @@ public class Report
 
     public Guid MessageId { get; set; }
 
+    public Message Message { get; set; } = null!;
+
     public Guid StudentId { get; set; }
+
+    public Student ReportedByStudent { get; set; } = null!;
 
     public string Reason { get; set; } = string.Empty;
 

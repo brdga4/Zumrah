@@ -8,6 +8,8 @@ public class MajorCourse
 
     public Guid CourseId { get; set; }
 
+    public Course Course { get; set; } = null!;
+
     public Guid? AddedByAdminId { get; set; }
 
     public DateTime AddedAt { get; set; }

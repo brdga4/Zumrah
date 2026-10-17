@@ -4,6 +4,8 @@ public class College
 {
     public Guid CollegeId { get; set; }
 
+    public ICollection<Major> Majors { get; set; } = [];
+
     public string CollegeName { get; set; } = string.Empty;
 
     public Guid? CreatedByAdminId { get; set; }

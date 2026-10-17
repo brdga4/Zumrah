@@ -8,6 +8,8 @@ public class Course
 
     public string CourseName { get; set; } = string.Empty;
 
+    public ChatRoom? ChatRoom { get; set; }
+
     public Guid? CreatedByAdminId { get; set; }
 
     public Guid? UpdatedByAdminId { get; set; }

@@ -6,7 +6,11 @@ public class Major
 
     public Guid CollegeId { get; set; }
 
+    public College College { get; set; } = null!;
+
     public string MajorName { get; set; } = string.Empty;
+
+    public ChatRoom? ChatRoom { get; set; }
 
     public Guid? CreatedByAdminId { get; set; }
 
