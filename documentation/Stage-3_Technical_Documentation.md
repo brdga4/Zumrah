@@ -159,93 +159,109 @@ flowchart LR
 ---
 config:
   theme: dark
-  fontFamily: '''Recursive Variable'', sans-serif'
   themeVariables:
-    fontFamily: '''Recursive Variable'', sans-serif'
+    fontFamily: "'Recursive Variable', sans-serif"
 ---
 erDiagram
 
-    COLLEGE {
-        uuid CollegeID PK
+    College {
+        uuid CollegeId PK
         string CollegeName
+        uuid CreatedByAdminId FK
+        uuid UpdatedByAdminId FK
+        datetime CreatedAt
+        datetime UpdatedAt
     }
 
-    MAJOR {
-        uuid MajorID PK
-        uuid CollegeID FK
+    Major {
+        uuid MajorId PK
+        uuid CollegeId FK
         string MajorName
+        uuid CreatedByAdminId FK
+        uuid UpdatedByAdminId FK
+        datetime CreatedAt
+        datetime UpdatedAt
     }
 
-    STUDENT {
-        uuid StudentID PK
-        uuid MicrosoftObjectID
+    Student {
+        uuid StudentId PK
+        uuid MicrosoftObjectId
         string UniversityEmail
         string Name
-        uuid MajorID FK
+        uuid MajorId FK
         datetime CreatedAt
     }
 
-    COURSE {
-        uuid CourseID PK
+    Course {
+        uuid CourseId PK
         string CourseCode
         string CourseName
+        uuid CreatedByAdminId FK
+        uuid UpdatedByAdminId FK
+        datetime CreatedAt
+        datetime UpdatedAt
     }
 
-    MAJOR_COURSE {
-        uuid MajorCourseID PK
-        uuid MajorID FK
-        uuid CourseID FK
+    MajorCourse {
+        uuid MajorCourseId PK
+        uuid MajorId FK
+        uuid CourseId FK
+        uuid AddedByAdminId FK
+        datetime AddedAt
     }
 
-    ENROLLMENT {
-        uuid EnrollmentID PK
-        uuid StudentID FK
-        uuid CourseID FK
+    Enrollment {
+        uuid EnrollmentId PK
+        uuid StudentId FK
+        uuid CourseId FK
         datetime EnrolledAt
     }
 
-    CHAT_ROOM {
-        uuid ChatRoomID PK
-        string RoomType
-        uuid CourseID FK
-        uuid MajorID FK
+    ChatRoom {
+        uuid ChatRoomId PK
+        RoomType RoomType
+        uuid CourseId FK
+        uuid MajorId FK
         boolean IsActive
+        datetime CreatedAt
     }
 
-    MESSAGE {
-        uuid MessageID PK
-        uuid ChatRoomID FK
-        uuid StudentID FK
+    Message {
+        uuid MessageId PK
+        uuid ChatRoomId FK
+        uuid StudentId FK
         string Content
         datetime SentAt
         boolean IsDeleted
+        uuid DeletedByAdminId FK
+        datetime DeletedAt
     }
 
-    REPORT {
-        uuid ReportID PK
-        uuid MessageID FK
-        uuid StudentID FK
-        uuid ReviewedByAdminID FK
+    Report {
+        uuid ReportId PK
+        uuid MessageId FK
+        uuid StudentId FK
+        uuid ReviewedByAdminId FK
         string Reason
-        string Status
+        ReportStatus Status
         datetime CreatedAt
         datetime ReviewedAt
     }
 
-    COURSE_FILE {
-        uuid FileID PK
-        uuid CourseID FK
-        uuid UploadedByStudentID FK
-        uuid ReviewedByAdminID FK
+    CourseFile {
+        uuid FileId PK
+        uuid CourseId FK
+        uuid UploadedByStudentId FK
+        uuid ReviewedByAdminId FK
         string FileName
         string BlobPath
-        string Status
+        FileStatus Status
         datetime UploadedAt
         datetime ReviewedAt
     }
 
-    ADMIN {
-        uuid AdminID PK
+    Admin {
+        uuid AdminId PK
         string Username
         string Email
         string PasswordHash
@@ -253,35 +269,49 @@ erDiagram
     }
 
 
-    COLLEGE ||--o{ MAJOR : contains
+    College ||--o{ Major : contains
+    Major ||--o{ Student : has
 
-    MAJOR ||--o{ STUDENT : has
+    Major ||--o{ MajorCourse : offers
+    Course ||--o{ MajorCourse : belongs_to
 
+    Student ||--o{ Enrollment : enrolls
+    Course ||--o{ Enrollment : receives
 
-    MAJOR ||--o{ MAJOR_COURSE : offers
-    COURSE ||--o{ MAJOR_COURSE : belongs_to
+    %% Every Course and Major must have exactly one ChatRoom.
+    %% A ChatRoom belongs to either a Course or a Major, never both.
 
-
-    STUDENT ||--o{ ENROLLMENT : enrolls
-    COURSE ||--o{ ENROLLMENT : receives
-
-
-    COURSE o|--|| CHAT_ROOM : has_course_chat
-    MAJOR o|--|| CHAT_ROOM : has_general_chat
-
-
-    CHAT_ROOM ||--o{ MESSAGE : contains
-    STUDENT ||--o{ MESSAGE : sends
+    Course o|--|| ChatRoom : has_course_chat
+    Major o|--|| ChatRoom : has_general_chat
 
 
-    MESSAGE ||--o{ REPORT : receives
-    STUDENT ||--o{ REPORT : submits
-    ADMIN o|--o{ REPORT : reviews
+    ChatRoom ||--o{ Message : contains
+    Student ||--o{ Message : sends
 
 
-    COURSE ||--o{ COURSE_FILE : contains
-    STUDENT ||--o{ COURSE_FILE : uploads
-    ADMIN o|--o{ COURSE_FILE : reviews
+    Message ||--o{ Report : receives
+    Student ||--o{ Report : submits
+    Admin o|--o{ Report : reviews
+
+
+    Course ||--o{ CourseFile : contains
+    Student ||--o{ CourseFile : uploads
+    Admin o|--o{ CourseFile : reviews
+
+
+    Admin o|--o{ College : creates
+    Admin o|--o{ College : updates
+
+    Admin o|--o{ Major : creates
+    Admin o|--o{ Major : updates
+
+    Admin o|--o{ Course : creates
+    Admin o|--o{ Course : updates
+
+    Admin o|--o{ MajorCourse : adds
+
+    Admin o|--o{ Message : deletes
+
 ```
 
 </details>
