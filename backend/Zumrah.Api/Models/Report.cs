@@ -14,7 +14,6 @@ public class Report
 
     public ReportStatus Status { get; set; } = ReportStatus.PENDING;
 
-
     public DateTime CreatedAt { get; set; }
 
     public Guid? ReviewedByAdminId { get; set; }
