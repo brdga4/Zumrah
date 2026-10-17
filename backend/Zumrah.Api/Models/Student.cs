@@ -2,9 +2,17 @@ namespace Zumrah.Api.Models;
 
 public class Student
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = "";
-    public int Age { get; set; }
-    public string Email { get; set; } = "";
-    public decimal Gpa { get; set; }
+    public Guid StudentId { get; set; }
+
+    public Guid MicrosoftObjectId { get; set; }
+
+    public string UniversityEmail { get; set; } = string.Empty;
+
+    public string Name { get; set; } = string.Empty;
+
+    public Guid MajorId { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
+    public Major Major { get; set; } = null!;
 }

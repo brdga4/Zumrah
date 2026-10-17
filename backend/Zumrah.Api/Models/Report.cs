@@ -1,0 +1,26 @@
+using Zumrah.Api.Models.Enums;
+
+namespace Zumrah.Api.Models;
+
+public class Report
+{
+    public Guid ReportId { get; set; }
+
+    public Guid MessageId { get; set; }
+
+    public Message Message { get; set; } = null!;
+
+    public Guid StudentId { get; set; }
+
+    public Student ReportedByStudent { get; set; } = null!;
+
+    public string Reason { get; set; } = string.Empty;
+
+    public ReportStatus Status { get; set; } = ReportStatus.PENDING;
+
+    public DateTime CreatedAt { get; set; }
+
+    public Guid? ReviewedByAdminId { get; set; }
+
+    public DateTime? ReviewedAt { get; set; }
+}
