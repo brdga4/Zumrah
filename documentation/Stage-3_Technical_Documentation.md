@@ -343,222 +343,227 @@ Enum ReportStatus {
 }
 
 
-Table ADMIN {
-  AdminID char(36) [pk]
+Table admin {
+  admin_id char(36) [pk]
 
-  Username varchar(100) [not null, unique]
-  Email varchar(255) [not null, unique]
-  PasswordHash varchar(255) [not null]
+  username varchar(100) [not null, unique]
+  email varchar(255) [not null, unique]
+  password_hash varchar(255) [not null]
 
-  CreatedAt datetime [not null]
+  created_at datetime [not null]
 }
 
 
-Table COLLEGE {
-  CollegeID char(36) [pk]
+Table college {
+  college_id char(36) [pk]
 
-  CollegeName varchar(200) [not null, unique]
+  college_name varchar(200) [not null, unique]
 
-  CreatedByAdminID char(36)
-  UpdatedByAdminID char(36)
+  created_by_admin_id char(36)
+  updated_by_admin_id char(36)
 
-  CreatedAt datetime [not null]
-  UpdatedAt datetime
+  created_at datetime [not null]
+  updated_at datetime
 }
 
 
-Table MAJOR {
-  MajorID char(36) [pk]
+Table major {
+  major_id char(36) [pk]
 
-  CollegeID char(36) [not null]
-  MajorName varchar(200) [not null]
+  college_id char(36) [not null]
+  major_name varchar(200) [not null]
 
-  CreatedByAdminID char(36)
-  UpdatedByAdminID char(36)
+  created_by_admin_id char(36)
+  updated_by_admin_id char(36)
 
-  CreatedAt datetime [not null]
-  UpdatedAt datetime
+  created_at datetime [not null]
+  updated_at datetime
 
   indexes {
-    (CollegeID, MajorName) [unique]
+    (college_id, major_name) [unique]
   }
 }
 
 
-Table COURSE {
-  CourseID char(36) [pk]
+Table course {
+  course_id char(36) [pk]
 
-  CourseCode varchar(30) [not null, unique]
-  CourseName varchar(200) [not null]
+  course_code varchar(30) [not null, unique]
+  course_name varchar(200) [not null]
 
-  CreatedByAdminID char(36)
-  UpdatedByAdminID char(36)
+  created_by_admin_id char(36)
+  updated_by_admin_id char(36)
 
-  CreatedAt datetime [not null]
-  UpdatedAt datetime
+  created_at datetime [not null]
+  updated_at datetime
 }
 
 
-Table MAJOR_COURSE {
-  MajorCourseID char(36) [pk]
+Table major_course {
+  major_course_id char(36) [pk]
 
-  MajorID char(36) [not null]
-  CourseID char(36) [not null]
+  major_id char(36) [not null]
+  course_id char(36) [not null]
 
-  AddedByAdminID char(36)
-  AddedAt datetime [not null]
+  added_by_admin_id char(36)
+  added_at datetime [not null]
 
   indexes {
-    (MajorID, CourseID) [unique]
+    (major_id, course_id) [unique]
   }
 }
 
 
-Table STUDENT {
-  StudentID char(36) [pk]
+Table student {
+  student_id char(36) [pk]
 
-  MicrosoftObjectID char(36) [not null, unique]
-  UniversityEmail varchar(255) [not null, unique]
-  Name varchar(200) [not null]
+  microsoft_object_id char(36) [not null, unique]
+  university_email varchar(255) [not null, unique]
+  name varchar(200) [not null]
 
-  MajorID char(36) [not null]
+  major_id char(36) [not null]
 
-  CreatedAt datetime [not null]
+  created_at datetime [not null]
 }
 
 
-Table ENROLLMENT {
-  EnrollmentID char(36) [pk]
+Table enrollment {
+  enrollment_id char(36) [pk]
 
-  StudentID char(36) [not null]
-  CourseID char(36) [not null]
+  student_id char(36) [not null]
+  course_id char(36) [not null]
 
-  EnrolledAt datetime [not null]
+  enrolled_at datetime [not null]
 
   indexes {
-    (StudentID, CourseID) [unique]
+    (student_id, course_id) [unique]
   }
 }
 
 
-Table CHAT_ROOM {
-  ChatRoomID char(36) [pk]
+Table chat_room {
+  chat_room_id char(36) [pk]
 
-  RoomType RoomType [not null]
+  room_type RoomType [not null]
 
-  CourseID char(36) [unique]
-  MajorID char(36) [unique]
+  course_id char(36) [unique]
+  major_id char(36) [unique]
 
-  IsActive boolean [not null, default: true]
+  is_active boolean [not null, default: true]
 
-  CreatedAt datetime [not null]
+  created_at datetime [not null]
 
   checks {
     `(
-      (RoomType = 'COURSE' AND CourseID IS NOT NULL AND MajorID IS NULL)
+      (room_type = 'COURSE' AND course_id IS NOT NULL AND major_id IS NULL)
       OR
-      (RoomType = 'MAJOR' AND MajorID IS NOT NULL AND CourseID IS NULL)
+      (room_type = 'MAJOR' AND major_id IS NOT NULL AND course_id IS NULL)
     )` [name: 'chk_chat_room_owner']
   }
 }
 
 
-Table MESSAGE {
-  MessageID char(36) [pk]
+Table message {
+  message_id char(36) [pk]
 
-  ChatRoomID char(36) [not null]
-  StudentID char(36) [not null]
+  chat_room_id char(36) [not null]
+  student_id char(36) [not null]
 
-  Content text [not null]
-  SentAt datetime [not null]
+  content text [not null]
+  sent_at datetime [not null]
 
-  IsDeleted boolean [not null, default: false]
+  is_deleted boolean [not null, default: false]
 
-  DeletedByAdminID char(36)
-  DeletedAt datetime
+  deleted_by_admin_id char(36)
+  deleted_at datetime
 }
 
 
-Table REPORT {
-  ReportID char(36) [pk]
+Table report {
+  report_id char(36) [pk]
 
-  MessageID char(36) [not null]
-  StudentID char(36) [not null]
+  message_id char(36) [not null]
+  student_id char(36) [not null]
 
-  Reason text [not null]
-  Status ReportStatus [not null, default: 'PENDING']
+  reason text [not null]
+  status ReportStatus [not null, default: 'PENDING']
 
-  ReviewedByAdminID char(36)
+  reviewed_by_admin_id char(36)
 
-  CreatedAt datetime [not null]
-  ReviewedAt datetime
+  created_at datetime [not null]
+  reviewed_at datetime
 
   indexes {
-    (StudentID, MessageID) [unique]
+    (student_id, message_id) [unique]
   }
 }
 
 
-Table COURSE_FILE {
-  FileID char(36) [pk]
+Table course_file {
+  file_id char(36) [pk]
 
-  CourseID char(36) [not null]
-  UploadedByStudentID char(36) [not null]
+  course_id char(36) [not null]
+  uploaded_by_student_id char(36) [not null]
 
-  FileName varchar(255) [not null]
-  BlobPath varchar(500) [not null, unique]
+  file_name varchar(255) [not null]
+  blob_path varchar(500) [not null, unique]
 
-  Status FileStatus [not null, default: 'PENDING']
+  status FileStatus [not null, default: 'PENDING']
 
-  ReviewedByAdminID char(36)
+  reviewed_by_admin_id char(36)
 
-  UploadedAt datetime [not null]
-  ReviewedAt datetime
+  uploaded_at datetime [not null]
+  reviewed_at datetime
 }
 
 
 
-Ref: MAJOR.CollegeID > COLLEGE.CollegeID
-Ref: STUDENT.MajorID > MAJOR.MajorID
+Ref: major.college_id > college.college_id
+Ref: student.major_id > major.major_id
 
 
-Ref: MAJOR_COURSE.MajorID > MAJOR.MajorID
-Ref: MAJOR_COURSE.CourseID > COURSE.CourseID
+Ref: major_course.major_id > major.major_id
+Ref: major_course.course_id > course.course_id
 
 
-Ref: ENROLLMENT.StudentID > STUDENT.StudentID
-Ref: ENROLLMENT.CourseID > COURSE.CourseID
+Ref: enrollment.student_id > student.student_id
+Ref: enrollment.course_id > course.course_id
 
 
-Ref: COURSE.CourseID ?-? CHAT_ROOM.CourseID
-Ref: MAJOR.MajorID ?-? CHAT_ROOM.MajorID
+// Every course must have one chat room.
+// A chat room may belong to a major instead of a course.
+Ref: course.course_id ?- chat_room.course_id
+
+// Every major must have one chat room.
+// A chat room may belong to a course instead of a major.
+Ref: major.major_id ?- chat_room.major_id
 
 
-Ref: MESSAGE.ChatRoomID > CHAT_ROOM.ChatRoomID
-Ref: MESSAGE.StudentID > STUDENT.StudentID
-Ref: MESSAGE.DeletedByAdminID >? ADMIN.AdminID
+Ref: message.chat_room_id > chat_room.chat_room_id
+Ref: message.student_id > student.student_id
+Ref: message.deleted_by_admin_id >? admin.admin_id
 
 
-Ref: REPORT.MessageID > MESSAGE.MessageID
-Ref: REPORT.StudentID > STUDENT.StudentID
-Ref: REPORT.ReviewedByAdminID >? ADMIN.AdminID
+Ref: report.message_id > message.message_id
+Ref: report.student_id > student.student_id
+Ref: report.reviewed_by_admin_id >? admin.admin_id
 
 
-Ref: COURSE_FILE.CourseID > COURSE.CourseID
-Ref: COURSE_FILE.UploadedByStudentID > STUDENT.StudentID
-Ref: COURSE_FILE.ReviewedByAdminID >? ADMIN.AdminID
+Ref: course_file.course_id > course.course_id
+Ref: course_file.uploaded_by_student_id > student.student_id
+Ref: course_file.reviewed_by_admin_id >? admin.admin_id
 
 
-Ref: COLLEGE.CreatedByAdminID >? ADMIN.AdminID
-Ref: COLLEGE.UpdatedByAdminID >? ADMIN.AdminID
+Ref: college.created_by_admin_id >? admin.admin_id
+Ref: college.updated_by_admin_id >? admin.admin_id
 
-Ref: MAJOR.CreatedByAdminID >? ADMIN.AdminID
-Ref: MAJOR.UpdatedByAdminID >? ADMIN.AdminID
+Ref: major.created_by_admin_id >? admin.admin_id
+Ref: major.updated_by_admin_id >? admin.admin_id
 
-Ref: COURSE.CreatedByAdminID >? ADMIN.AdminID
-Ref: COURSE.UpdatedByAdminID >? ADMIN.AdminID
+Ref: course.created_by_admin_id >? admin.admin_id
+Ref: course.updated_by_admin_id >? admin.admin_id
 
-Ref: MAJOR_COURSE.AddedByAdminID >? ADMIN.AdminID
+Ref: major_course.added_by_admin_id >? admin.admin_id
 ```
 
 </details>
