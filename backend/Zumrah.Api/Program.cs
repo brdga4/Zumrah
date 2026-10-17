@@ -1,4 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using Zumrah.Api.Data;
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration
+    .GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException(
+        "Database connection string is missing."
+    );
+
+builder.Services.AddDbContext<ZumrahDbContext>(options =>
+    options.UseMySQL(connectionString));
 
 builder.Services.AddCors(options =>
 {
