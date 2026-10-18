@@ -466,14 +466,15 @@ namespace Zumrah.Api.Data.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("major_id");
 
-                    b.Property<Guid>("MicrosoftObjectId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("microsoft_object_id");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(200)")
                         .HasColumnName("name");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("password_hash");
 
                     b.Property<string>("UniversityEmail")
                         .IsRequired()
@@ -483,9 +484,6 @@ namespace Zumrah.Api.Data.Migrations
                     b.HasKey("StudentId");
 
                     b.HasIndex("MajorId");
-
-                    b.HasIndex("MicrosoftObjectId")
-                        .IsUnique();
 
                     b.HasIndex("UniversityEmail")
                         .IsUnique();
