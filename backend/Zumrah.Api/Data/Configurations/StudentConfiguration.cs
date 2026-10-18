@@ -16,11 +16,6 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .HasColumnName("student_id")
             .HasColumnType("char(36)");
 
-        builder.Property(student => student.MicrosoftObjectId)
-            .HasColumnName("microsoft_object_id")
-            .HasColumnType("char(36)")
-            .IsRequired();
-
         builder.Property(student => student.UniversityEmail)
             .HasColumnName("university_email")
             .HasColumnType("varchar(255)")
@@ -41,8 +36,10 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .HasColumnType("datetime")
             .IsRequired();
 
-        builder.HasIndex(student => student.MicrosoftObjectId)
-            .IsUnique();
+        builder.Property(student => student.PasswordHash)
+            .HasColumnName("password_hash")
+            .HasColumnType("varchar(255)")
+            .IsRequired();
 
         builder.HasIndex(student => student.UniversityEmail)
             .IsUnique();
