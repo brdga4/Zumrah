@@ -93,7 +93,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddSingleton<JwtTokenService>();
 
 var app = builder.Build();
 
