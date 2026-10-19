@@ -95,6 +95,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<JwtTokenService>();
 
+builder.Services.AddScoped<IPasswordHasher<Student>, PasswordHasher<Student>>();
+
 var app = builder.Build();
 
 app.UseCors("ZumrahFrontends");
