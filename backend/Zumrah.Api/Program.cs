@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
+using Resend;
 using Zumrah.Api.Models;
 using Zumrah.Api.Data;
 using Zumrah.Api.Features.Auth;
@@ -16,6 +17,13 @@ var connectionString = builder.Configuration
 
 builder.Services.AddDbContext<ZumrahDbContext>(options =>
     options.UseMySQL(connectionString));
+
+builder.Services.AddResend(options =>
+{
+    options.ApiToken = builder.Configuration["Resend:ApiKey"] ?? throw new InvalidOperationException(
+            "Resend API key is missing."
+        );
+});
 
 // JWT configuration
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? throw new InvalidOperationException(
@@ -94,6 +102,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddSingleton<JwtTokenService>();
+builder.Services.AddSingleton<OtpService>();
 
 var app = builder.Build();
 
