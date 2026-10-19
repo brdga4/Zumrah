@@ -1,5 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
+using Zumrah.Api.Models;
 using Zumrah.Api.Data;
+using Zumrah.Api.Features.Auth;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +17,60 @@ var connectionString = builder.Configuration
 builder.Services.AddDbContext<ZumrahDbContext>(options =>
     options.UseMySQL(connectionString));
 
+// JWT configuration
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? throw new InvalidOperationException(
+        "JWT issuer is missing."
+    );
+
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? throw new InvalidOperationException(
+        "JWT audience is missing."
+    );
+
+var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException(
+        "JWT signing key is missing."
+    );
+
+var jwtKeyBytes = Convert.FromBase64String(jwtKey);
+
+if (jwtKeyBytes.Length < 32)
+{
+    throw new InvalidOperationException(
+        "JWT signing key must contain at least 32 bytes."
+    );
+}
+
+// JWT authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.MapInboundClaims = false;
+
+        options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = jwtIssuer,
+
+                ValidateAudience = true,
+                ValidAudience = jwtAudience,
+
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(jwtKeyBytes),
+                ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
+
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.FromMinutes(1),
+
+                NameClaimType = "sub",
+                RoleClaimType = "role"
+            };
+    });
+
+// Authorization policies
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("Student", policy =>
+        policy.RequireRole("Student"))
+    .AddPolicy("Admin", policy =>
+        policy.RequireRole("Admin"));
 
 builder.Services.AddCors(options =>
 {
@@ -34,10 +93,14 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddScoped<JwtTokenService>();
 
 var app = builder.Build();
 
 app.UseCors("ZumrahFrontends");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/api/example", async (ZumrahDbContext db) =>
 {
