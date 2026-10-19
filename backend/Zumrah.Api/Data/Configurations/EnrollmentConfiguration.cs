@@ -40,11 +40,13 @@ public class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollment>
         builder.HasOne<Student>()
             .WithMany()
             .HasForeignKey(enrollment => enrollment.StudentId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(enrollment => enrollment.Course)
             .WithMany()
             .HasForeignKey(enrollment => enrollment.CourseId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

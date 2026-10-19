@@ -61,15 +61,18 @@ public class ReportConfiguration : IEntityTypeConfiguration<Report>
         builder.HasOne(report => report.Message)
             .WithMany()
             .HasForeignKey(report => report.MessageId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(report => report.ReportedByStudent)
             .WithMany()
             .HasForeignKey(report => report.StudentId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne<Admin>()
             .WithMany()
-            .HasForeignKey(report => report.ReviewedByAdminId);
+            .HasForeignKey(report => report.ReviewedByAdminId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }
