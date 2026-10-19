@@ -1,0 +1,259 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&display=swap');
+
+#root:has(.otp-page) {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: initial;
+}
+
+body:has(.otp-page) {
+  display: block;
+  margin: 0;
+  background: #FAF9FE;
+}
+
+.otp-page,
+.otp-page * {
+  box-sizing: border-box;
+}
+
+.otp-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  width: 100%;
+  background: #FAF9FE;
+  color: #172033;
+  font-family: 'Alexandria', sans-serif;
+}
+
+.otp-welcome {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(32px, 5vw, 80px);
+  background: linear-gradient(148deg, #6948E8, #4B35B5);
+  color: white;
+}
+
+.otp-welcome::before,
+.otp-welcome::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  border: 1px solid #ffffff24;
+  border-radius: 50%;
+}
+
+.otp-welcome::before {
+  width: 630px;
+  height: 630px;
+  bottom: -310px;
+  left: -200px;
+}
+
+.otp-welcome::after {
+  width: 440px;
+  height: 440px;
+  top: 8%;
+  left: -170px;
+}
+
+.otp-brand {
+  font-size: 42px;
+  font-weight: 700;
+}
+
+.otp-hero {
+  max-width: 530px;
+  margin: auto 0;
+}
+
+.otp-hero span {
+  color: #E0D9FF;
+  font-size: 13px;
+}
+
+.otp-hero p {
+  color: #E9E4FF;
+  font-size: 16px;
+  line-height: 2.2;
+}
+
+.otp-footer {
+  color: #D8D0FF;
+  font-size: 12px;
+}
+
+.otp-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 30px;
+}
+
+.otp-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+.otp-pill {
+  display: inline-flex;
+  padding: 9px 13px;
+  border: 1px solid #E3DDFE;
+  border-radius: 100px;
+  background: #F2EEFF;
+  color: #4B35B5;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.otp-card h1 {
+  margin: 25px 0 11px;
+  font-size: 32px;
+  line-height: 1.5;
+  color: #172033;
+}
+
+.otp-subtitle {
+  margin-bottom: 30px;
+  color: #777D91;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.otp-email-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 28px;
+  padding: 17px 18px;
+  border: 1px solid #E3DDFE;
+  border-radius: 12px;
+  background: #F5F2FF;
+}
+
+.otp-email-box span {
+  color: #777D91;
+  font-size: 12px;
+}
+
+.otp-email-box strong {
+  color: #4B35B5;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.otp-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.otp-input {
+  width: 100%;
+  min-height: 58px;
+  padding: 14px 16px;
+  border: 1px solid #E8E7F0;
+  border-radius: 12px;
+  background: white;
+  color: #172033;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: center;
+}
+
+.otp-input:focus {
+  outline: 2px solid #6847E8;
+  outline-offset: 2px;
+}
+
+.otp-input[aria-invalid="true"] {
+  border-color: #E5484D;
+}
+
+.otp-error {
+  min-height: 22px;
+  margin: 8px 0;
+  color: #E5484D;
+  font-size: 12px;
+}
+
+.otp-card .zumrah-button {
+  width: 100%;
+}
+
+.otp-message {
+  min-height: 24px;
+  margin-top: 12px;
+  color: #4B35B5;
+  font-size: 12px;
+  line-height: 1.9;
+  text-align: center;
+}
+
+.otp-resend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 12px;
+  color: #777D91;
+}
+
+.otp-resend button {
+  padding: 5px;
+  border: none;
+  background: transparent;
+  color: #6847E8;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.otp-resend button:hover {
+  color: #4B35B5;
+  text-decoration: underline;
+}
+
+@media (max-width: 800px) {
+  .otp-page {
+    grid-template-columns: 1fr;
+  }
+
+  .otp-welcome {
+    min-height: 265px;
+    padding: 29px 26px;
+  }
+
+  .otp-hero {
+    margin: 35px 0 25px;
+  }
+
+  .otp-hero p {
+    font-size: 12px;
+  }
+
+  .otp-footer {
+    display: none;
+  }
+
+  .otp-panel {
+    padding: 45px 22px 30px;
+  }
+
+  .otp-card h1 {
+    font-size: 27px;
+  }
+}
