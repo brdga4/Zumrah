@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
+using Zumrah.Api.Models;
 using Zumrah.Api.Data;
 using Zumrah.Api.Features.Auth;
 
@@ -53,6 +55,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(jwtKeyBytes),
+                ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
 
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.FromMinutes(1),
