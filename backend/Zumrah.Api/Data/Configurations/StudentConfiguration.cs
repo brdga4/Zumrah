@@ -47,6 +47,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.HasOne(student => student.Major)
             .WithMany()
             .HasForeignKey(student => student.MajorId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

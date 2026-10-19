@@ -61,10 +61,12 @@ public class ChatRoomConfiguration : IEntityTypeConfiguration<ChatRoom>
 
         builder.HasOne<Course>()
             .WithOne(course => course.ChatRoom)
-            .HasForeignKey<ChatRoom>(room => room.CourseId);
+            .HasForeignKey<ChatRoom>(room => room.CourseId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
 
         builder.HasOne<Major>()
             .WithOne(major => major.ChatRoom)
-            .HasForeignKey<ChatRoom>(room => room.MajorId);
+            .HasForeignKey<ChatRoom>(room => room.MajorId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }
