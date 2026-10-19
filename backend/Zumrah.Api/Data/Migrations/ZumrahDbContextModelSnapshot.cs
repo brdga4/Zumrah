@@ -400,6 +400,63 @@ namespace Zumrah.Api.Data.Migrations
                     b.ToTable("message", (string)null);
                 });
 
+            modelBuilder.Entity("Zumrah.Api.Models.PendingRegistration", b =>
+                {
+                    b.Property<Guid>("PendingRegistrationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasColumnName("pending_registration_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("FailedAttempts")
+                        .HasColumnType("int")
+                        .HasColumnName("failed_attempts");
+
+                    b.Property<DateTime>("LastOtpSentAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("last_otp_sent_at");
+
+                    b.Property<Guid>("MajorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("major_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime>("OtpExpiresAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("otp_expires_at");
+
+                    b.Property<string>("OtpHash")
+                        .IsRequired()
+                        .HasColumnType("char(64)")
+                        .HasColumnName("otp_hash");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("password_hash");
+
+                    b.Property<string>("UniversityEmail")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("university_email");
+
+                    b.HasKey("PendingRegistrationId");
+
+                    b.HasIndex("MajorId");
+
+                    b.HasIndex("UniversityEmail")
+                        .IsUnique();
+
+                    b.ToTable("pending_registration", (string)null);
+                });
+
             modelBuilder.Entity("Zumrah.Api.Models.Report", b =>
                 {
                     b.Property<Guid>("ReportId")
@@ -495,33 +552,39 @@ namespace Zumrah.Api.Data.Migrations
                 {
                     b.HasOne("Zumrah.Api.Models.Course", null)
                         .WithOne("ChatRoom")
-                        .HasForeignKey("Zumrah.Api.Models.ChatRoom", "CourseId");
+                        .HasForeignKey("Zumrah.Api.Models.ChatRoom", "CourseId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("Zumrah.Api.Models.Major", null)
                         .WithOne("ChatRoom")
-                        .HasForeignKey("Zumrah.Api.Models.ChatRoom", "MajorId");
+                        .HasForeignKey("Zumrah.Api.Models.ChatRoom", "MajorId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
                 });
 
             modelBuilder.Entity("Zumrah.Api.Models.College", b =>
                 {
                     b.HasOne("Zumrah.Api.Models.Admin", null)
                         .WithMany()
-                        .HasForeignKey("CreatedByAdminId");
+                        .HasForeignKey("CreatedByAdminId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("Zumrah.Api.Models.Admin", null)
                         .WithMany()
-                        .HasForeignKey("UpdatedByAdminId");
+                        .HasForeignKey("UpdatedByAdminId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
                 });
 
             modelBuilder.Entity("Zumrah.Api.Models.Course", b =>
                 {
                     b.HasOne("Zumrah.Api.Models.Admin", null)
                         .WithMany()
-                        .HasForeignKey("CreatedByAdminId");
+                        .HasForeignKey("CreatedByAdminId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("Zumrah.Api.Models.Admin", null)
                         .WithMany()
-                        .HasForeignKey("UpdatedByAdminId");
+                        .HasForeignKey("UpdatedByAdminId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
                 });
 
             modelBuilder.Entity("Zumrah.Api.Models.CourseFile", b =>
@@ -529,17 +592,18 @@ namespace Zumrah.Api.Data.Migrations
                     b.HasOne("Zumrah.Api.Models.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Zumrah.Api.Models.Admin", null)
                         .WithMany()
-                        .HasForeignKey("ReviewedByAdminId");
+                        .HasForeignKey("ReviewedByAdminId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("Zumrah.Api.Models.Student", "UploadedByStudent")
                         .WithMany()
                         .HasForeignKey("UploadedByStudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -552,13 +616,13 @@ namespace Zumrah.Api.Data.Migrations
                     b.HasOne("Zumrah.Api.Models.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Zumrah.Api.Models.Student", null)
                         .WithMany()
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -569,16 +633,18 @@ namespace Zumrah.Api.Data.Migrations
                     b.HasOne("Zumrah.Api.Models.College", "College")
                         .WithMany("Majors")
                         .HasForeignKey("CollegeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Zumrah.Api.Models.Admin", null)
                         .WithMany()
-                        .HasForeignKey("CreatedByAdminId");
+                        .HasForeignKey("CreatedByAdminId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("Zumrah.Api.Models.Admin", null)
                         .WithMany()
-                        .HasForeignKey("UpdatedByAdminId");
+                        .HasForeignKey("UpdatedByAdminId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.Navigation("College");
                 });
@@ -587,18 +653,19 @@ namespace Zumrah.Api.Data.Migrations
                 {
                     b.HasOne("Zumrah.Api.Models.Admin", null)
                         .WithMany()
-                        .HasForeignKey("AddedByAdminId");
+                        .HasForeignKey("AddedByAdminId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("Zumrah.Api.Models.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Zumrah.Api.Models.Major", null)
                         .WithMany()
                         .HasForeignKey("MajorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -609,20 +676,32 @@ namespace Zumrah.Api.Data.Migrations
                     b.HasOne("Zumrah.Api.Models.ChatRoom", null)
                         .WithMany()
                         .HasForeignKey("ChatRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Zumrah.Api.Models.Admin", null)
                         .WithMany()
-                        .HasForeignKey("DeletedByAdminId");
+                        .HasForeignKey("DeletedByAdminId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("Zumrah.Api.Models.Student", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("Zumrah.Api.Models.PendingRegistration", b =>
+                {
+                    b.HasOne("Zumrah.Api.Models.Major", "Major")
+                        .WithMany()
+                        .HasForeignKey("MajorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Major");
                 });
 
             modelBuilder.Entity("Zumrah.Api.Models.Report", b =>
@@ -630,17 +709,18 @@ namespace Zumrah.Api.Data.Migrations
                     b.HasOne("Zumrah.Api.Models.Message", "Message")
                         .WithMany()
                         .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Zumrah.Api.Models.Admin", null)
                         .WithMany()
-                        .HasForeignKey("ReviewedByAdminId");
+                        .HasForeignKey("ReviewedByAdminId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("Zumrah.Api.Models.Student", "ReportedByStudent")
                         .WithMany()
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Message");
@@ -653,7 +733,7 @@ namespace Zumrah.Api.Data.Migrations
                     b.HasOne("Zumrah.Api.Models.Major", "Major")
                         .WithMany()
                         .HasForeignKey("MajorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Major");
