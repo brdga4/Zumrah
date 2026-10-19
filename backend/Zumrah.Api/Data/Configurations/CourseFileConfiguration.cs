@@ -63,15 +63,18 @@ public class CourseFileConfiguration : IEntityTypeConfiguration<CourseFile>
         builder.HasOne(file => file.Course)
             .WithMany()
             .HasForeignKey(file => file.CourseId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(file => file.UploadedByStudent)
             .WithMany()
             .HasForeignKey(file => file.UploadedByStudentId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne<Admin>()
             .WithMany()
-            .HasForeignKey(file => file.ReviewedByAdminId);
+            .HasForeignKey(file => file.ReviewedByAdminId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }

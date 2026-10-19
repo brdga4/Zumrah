@@ -43,10 +43,12 @@ public class CollegeConfiguration : IEntityTypeConfiguration<College>
 
         builder.HasOne<Admin>()
             .WithMany()
-            .HasForeignKey(college => college.CreatedByAdminId);
+            .HasForeignKey(college => college.CreatedByAdminId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
 
         builder.HasOne<Admin>()
             .WithMany()
-            .HasForeignKey(college => college.UpdatedByAdminId);
+            .HasForeignKey(college => college.UpdatedByAdminId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }

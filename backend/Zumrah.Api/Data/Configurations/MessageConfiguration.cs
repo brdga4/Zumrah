@@ -52,15 +52,18 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
         builder.HasOne<ChatRoom>()
             .WithMany()
             .HasForeignKey(message => message.ChatRoomId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(message => message.Student)
             .WithMany()
             .HasForeignKey(message => message.StudentId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne<Admin>()
             .WithMany()
-            .HasForeignKey(message => message.DeletedByAdminId);
+            .HasForeignKey(message => message.DeletedByAdminId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }
