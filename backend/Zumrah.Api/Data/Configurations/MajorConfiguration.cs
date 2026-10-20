@@ -52,14 +52,17 @@ public class MajorConfiguration : IEntityTypeConfiguration<Major>
         builder.HasOne(major => major.College)
             .WithMany(college => college.Majors)
             .HasForeignKey(major => major.CollegeId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne<Admin>()
             .WithMany()
-            .HasForeignKey(major => major.CreatedByAdminId);
+            .HasForeignKey(major => major.CreatedByAdminId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
 
         builder.HasOne<Admin>()
             .WithMany()
-            .HasForeignKey(major => major.UpdatedByAdminId);
+            .HasForeignKey(major => major.UpdatedByAdminId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }

@@ -2,20 +2,29 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
+using Resend;
 using Zumrah.Api.Models;
 using Zumrah.Api.Data;
 using Zumrah.Api.Features.Auth;
+using Zumrah.Api.Features;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration
-    .GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException(
+    .GetConnectionString("DevConnection") ?? throw new InvalidOperationException(
         "Database connection string is missing."
     );
 
 builder.Services.AddDbContext<ZumrahDbContext>(options =>
     options.UseMySQL(connectionString));
+
+builder.Services.AddResend(options =>
+{
+    options.ApiToken = builder.Configuration["Resend:ApiKey"] ?? throw new InvalidOperationException(
+            "Resend API key is missing."
+        );
+});
 
 // JWT configuration
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? throw new InvalidOperationException(
@@ -46,23 +55,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.MapInboundClaims = false;
 
         options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = jwtIssuer,
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
 
-                ValidateAudience = true,
-                ValidAudience = jwtAudience,
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
 
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(jwtKeyBytes),
-                ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(jwtKeyBytes),
+            ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
 
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.FromMinutes(1),
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromMinutes(1),
 
-                NameClaimType = "sub",
-                RoleClaimType = "role"
-            };
+            NameClaimType = "sub",
+            RoleClaimType = "role"
+        };
     });
 
 // Authorization policies
@@ -93,8 +102,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddSingleton<JwtTokenService>();
+builder.Services.AddSingleton<OtpService>();
 
+builder.Services.AddScoped<IPasswordHasher<Student>, PasswordHasher<Student>>();
+builder.Services.AddScoped<IPasswordHasher<Admin>, PasswordHasher<Admin>>();
 var app = builder.Build();
 
 app.UseCors("ZumrahFrontends");
@@ -102,19 +114,6 @@ app.UseCors("ZumrahFrontends");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/api/example", async (ZumrahDbContext db) =>
-{
-    var email = await db.Admins
-        .Where(admin => admin.Username == "admin")
-        .Select(admin => admin.Email)
-        .FirstOrDefaultAsync();
-
-    if (email is null)
-    {
-        return Results.NotFound("Admin not found.");
-    }
-
-    return Results.Ok(new { email });
-});
+app.MapAllEndpoints();
 
 app.Run();

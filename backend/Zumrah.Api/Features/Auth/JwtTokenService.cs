@@ -6,33 +6,36 @@ namespace Zumrah.Api.Features.Auth;
 
 public class JwtTokenService
 {
-    private readonly IConfiguration _configuration;
+    private readonly string _issuer;
+    private readonly string _audience;
+    private readonly byte[] _key;
 
     public JwtTokenService(IConfiguration configuration)
     {
-        _configuration = configuration;
+        _issuer = configuration["Jwt:Issuer"]
+            ?? throw new InvalidOperationException(
+                "JWT issuer is missing.");
+
+        _audience = configuration["Jwt:Audience"]
+            ?? throw new InvalidOperationException(
+                "JWT audience is missing.");
+
+        string secret = configuration["Jwt:Key"]
+            ?? throw new InvalidOperationException(
+                "JWT signing key is missing.");
+
+        _key = Convert.FromBase64String(secret);
+
+        if (_key.Length < 32)
+        {
+            throw new InvalidOperationException(
+                "JWT signing key must contain at least 32 bytes.");
+        }
     }
 
     public string CreateToken(Guid userId, string role)
     {
-        var issuer = _configuration["Jwt:Issuer"]
-            ?? throw new InvalidOperationException(
-                "JWT issuer is missing."
-            );
-
-        var audience = _configuration["Jwt:Audience"]
-            ?? throw new InvalidOperationException(
-                "JWT audience is missing."
-            );
-
-        var key = _configuration["Jwt:Key"]
-            ?? throw new InvalidOperationException(
-                "JWT signing key is missing."
-            );
-
-        var keyBytes = Convert.FromBase64String(key);
-
-        var securityKey = new SymmetricSecurityKey(keyBytes);
+        var securityKey = new SymmetricSecurityKey(_key);
 
         var credentials = new SigningCredentials(
             securityKey,
@@ -57,8 +60,8 @@ public class JwtTokenService
         var now = DateTime.UtcNow;
 
         var token = new JwtSecurityToken(
-            issuer: issuer,
-            audience: audience,
+            issuer: _issuer,
+            audience: _audience,
             claims: claims,
             notBefore: now,
             expires: now.AddHours(1),

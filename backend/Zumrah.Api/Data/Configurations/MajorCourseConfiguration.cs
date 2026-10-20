@@ -44,15 +44,18 @@ public class MajorCourseConfiguration : IEntityTypeConfiguration<MajorCourse>
         builder.HasOne<Major>()
             .WithMany()
             .HasForeignKey(mc => mc.MajorId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(mc => mc.Course)
             .WithMany()
             .HasForeignKey(mc => mc.CourseId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne<Admin>()
             .WithMany()
-            .HasForeignKey(mc => mc.AddedByAdminId);
+            .HasForeignKey(mc => mc.AddedByAdminId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }
