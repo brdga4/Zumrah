@@ -1,0 +1,413 @@
+
+/* Zumrah Sign-up Page */
+/* Based on the approved auth.css design */
+
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&display=swap');
+
+/* Override default Vite layout styles */
+body:has(.zumrah-signup) {
+  display: block;
+  margin: 0;
+  min-width: 320px;
+  background: #FAF9FE;
+}
+
+#root:has(.zumrah-signup) {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: initial;
+}
+
+/* Main page */
+.zumrah-signup {
+  --primary: #6847E8;
+  --primary-dark: #4B35B5;
+  --ink: #172033;
+  --muted: #777D91;
+  --line: #E8E7F0;
+  --background: #FAF9FE;
+
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  min-height: 100vh;
+  direction: rtl;
+  color-scheme: light;
+  background: var(--background);
+  color: var(--ink);
+  font-family: Alexandria, Tahoma, Arial, sans-serif;
+  text-align: start;
+}
+
+.zumrah-signup *,
+.zumrah-signup *::before,
+.zumrah-signup *::after {
+  box-sizing: border-box;
+}
+
+/* Purple welcome section */
+.zumrah-signup .welcome {
+  padding: clamp(32px, 5vw, 80px);
+  background: linear-gradient(
+    148deg,
+    #6948E8 0%,
+    #4B35B5 100%
+  );
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.zumrah-signup .welcome::before,
+.zumrah-signup .welcome::after {
+  content: "";
+  position: absolute;
+  border: 1px solid #ffffff24;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.zumrah-signup .welcome::before {
+  width: 630px;
+  height: 630px;
+  bottom: -310px;
+  left: -200px;
+}
+
+.zumrah-signup .welcome::after {
+  width: 440px;
+  height: 440px;
+  top: 8%;
+  left: -170px;
+}
+
+/* Logo */
+.zumrah-signup .brand {
+  display: inline-block;
+  align-self: flex-start;
+  font-weight: 700;
+  font-size: 42px;
+  line-height: 1.8;
+  letter-spacing: 0;
+}
+
+/* Welcome text */
+.zumrah-signup .hero {
+  max-width: 530px;
+  margin: auto 0;
+}
+
+.zumrah-signup .eyebrow {
+  color: #E0D9FF;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.zumrah-signup .hero p {
+  color: #E9E4FF;
+  line-height: 2.2;
+  font-size: 16px;
+  max-width: 460px;
+}
+
+.zumrah-signup .welcome-foot {
+  color: #D8D0FF;
+  font-size: 12px;
+}
+
+/* Sign-up panel */
+.zumrah-signup .signup-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 30px 25px;
+}
+
+.zumrah-signup .signup-card {
+  width: 100%;
+  max-width: 510px;
+}
+
+/* Welcome badge */
+.zumrah-signup .pill {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  border: 1px solid #E3DDFE;
+  background: #F2EEFF;
+  color: var(--primary-dark);
+  border-radius: 100px;
+  padding: 9px 13px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Headings */
+.zumrah-signup .signup-card h1 {
+  color: #172033;
+  font-size: clamp(26px, 2.3vw, 35px);
+  line-height: 1.5;
+  letter-spacing: -0.7px;
+  margin: 18px 0 8px;
+  font-weight: 700;
+}
+
+.zumrah-signup .subtitle {
+  color: var(--muted);
+  line-height: 2;
+  font-size: 13px;
+  margin: 0 0 22px;
+}
+
+/* Form fields */
+.zumrah-signup .signup-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  margin-bottom: 14px;
+}
+
+.zumrah-signup .signup-field label {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Input and Select */
+.zumrah-signup .signup-field input,
+.zumrah-signup .signup-field select {
+  height: 49px;
+  width: 100%;
+  min-width: 0;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--ink);
+  background: white;
+  outline: none;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.zumrah-signup .signup-field input::placeholder {
+  color: #9B9DAA;
+}
+
+.zumrah-signup .signup-field input:focus,
+.zumrah-signup .signup-field select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px #6847E817;
+}
+
+.zumrah-signup .signup-field select:disabled {
+  background: #F7F7FB;
+  color: #999AA8;
+  cursor: not-allowed;
+}
+
+/* Two fields in one row */
+.zumrah-signup .signup-fields-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.zumrah-signup .signup-fields-two .signup-field {
+  margin-bottom: 14px;
+}
+
+/* University detected from email */
+.zumrah-signup .signup-university {
+  border: 1px solid #E3DDFE;
+  background: #F5F2FF;
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.zumrah-signup .signup-university span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.zumrah-signup .signup-university strong {
+  color: var(--primary-dark);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.8;
+  min-height: 20px;
+}
+
+/* Validation messages */
+.zumrah-signup .field-error {
+  display: block;
+  color: #C52C45;
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 1px;
+}
+
+.zumrah-signup .field-error:empty {
+  display: none;
+}
+
+.zumrah-signup .signup-field input[aria-invalid="true"],
+.zumrah-signup .signup-field select[aria-invalid="true"] {
+  border-color: #C52C45;
+  box-shadow: 0 0 0 2px #C52C4518;
+}
+
+/* Shared Button component */
+.zumrah-signup .signup-action .zumrah-button {
+  width: 100%;
+  min-height: 53px;
+  margin-top: 3px;
+  padding: 14px 24px;
+  background: var(--primary);
+  color: white;
+  border: 1px solid var(--primary);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 24px #6847e820;
+  transition:
+    background 0.15s,
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+
+.zumrah-signup .signup-action .zumrah-button:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 12px 25px #6847e82e;
+  transform: translateY(-1px);
+}
+
+.zumrah-signup .signup-action .zumrah-button:focus-visible {
+  outline: 3px solid #B9ACFF;
+  outline-offset: 3px;
+}
+
+/* Signup feedback */
+.zumrah-signup .signup-message {
+  min-height: 25px;
+  color: var(--primary-dark);
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.zumrah-signup .signup-message:empty {
+  display: none;
+}
+
+/* Login link */
+.zumrah-signup .account-switch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+
+.zumrah-signup .account-switch a {
+  color: var(--primary-dark);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.zumrah-signup .account-switch a:hover {
+  text-decoration: underline;
+}
+
+.zumrah-signup .account-switch a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+/* Footer */
+.zumrah-signup .signup-bottom {
+  color: #A0A0AD;
+  font-size: 11px;
+  margin-top: 22px;
+  text-align: center;
+}
+
+/* Tablet and mobile */
+@media (max-width: 800px) {
+  .zumrah-signup {
+    grid-template-columns: 1fr;
+  }
+
+  .zumrah-signup .welcome {
+    min-height: 265px;
+    padding: 29px 26px;
+  }
+
+  .zumrah-signup .hero {
+    margin: 35px 0 25px;
+  }
+
+  .zumrah-signup .hero p {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  .zumrah-signup .welcome-foot {
+    display: none;
+  }
+
+  .zumrah-signup .signup-panel {
+    padding: 34px 22px 28px;
+  }
+
+  .zumrah-signup .signup-bottom {
+    margin-top: 25px;
+  }
+}
+
+/* Small mobile screens */
+@media (max-width: 520px) {
+  .zumrah-signup .signup-fields-two {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .zumrah-signup .signup-card h1 {
+    font-size: 26px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .zumrah-signup *,
+  .zumrah-signup *::before,
+  .zumrah-signup *::after {
+    transition: none !important;
+  }
+}
