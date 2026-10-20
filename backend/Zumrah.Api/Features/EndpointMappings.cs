@@ -7,6 +7,7 @@ public static class EndpointMappings
     public static IEndpointRouteBuilder MapAllEndpoints(
         this IEndpointRouteBuilder app)
     {
+        app.MapRegisterStudentEndpoint();
         return app;
     }
 }
