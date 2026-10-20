@@ -2,9 +2,13 @@ import { useRef, useState } from 'react';
 import Button from '../../../Components/Button';
 import { loginPasswordError, universityEmailError } from './authValidation';
 import './LoginPage.css';
+import { API_BASE_URL } from '../../../config';
+import { useNavigate } from 'react-router-dom';
+
 
 // This page is UI-only. Backend authentication will be added later.
 export default function LoginPage() {
+  const navigate = useNavigate(); // for redirecting after successful login
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '' });
@@ -24,8 +28,8 @@ export default function LoginPage() {
     setErrors((previous) => ({ ...previous, password: error }));
     return !error;
   }
-
-  function handleSubmit(event) {
+  // When the student clicks the login button, React calls the `handleSubmit` function.
+  async function handleSubmit(event) {
     event.preventDefault();
     setMessage('');
 
@@ -37,8 +41,38 @@ export default function LoginPage() {
       return;
     }
 
-    // TODO: Connect to the .NET authentication API.
-    setMessage('تم التحقق من الحقول. تسجيل الدخول الفعلي ينتظر الربط بالباك إند.');
+    // try to log in the user by sending a request to the backend API.
+    
+try {
+  const response = await fetch(
+    `${API_BASE_URL}/api/auth/student/login`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        universityEmail: email.trim(),
+        password: password,
+      }),
+    }
+  );
+  if (!response.ok) {
+  setMessage('فشل تسجيل الدخول. تحقق من بياناتك وحاول مرة أخرى.');
+  return;
+}
+  const data = await response.json();
+  if (!data.accessToken) {
+  setMessage('لم يتم استلام رمز تسجيل الدخول.');
+  return;
+}
+  sessionStorage.setItem('accessToken', data.accessToken);
+  navigate('/home'); // Redirect to the home page after successful login.
+} catch (error) {
+  console.error('Login failed:', error);
+  setMessage('تعذر الاتصال بالخادم. حاول مجددًا.');
+}
+
   }
 
   return (

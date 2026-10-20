@@ -3,10 +3,11 @@ import { API_BASE_URL } from '../../config';
 import { useState } from 'react'
 import Button from '../../Components/Button'
 import './OtpVerification.css'
+import { useNavigate } from 'react-router-dom';
 
 // OTP verification component
 export default function OtpVerification() {
-
+  const navigate = useNavigate()
   // State variables
   const [otp, setOtp] = useState('')
   const [error, setError] = useState('')
@@ -76,7 +77,7 @@ if (!data.accessToken) {
 }
 
 sessionStorage.setItem('accessToken', data.accessToken);
-
+navigate('/home'); // Redirect to the home page after successful verification.
 setMessage('تم تأكيد البريد الإلكتروني بنجاح.');
 
 
