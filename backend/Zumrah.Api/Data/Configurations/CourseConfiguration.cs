@@ -48,10 +48,12 @@ public class CourseConfiguration : IEntityTypeConfiguration<Course>
 
         builder.HasOne<Admin>()
             .WithMany()
-            .HasForeignKey(course => course.CreatedByAdminId);
+            .HasForeignKey(course => course.CreatedByAdminId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
 
         builder.HasOne<Admin>()
             .WithMany()
-            .HasForeignKey(course => course.UpdatedByAdminId);
+            .HasForeignKey(course => course.UpdatedByAdminId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }

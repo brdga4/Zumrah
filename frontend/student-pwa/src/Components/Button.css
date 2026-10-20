@@ -1,0 +1,17 @@
+
+.zumrah-button {
+  background-color: #6847E8;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 24px;
+  min-height: 58px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.zumrah-button:hover {
+  background-color: #4B35B5;
+}

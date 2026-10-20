@@ -15,6 +15,7 @@ public class ZumrahDbContext : DbContext
     public DbSet<Course> Courses => Set<Course>();
     public DbSet<MajorCourse> MajorCourses => Set<MajorCourse>();
     public DbSet<Student> Students => Set<Student>();
+    public DbSet<PendingRegistration> PendingRegistrations => Set<PendingRegistration>();
     public DbSet<Enrollment> Enrollments => Set<Enrollment>();
     public DbSet<ChatRoom> ChatRooms => Set<ChatRoom>();
     public DbSet<Message> Messages => Set<Message>();
