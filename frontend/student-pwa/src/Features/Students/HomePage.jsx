@@ -27,7 +27,7 @@ const courses = [
 export default function HomePage() {
 
   // Temporary action until enrollment API integration.
-  function handleJoin(courseId) {
+  function handleJoin() {
     window.alert(
       'سيتم تفعيل الانضمام بعد ربط الصفحة بالباك إند.'
     );
@@ -87,7 +87,7 @@ export default function HomePage() {
                   </span>
                 ) : (
                   <Button
-                    onClick={() => handleJoin(course.courseId)}
+                    onClick={handleJoin}
                   >
                     انضمام
                   </Button>
