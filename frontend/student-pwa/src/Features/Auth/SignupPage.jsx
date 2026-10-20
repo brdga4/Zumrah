@@ -2,7 +2,7 @@ import { API_BASE_URL } from '../../config';
 import { useState, useEffect } from 'react';
 import Button from '../../Components/Button';
 import './SignupPage.css';
-
+import { useNavigate } from 'react-router-dom';
 // Demo university data. Replace with backend data later.
 const universities = {
   'ksu.edu.sa': 'جامعة الملك سعود',
@@ -82,6 +82,8 @@ function getFieldError(field, values) {
 }
 
 export default function SignupPage() {
+  const navigate = useNavigate();
+  
   const [values, setValues] = useState({
     fullName: '',
     universityEmail: '',
@@ -225,6 +227,7 @@ sessionStorage.setItem(
   'pendingSignupEmail',
   values.universityEmail.trim()
 );
+  navigate('/verify-email');
 
 setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي.');
   setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي.');
