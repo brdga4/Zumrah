@@ -55,23 +55,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.MapInboundClaims = false;
 
         options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = jwtIssuer,
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
 
-                ValidateAudience = true,
-                ValidAudience = jwtAudience,
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
 
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(jwtKeyBytes),
-                ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(jwtKeyBytes),
+            ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
 
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.FromMinutes(1),
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromMinutes(1),
 
-                NameClaimType = "sub",
-                RoleClaimType = "role"
-            };
+            NameClaimType = "sub",
+            RoleClaimType = "role"
+        };
     });
 
 // Authorization policies
@@ -106,7 +106,7 @@ builder.Services.AddSingleton<JwtTokenService>();
 builder.Services.AddSingleton<OtpService>();
 
 builder.Services.AddScoped<IPasswordHasher<Student>, PasswordHasher<Student>>();
-
+builder.Services.AddScoped<IPasswordHasher<Admin>, PasswordHasher<Admin>>();
 var app = builder.Build();
 
 app.UseCors("ZumrahFrontends");
