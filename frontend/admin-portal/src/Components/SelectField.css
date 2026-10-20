@@ -1,0 +1,31 @@
+
+.zumrah-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.zumrah-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #172033;
+}
+
+.zumrah-select {
+  width: 100%;
+  min-height: 58px;
+  padding: 14px 16px;
+  border: 1px solid #E8E7F0;
+  border-radius: 12px;
+  background-color: #FFFFFF;
+  color: #172033;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.zumrah-select:focus {
+  outline: 2px solid #6847E8;
+  outline-offset: 2px;
+}
