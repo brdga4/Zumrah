@@ -1,19 +1,19 @@
 
-
+import { API_BASE_URL } from '../../config';
 import { useState } from 'react'
 import Button from '../../Components/Button'
 import './OtpVerification.css'
 
 // OTP verification component
-// email is a prop with a default value
-export default function OtpVerification({
-  email = 'name@student.ksu.edu.sa'
-}) {
+export default function OtpVerification() {
 
   // State variables
   const [otp, setOtp] = useState('')
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
+  // Get the email saved during signup.
+const verificationEmail =
+  sessionStorage.getItem('pendingSignupEmail') || '';
 
   // Handle user input
   function handleChange(event) {
@@ -32,17 +32,61 @@ export default function OtpVerification({
   }
 
   // Handle form submission
-  function handleSubmit(event) {
-    event.preventDefault()
+
+  // Verify the OTP with the backend.
+  async function handleSubmit(event) {
+    event.preventDefault();
 
     if (!otp) {
-      setError('الرجاء إدخال رمز التحقق.')
-      return
+      setError('الرجاء إدخال رمز التحقق.');
+      return;
     }
 
-    setError('')
-    setMessage('سيتم التحقق من الرمز بعد ربط الباك إند.')
+    setError('');
+    setMessage('');
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/auth/student/verify-email`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            universityEmail: verificationEmail,
+            otp: otp,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        setError('تعذر تأكيد البريد. تحقق من الرمز وحاول مجددًا.');
+        return;
+      }
+
+
+    
+const data = await response.json();
+
+// Save the JWT temporarily for the current browser session.
+if (!data.accessToken) {
+  setError('لم يتم استلام رمز تسجيل الدخول.');
+  return;
+}
+
+sessionStorage.setItem('accessToken', data.accessToken);
+
+setMessage('تم تأكيد البريد الإلكتروني بنجاح.');
+
+
+
+    } catch (error) {
+      console.error('OTP verification failed:', error);
+      setError('تعذر الاتصال بالخادم. حاول مجددًا.');
+    }
   }
+
 
   // Handle resend code
   function handleResend() {
@@ -88,7 +132,7 @@ export default function OtpVerification({
           {/* Display email from props */}
           <div className="otp-email-box">
             <span>البريد الجامعي</span>
-            <strong dir="ltr">{email}</strong>
+            <strong dir="ltr">{verificationEmail}</strong>
           </div>
 
           {/* OTP form */}
