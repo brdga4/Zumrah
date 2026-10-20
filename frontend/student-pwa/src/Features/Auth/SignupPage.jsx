@@ -1,5 +1,5 @@
-
-import { useState } from 'react';
+import { API_BASE_URL } from '../../config';
+import { useState, useEffect } from 'react';
 import Button from '../../Components/Button';
 import './SignupPage.css';
 
@@ -9,29 +9,7 @@ const universities = {
   'kku.edu.sa': 'جامعة الملك خالد',
 };
 
-// Demo colleges and majors.
-const collegeMajors = {
-  'كلية الهندسة': [
-    'الهندسة الكهربائية',
-    'الهندسة الميكانيكية',
-    'الهندسة المدنية',
-  ],
-  'كلية علوم الحاسب والمعلومات': [
-    'علوم الحاسب',
-    'هندسة البرمجيات',
-    'نظم المعلومات',
-  ],
-  'كلية العلوم': [
-    'الرياضيات',
-    'الفيزياء',
-    'الكيمياء',
-  ],
-  'كلية إدارة الأعمال': [
-    'إدارة الأعمال',
-    'المحاسبة',
-    'المالية',
-  ],
-};
+
 
 // Identify the university from the email domain.
 function universityForEmail(email) {
@@ -112,13 +90,39 @@ export default function SignupPage() {
     college: '',
     major: '',
   });
-
+  // Colleges and majors from the backend
+  const [collegeData, setCollegeData] = useState([]);
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState('');
+  
+  // Fetch colleges and majors from the backend.
+  useEffect(() => {
+    async function fetchColleges() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/colleges`);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch colleges');
+        }
+
+        const data = await response.json();
+        setCollegeData(data.colleges);
+      } catch (error) {
+        console.error('Error loading colleges:', error);
+      }
+    }
+
+    fetchColleges();
+  }, []);
+
 
   const university = universityForEmail(values.universityEmail);
-  const colleges = Object.keys(collegeMajors);
-  const majors = collegeMajors[values.college] || [];
+  
+const colleges = collegeData;
+
+const majors =
+  colleges.find((college) => college.collegeId === values.college)?.majors || [];
+
 
   // Update input values and reset dependent fields.
   function handleChange(event) {
@@ -163,7 +167,7 @@ export default function SignupPage() {
   }
 
   // Validate the whole form before backend integration.
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setMessage('');
 
@@ -191,10 +195,44 @@ export default function SignupPage() {
       return;
     }
 
-    // TODO: Connect registration and OTP sending to the .NET API.
-    setMessage(
-      'تم التحقق من الحقول. إنشاء الحساب وإرسال رمز OTP ينتظران الربط بالباك إند.'
-    );
+    
+try {
+  // Send registration data to the backend.
+  const response = await fetch(`${API_BASE_URL}/api/auth/student/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: values.fullName.trim(),
+      universityEmail: values.universityEmail.trim(),
+      password: values.password,
+      majorId: values.major,
+    }),
+  });
+
+  if (!response.ok) {
+    setMessage('تعذر إنشاء الحساب. تأكد من البيانات وحاول مجددًا.');
+    return;
+  }
+  if (!response.ok) {
+  setMessage('تعذر إنشاء الحساب. تأكد من البيانات وحاول مجددًا.');
+  return;
+}
+
+// Save the email for OTP verification.
+sessionStorage.setItem(
+  'pendingSignupEmail',
+  values.universityEmail.trim()
+);
+
+setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي.');
+  setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي.');
+} catch (error) {
+  console.error('Registration failed:', error);
+  setMessage('تعذر الاتصال بالخادم. حاول مجددًا.');
+}
+
   }
 
   return (
@@ -356,11 +394,13 @@ export default function SignupPage() {
                 >
                   <option value="">اختر الكلية</option>
 
-                  {colleges.map((college) => (
-                    <option key={college} value={college}>
-                      {college}
-                    </option>
-                  ))}
+                  
+                {colleges.map((college) => (
+                  <option key={college.collegeId} value={college.collegeId}>
+                    {college.collegeName}
+                  </option>
+                ))}
+
                 </select>
 
                 <span className="field-error" role="alert">
@@ -387,10 +427,10 @@ export default function SignupPage() {
                   </option>
 
                   {majors.map((major) => (
-                    <option key={major} value={major}>
-                      {major}
-                    </option>
-                  ))}
+                  <option key={major.majorId} value={major.majorId}>
+                    {major.majorName}
+                  </option>
+                    ))}
                 </select>
 
                 <span className="field-error" role="alert">
