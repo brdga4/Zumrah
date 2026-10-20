@@ -6,12 +6,13 @@ using Resend;
 using Zumrah.Api.Models;
 using Zumrah.Api.Data;
 using Zumrah.Api.Features.Auth;
+using Zumrah.Api.Features;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration
-    .GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException(
+    .GetConnectionString("DevConnection") ?? throw new InvalidOperationException(
         "Database connection string is missing."
     );
 
@@ -113,19 +114,6 @@ app.UseCors("ZumrahFrontends");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/api/example", async (ZumrahDbContext db) =>
-{
-    var email = await db.Admins
-        .Where(admin => admin.Username == "admin")
-        .Select(admin => admin.Email)
-        .FirstOrDefaultAsync();
-
-    if (email is null)
-    {
-        return Results.NotFound("Admin not found.");
-    }
-
-    return Results.Ok(new { email });
-});
+app.MapAllEndpoints();
 
 app.Run();
