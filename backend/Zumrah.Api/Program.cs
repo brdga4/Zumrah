@@ -86,6 +86,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("ZumrahFrontends", policy =>
     {
         policy.WithOrigins(
+            // Production custom domains
+            "https://zumrah.tech",
+            "https://admin.zumrah.tech",
+
             // Production frontends
             "https://zumrah-student.pages.dev",
             "https://zumrah-admin.pages.dev",
