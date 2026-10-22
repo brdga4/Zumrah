@@ -89,7 +89,7 @@ builder.Services.AddCors(options =>
             // Production custom domains
             "https://zumrah.tech",
             "https://admin.zumrah.tech",
-            
+
             // Production frontends
             "https://zumrah-student.pages.dev",
             "https://zumrah-admin.pages.dev",

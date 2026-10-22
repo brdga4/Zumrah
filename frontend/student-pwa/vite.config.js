@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://zumrah-api-c9guedfya3bdgga3.germanywestcentral-01.azurewebsites.net',
+        target: 'https://api.zumrah.tech',
         changeOrigin: true,
       },
     },
