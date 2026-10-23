@@ -12,7 +12,7 @@ namespace Zumrah.Api.Features.Auth.Student.Registration;
 
 public static class RegisterStudentEndpoint
 {
-    private const string _EmailPattern = @"^[0-9]+@student\.ksu\.edu\.sa$";
+    private const string _EmailPattern = @"^[0-9]{9}@student\.ksu\.edu\.sa$";
     public static IEndpointRouteBuilder MapRegisterStudentEndpoint(
         this IEndpointRouteBuilder app)
     {
@@ -32,7 +32,19 @@ public static class RegisterStudentEndpoint
         IPasswordHasher<StudentModel> passwordHasher,
         IResend resend)
     {
-        string email = request.UniversityEmail.Trim().ToLowerInvariant();
+        // Name validation
+        string? name = request.Name?.Trim();
+
+        if (string.IsNullOrWhiteSpace(name) || name.Length > 100)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_NAME",
+                message = "Name is required and cannot exceed 100 characters."
+            });
+        }
+
+        string email = (request.UniversityEmail ?? "").Trim().ToLowerInvariant();
 
         // Email Regex
         if (!Regex.IsMatch(email, _EmailPattern))
@@ -41,6 +53,18 @@ public static class RegisterStudentEndpoint
             {
                 code = "INVALID_EMAIL",
                 message = "A valid KSU student email is required."
+            });
+        }
+
+
+        if (string.IsNullOrWhiteSpace(request.Password) ||
+            request.Password.Length < 8 ||
+            request.Password.Length > 100)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_PASSWORD",
+                message = "Password must be between 8 and 100 characters."
             });
         }
 
@@ -56,8 +80,28 @@ public static class RegisterStudentEndpoint
             });
         }
 
+
+        if (!await db.Majors.AnyAsync(m => m.MajorId == request.MajorId))
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_MAJOR",
+                message = "The selected major does not exist."
+            });
+        }
+
         // Checks for pending registrations
         var pendingReg = await db.PendingRegistrations.SingleOrDefaultAsync(p => p.UniversityEmail == email);
+
+        if (pendingReg is not null &&
+            now < pendingReg.LastOtpSentAt.AddSeconds(60))
+        {
+            return Results.Json(new
+            {
+                code = "OTP_COOLDOWN",
+                message = "Please wait 60 seconds before requesting another OTP."
+            }, statusCode: 429);
+        }
 
         if (pendingReg is null)
         {
@@ -74,7 +118,7 @@ public static class RegisterStudentEndpoint
         string otp = otpService.GenerateCode();
 
         // Replaces all registration information
-        pendingReg.Name = request.Name.Trim();
+        pendingReg.Name = name;
         pendingReg.UniversityEmail = email;
         pendingReg.PasswordHash = passwordHasher.HashPassword(new StudentModel(), request.Password);
         pendingReg.MajorId = request.MajorId;
