@@ -176,14 +176,36 @@ public static class RegisterStudentEndpoint
 
         var pending = await db.PendingRegistrations.SingleAsync(p => p.UniversityEmail == email);
 
-        // Verify the OTP
-        if (DateTime.UtcNow >= pending.OtpExpiresAt ||
-            !otpService.VerifyCode(
-                pending.PendingRegistrationId,
-                email,
-                request.Otp,
-                pending.OtpHash))
+        if (pending.FailedAttempts >= 5)
         {
+            return Results.Json(new
+            {
+                code = "TOO_MANY_ATTEMPTS",
+                message = "Too many incorrect OTP attempts. Please request a new code."
+            }, statusCode: 429);
+        }
+
+        // Check OTP expiration
+        if (DateTime.UtcNow >= pending.OtpExpiresAt)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_OTP",
+                message = "Invalid or expired verification code."
+            });
+        }
+
+        // Check OTP correctness
+        if (!otpService.VerifyCode(
+            pending.PendingRegistrationId,
+            email,
+            request.Otp,
+            pending.OtpHash))
+        {
+            pending.FailedAttempts++;
+
+            await db.SaveChangesAsync();
+
             return Results.BadRequest(new
             {
                 code = "INVALID_OTP",
@@ -196,6 +218,15 @@ public static class RegisterStudentEndpoint
             .Include(m => m.College)
             .Include(m => m.ChatRoom)
             .SingleAsync(m => m.MajorId == pending.MajorId);
+
+        if(major.ChatRoom is null)
+        {
+            return Results.Json(new
+            {
+                code = "MAJOR_CHAT_ROOM_MISSING",
+                message = "The selected major is not ready for registration. Please try again later."
+            }, statusCode: 503);
+        }
 
         // Creates the verified student
         var student = new StudentModel
@@ -240,7 +271,7 @@ public static class RegisterStudentEndpoint
                     MajorName = major.MajorName
                 },
 
-                MajorChatRoomId = major.ChatRoom!.ChatRoomId
+                MajorChatRoomId = major.ChatRoom.ChatRoomId
             }
         };
 
