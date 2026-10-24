@@ -13,7 +13,7 @@ namespace Zumrah.Api.Features.Auth.Student.Registration;
 public static class RegisterStudentEndpoint
 {
     private const string _EmailPattern = @"^[0-9]{9}@student\.ksu\.edu\.sa$";
-    public static IEndpointRouteBuilder MapRegisterStudentEndpoint(
+    public static IEndpointRouteBuilder MapRegisterStudentEndpoints(
         this IEndpointRouteBuilder app)
     {
         app.MapPost("/api/auth/student/register", Register)
