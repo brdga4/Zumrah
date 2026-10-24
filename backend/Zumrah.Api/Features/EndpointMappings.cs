@@ -11,7 +11,7 @@ public static class EndpointMappings
     public static IEndpointRouteBuilder MapAllEndpoints(
         this IEndpointRouteBuilder app)
     {
-        app.MapRegisterStudentEndpoint();
+        app.MapRegisterStudentEndpoints();
         app.MapAdminLoginEndpoint();
         app.MapLoginStudentEndpoint();
         app.MapGetCollegesEndpoint();
