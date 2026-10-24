@@ -13,7 +13,7 @@ using Zumrah.Api.Features.Students;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration
-    .GetConnectionString("DevConnection") ?? throw new InvalidOperationException(
+    .GetConnectionString("ProdConnection") ?? throw new InvalidOperationException(
         "Database connection string is missing."
     );
 
