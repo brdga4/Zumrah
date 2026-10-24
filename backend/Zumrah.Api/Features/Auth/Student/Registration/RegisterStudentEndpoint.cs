@@ -108,7 +108,8 @@ public static class RegisterStudentEndpoint
             pendingReg = new PendingRegistration
             {
                 PendingRegistrationId = Guid.NewGuid(),
-                UniversityEmail = email
+                UniversityEmail = email,
+                CreatedAt = now
             };
 
             db.PendingRegistrations.Add(pendingReg);
@@ -129,7 +130,6 @@ public static class RegisterStudentEndpoint
         pendingReg.OtpExpiresAt = now.AddMinutes(10);
         pendingReg.FailedAttempts = 0;
         pendingReg.LastOtpSentAt = now;
-        pendingReg.CreatedAt = now;
 
         await db.SaveChangesAsync();
 
@@ -147,7 +147,15 @@ public static class RegisterStudentEndpoint
 
         if (!response.Success)
         {
-            return Results.StatusCode(503);
+            pendingReg.LastOtpSentAt = now.AddSeconds(-60);
+
+            await db.SaveChangesAsync();
+
+            return Results.Json(new
+            {
+                code = "OTP_SEND_FAILED",
+                message = "Failed to send the verification email. Please try again."
+            }, statusCode: 503);
         }
 
         return Results.Accepted(value: new
