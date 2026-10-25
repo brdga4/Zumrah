@@ -41,4 +41,28 @@ public class CourseService
 
         return (majorCourses, enrolledCourseIds);
     }
+
+
+    public async Task<List<Enrollment>?> GetEnrolledCoursesAsync(Guid studentId)
+    {
+        // Checks whether the student exists
+        var studentExists = await _db.Students
+            .AnyAsync(s => s.StudentId == studentId);
+
+        if (!studentExists)
+        {
+            return null;
+        }
+
+        // Gets all courses the student is enrolled in
+        var enrollments = await _db.Enrollments
+            .Include(e => e.Course)
+                .ThenInclude(c => c.ChatRoom)
+            .Where(e => e.StudentId == studentId)
+            .AsNoTracking()
+            .OrderBy(e => e.Course.CourseCode)
+            .ToListAsync();
+
+        return enrollments;
+    }
 }
