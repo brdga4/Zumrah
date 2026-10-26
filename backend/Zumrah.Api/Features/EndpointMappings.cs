@@ -20,6 +20,7 @@ public static class EndpointMappings
         app.MapStudentProfileEndpoints();
         app.MapGetAvailableCoursesEndpoint();
         app.MapGetEnrolledCoursesEndpoint();
+        app.MapCreateEnrollmentEndpoint();
 
         return app;
     }
