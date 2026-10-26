@@ -64,4 +64,53 @@ public class AcademicManagementService
             CreatedAt = college.CreatedAt
         };
     }
+
+    public async Task<(College? College, bool Duplicate)> UpdateCollegeAsync(
+        Guid collegeId,
+        string collegeName,
+        Guid adminId)
+    {
+        collegeName = collegeName.Trim();
+
+        if (string.IsNullOrWhiteSpace(collegeName) ||
+            collegeName.Length > 200)
+        {
+            throw new ArgumentException("Invalid college name.");
+        }
+
+        var college = await _db.Colleges
+            .FirstOrDefaultAsync(c => c.CollegeId == collegeId);
+
+        if (college is null)
+        {
+            return (null, false);
+        }
+
+        bool exists = await _db.Colleges
+            .AnyAsync(c =>
+                c.CollegeId != collegeId &&
+                c.CollegeName == collegeName);
+
+        if (exists)
+        {
+            return (null, true);
+        }
+
+        college.CollegeName = collegeName;
+        college.UpdatedByAdminId = adminId;
+        college.UpdatedAt = DateTime.UtcNow;
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is MySqlException { Number: 1062 })
+        {
+            _db.Entry(college).State = EntityState.Detached;
+            return (null, true);
+        }
+
+        return (college, false);
+    }
 }
