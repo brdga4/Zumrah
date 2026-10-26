@@ -131,4 +131,28 @@ public class CourseService
 
         return (enrollment, null);
     }
+
+
+    public async Task<bool> DeleteEnrollmentAsync(Guid studentId, Guid courseId)
+    {
+        // Gets the student's enrollment for the requested course
+        var enrollment = await _db.Enrollments
+            .SingleOrDefaultAsync(e =>
+                e.StudentId == studentId &&
+                e.CourseId == courseId);
+
+        // Student isn't enrolled in this course
+        if (enrollment is null)
+        {
+            return false;
+        }
+
+        // Marks the enrollment for deletion
+        _db.Enrollments.Remove(enrollment);
+
+        // Deletes the enrollment from MySQL
+        await _db.SaveChangesAsync();
+
+        return true;
+    }
 }

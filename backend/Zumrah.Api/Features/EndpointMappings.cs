@@ -21,6 +21,7 @@ public static class EndpointMappings
         app.MapGetAvailableCoursesEndpoint();
         app.MapGetEnrolledCoursesEndpoint();
         app.MapCreateEnrollmentEndpoint();
+        app.MapDeleteEnrollmentEndpoint();
 
         return app;
     }
