@@ -17,6 +17,9 @@ public static class AdminAcademicEndpoints
         app.MapPost("/api/admin/majors", CreateMajor)
             .RequireAuthorization("Admin");
 
+        app.MapPatch("/api/admin/majors/{majorId}", UpdateMajor)
+            .RequireAuthorization("Admin");
+
         return app;
     }
 
@@ -174,6 +177,71 @@ public static class AdminAcademicEndpoints
             return Results.Json(
                 result.Major,
                 statusCode: StatusCodes.Status201Created);
+        }
+        catch (ArgumentException)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_MAJOR_NAME",
+                message = "Major name must be between 1 and 200 characters."
+            });
+        }
+    }
+
+    private static async Task<IResult> UpdateMajor(
+        string majorId,
+        UpdateMajorRequest request,
+        HttpContext httpContext,
+        AcademicManagementService service)
+    {
+        if (!Guid.TryParse(majorId, out Guid parsedMajorId))
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_MAJOR_ID",
+                message = "Invalid major ID."
+            });
+        }
+
+        if (!Guid.TryParse(
+            httpContext.User.FindFirst("sub")?.Value,
+            out Guid adminId))
+        {
+            return Results.Unauthorized();
+        }
+
+        try
+        {
+            var result = await service.UpdateMajorAsync(
+                parsedMajorId,
+                request.MajorName ?? string.Empty,
+                adminId);
+
+            if (result.Duplicate)
+            {
+                return Results.Conflict(new
+                {
+                    code = "MAJOR_ALREADY_EXISTS",
+                    message = "Major already exists in this college."
+                });
+            }
+
+            if (result.Major is null)
+            {
+                return Results.NotFound(new
+                {
+                    code = "MAJOR_NOT_FOUND",
+                    message = "Major not found."
+                });
+            }
+
+            return Results.Ok(new
+            {
+                majorId = result.Major.MajorId,
+                collegeId = result.Major.CollegeId,
+                majorName = result.Major.MajorName,
+                updatedAt = result.Major.UpdatedAt
+            });
         }
         catch (ArgumentException)
         {

@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 using Zumrah.Api.Data;
@@ -192,5 +193,55 @@ public class AcademicManagementService
             ChatRoomId = chatRoomId,
             CreatedAt = createdAt
         }, false, false);
+    }
+
+    public async Task<(Major? Major, bool Duplicate)> UpdateMajorAsync(
+        Guid majorId,
+        string majorName,
+        Guid adminId)
+    {
+        majorName = majorName.Trim();
+
+        if (string.IsNullOrWhiteSpace(majorName) ||
+            majorName.Length > 200)
+        {
+            throw new ArgumentException("Invalid major name.");
+        }
+
+        var major = await _db.Majors
+            .FirstOrDefaultAsync(m => m.MajorId == majorId);
+
+        if (major is null)
+        {
+            return (null, false);
+        }
+
+        bool exists = await _db.Majors
+            .AnyAsync(m =>
+                m.MajorId != majorId &&
+                m.CollegeId == major.CollegeId &&
+                m.MajorName == majorName);
+
+        if (exists)
+        {
+            return (null, true);
+        }
+
+        major.MajorName = majorName;
+        major.UpdatedByAdminId = adminId;
+        major.UpdatedAt = DateTime.UtcNow;
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is MySqlException { Number: 1062 })
+        {
+            _db.Entry(major).State = EntityState.Detached;
+            return (null, true);
+        }
+
+        return (major, false);
     }
 }
