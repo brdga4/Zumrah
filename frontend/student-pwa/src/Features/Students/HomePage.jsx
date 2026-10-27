@@ -1,36 +1,142 @@
 
 import Button from '../../Components/Button';
 import './HomePage.css';
+import { useState, useEffect } from 'react';
+import { getStudentProfile } from './studentApi';
+import { getAvailableCourses, getEnrolledCourses, enrollInCourse, unenrollFromCourse } from '../Courses/coursesApi';
 
-// Temporary course data until the backend API is ready.
-const courses = [
-  {
-    courseId: 'demo-1',
-    courseCode: 'CS101',
-    courseName: 'مقدمة في البرمجة',
-    isEnrolled: false,
-  },
-  {
-    courseId: 'demo-2',
-    courseCode: 'MATH101',
-    courseName: 'التفاضل والتكامل',
-    isEnrolled: false,
-  },
-  {
-    courseId: 'demo-3',
-    courseCode: 'EE210',
-    courseName: 'الدوائر الكهربائية',
-    isEnrolled: true,
-  },
-];
+
 
 export default function HomePage() {
 
-  // Temporary action until enrollment API integration.
-  function handleJoin() {
-    window.alert(
-      'سيتم تفعيل الانضمام بعد ربط الصفحة بالباك إند.'
-    );
+   // Store the student profile received from the backend
+  const [student, setStudent] = useState(null);
+  // Store available courses received from the backend
+  const [availableCourses, setAvailableCourses] = useState([]);
+  // Store enrolled courses received from the backend
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+  
+  // Fetch student profile when the Home Page loads
+  useEffect(() => {
+    async function loadStudent() {
+      try {
+        // Call our API function
+        const data = await getStudentProfile();
+
+        // Store the response in React state
+        setStudent(data);
+      } catch (error) {
+        console.error('Failed to load student:', error);
+      }
+    }
+
+    loadStudent();
+  }, []);
+
+  
+  // Fetch available courses when the Home Page loads
+  useEffect(() => {
+    async function loadCourses() {
+      try {
+        // Call our API function
+        const data = await getAvailableCourses();
+
+        // Store the courses array in React state
+        setAvailableCourses(data.courses);
+      } catch (error) {
+        console.error('Failed to load available courses:', error);
+      }
+    }
+
+    loadCourses();
+  }, []);
+
+  // Fetch enrolled courses when the Home Page loads
+  useEffect(() => {
+    async function loadEnrolledCourses() {
+      try {
+        // Call our API function
+        const data = await getEnrolledCourses();
+
+        // Store the enrolled courses array in React state
+        setEnrolledCourses(data.courses);
+      } catch (error) {
+        console.error('Failed to load enrolled courses:', error);
+      }
+    }
+
+    loadEnrolledCourses();
+  }, []);
+
+
+  // Handle course enrollment when the Join button is clicked
+  async function handleJoin(courseId) {
+    try {
+      // Send the selected course ID to the backend
+      await enrollInCourse(courseId);
+      
+      // Refresh available courses after enrollment
+      const availableData = await getAvailableCourses();
+      setAvailableCourses(availableData.courses);
+      // Refresh enrolled courses after enrollment
+      const enrolledData = await getEnrolledCourses();
+      setEnrolledCourses(enrolledData.courses);
+
+     // Show a success message
+      window.alert('تم الانضمام إلى المقرر بنجاح');
+    }  catch (error) {
+      // Log the error in the browser console
+      console.error('Failed to enroll in course:', error);
+
+      // Student is already enrolled
+      if (error.status === 409) {
+        window.alert('أنت مسجل في هذا المقرر بالفعل');
+
+      // Course does not exist
+      } else if (error.status === 404) {
+        window.alert('المقرر غير موجود');
+
+      // Course is not available for the student's major
+      } else if (error.status === 400) {
+        window.alert('هذا المقرر غير متاح لتخصصك');
+
+      // Handle any other error
+      } else {
+        window.alert('تعذر الانضمام إلى المقرر');
+      }
+    }   
+
+  }
+
+  // Handle course unenrollment when the Leave button is clicked
+  async function handleLeave(courseId) {
+    try {
+      // Send the DELETE request to the backend
+      await unenrollFromCourse(courseId);
+
+      // Refresh available courses
+      const availableData = await getAvailableCourses();
+      setAvailableCourses(availableData.courses);
+
+      // Refresh enrolled courses
+      const enrolledData = await getEnrolledCourses();
+      setEnrolledCourses(enrolledData.courses);
+
+      // Show a success message
+      window.alert('تم حذف المقرر بنجاح');
+
+    } catch (error) {
+      // Log the error in the browser console
+      console.error('Failed to leave course:', error);
+
+      // Student is not enrolled in the course
+      if (error.status === 404) {
+        window.alert('أنت غير مسجل في هذا المقرر');
+      } else {
+        // Handle any other error
+        window.alert('تعذر الانسحاب من المقرر');
+      }
+    }
   }
 
   return (
@@ -55,14 +161,32 @@ export default function HomePage() {
       <div className="home-container">
 
         <section className="home-welcome">
-          <h1>أهلًا بك في زُمْرَة 👋</h1>
+          <h1>أهلًا، {student?.name || 'طالب'} 👋</h1>
 
           <p>
             مساحتك الجامعية للتواصل ومشاركة المعرفة
             مع طلاب جامعتك.
           </p>
         </section>
+        {/* Enrolled Courses */}
+        <section>
+          <h2>مقرراتي</h2>
 
+          {enrolledCourses.length === 0 ? (
+            <p>لم تنضم إلى أي مقرر بعد.</p>
+          ) : (
+            enrolledCourses.map((course) => (
+              <div key={course.courseId}>
+                <h3>{course.courseName}</h3>
+                <p>{course.courseCode}</p>
+              {/* Leave the selected course */}
+                <Button onClick={() => handleLeave(course.courseId)}>
+                 حذف المقرر
+                </Button>
+              </div>
+            ))
+          )}
+        </section>
         {/* Course Communities */}
         <section className="home-communities">
 
@@ -70,7 +194,7 @@ export default function HomePage() {
 
           <div className="home-courses-grid">
 
-            {courses.map((course) => (
+            {availableCourses.map((course) => (
               <div
                 className="home-course-card"
                 key={course.courseId}
@@ -87,7 +211,7 @@ export default function HomePage() {
                   </span>
                 ) : (
                   <Button
-                    onClick={handleJoin}
+                    onClick={() => handleJoin(course.courseId)}
                   >
                     انضمام
                   </Button>
