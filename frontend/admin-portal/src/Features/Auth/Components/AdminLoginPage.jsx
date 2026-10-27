@@ -6,8 +6,11 @@ import {
   loginPasswordError,
 } from './authValidation';
 import './AdminLoginPage.css';
+import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../../config';
 
 export default function AdminLoginPage() {
+    const navigate = useNavigate();
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
@@ -55,66 +58,43 @@ export default function AdminLoginPage() {
     }
 
     setIsLoading(true);
-
     try {
-      const response = await fetch(
-        'http://localhost:5000/api/auth/admin',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            identifier: identifier.trim(),
-            password: password,
-          }),
-        }
-      );
+  const response = await fetch(`${API_BASE_URL}/api/auth/admin`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      identifier: identifier.trim(),
+      password: password,
+    }),
+  });
 
-      if (response.status === 400) {
-        setMessage('يرجى التأكد من البيانات المدخلة.');
-        return;
-      }
-
-      if (response.status === 401) {
-        setMessage('اسم المستخدم أو كلمة المرور غير صحيحة.');
-        return;
-      }
-
-      if (!response.ok) {
-        setMessage('حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.');
-        return;
-      }
-
-      const data = await response.json();
-
-      if (!data.accessToken || !data.admin) {
-        setMessage('استجابة الخادم غير مكتملة.');
-        return;
-      }
-
-      // Store JWT for the current browser session
-      sessionStorage.setItem('adminAccessToken', data.accessToken);
-
-      setPassword('');
-
-      setMessage(
-        `تم تسجيل الدخول بنجاح، مرحبًا ${data.admin.username}`
-      );
-
-      // JWT received successfully.
-      // Token management and dashboard navigation
-      // will be implemented in the next step.
-
-    } catch (error) {
-      console.error('Admin login error:', error);
-
-      setMessage(
-        'تعذر الاتصال بالخادم. تأكد من تشغيل الـ Backend.'
-      );
-    } finally {
-      setIsLoading(false);
+  if (!response.ok) {
+    if (response.status === 401) {
+      setMessage('اسم المستخدم أو البريد الإلكتروني أو كلمة المرور غير صحيحة.');
+    } else {
+      setMessage('تعذر تسجيل الدخول حاليًا. حاول مرة أخرى.');
     }
+
+    return;
+  }
+
+  const data = await response.json();
+
+  if (!data.accessToken) {
+    setMessage('لم يتم استلام رمز الدخول من الخادم.');
+    return;
+  }
+
+  sessionStorage.setItem('accessToken', data.accessToken);
+  navigate('/dashboard', { replace: true });
+} catch (error) {
+  console.error('Admin login failed:', error);
+  setMessage('تعذر الاتصال بالخادم. تأكد من تشغيله ثم حاول مجددًا.');
+} finally {
+  setIsLoading(false);
+}
   }
 
   return (
