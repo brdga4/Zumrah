@@ -1,6 +1,8 @@
 
 import Button from '../../Components/Button';
 import './HomePage.css';
+import { useState, useEffect } from 'react';
+import { getStudentProfile } from './studentApi';
 
 // Temporary course data until the backend API is ready.
 const courses = [
@@ -25,6 +27,28 @@ const courses = [
 ];
 
 export default function HomePage() {
+
+   // Store the student profile received from the backend
+  const [student, setStudent] = useState(null);
+
+  
+  // Fetch student profile when the Home Page loads
+  useEffect(() => {
+    async function loadStudent() {
+      try {
+        // Call our API function
+        const data = await getStudentProfile();
+
+        // Store the response in React state
+        setStudent(data);
+      } catch (error) {
+        console.error('Failed to load student:', error);
+      }
+    }
+
+    loadStudent();
+  }, []);
+
 
   // Temporary action until enrollment API integration.
   function handleJoin() {
@@ -55,7 +79,7 @@ export default function HomePage() {
       <div className="home-container">
 
         <section className="home-welcome">
-          <h1>أهلًا بك في زُمْرَة 👋</h1>
+          <h1>أهلًا، {student?.name || 'طالب'} 👋</h1>
 
           <p>
             مساحتك الجامعية للتواصل ومشاركة المعرفة
