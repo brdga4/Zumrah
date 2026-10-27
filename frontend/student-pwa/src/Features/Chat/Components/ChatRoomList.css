@@ -1,0 +1,89 @@
+/* ==========================================
+   1. CHAT ROOM LIST CONTAINER
+   ========================================== */
+
+.card.chat-room-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  min-width: 0;
+}
+
+/* Chat room list heading */
+.chat-room-list .heading-2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+/* ==========================================
+   2. CHAT ROOM GROUPS
+   ========================================== */
+
+.chat-room-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+/* ==========================================
+   3. CHAT ROOM BUTTONS
+   ========================================== */
+
+.chat-room-entry {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid #e8e4f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #172033;
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.chat-room-entry:hover {
+  border-color: #6847e8;
+  background: #f6f3ff;
+}
+
+/* Highlight the major chat room */
+.chat-room-entry-major {
+  background: #f6f3ff;
+  border-color: #e3ddfe;
+}
+
+/* ==========================================
+   4. ROOM INFORMATION
+   ========================================== */
+
+.chat-room-entry-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chat-room-entry-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.chat-room-entry-description {
+  color: #716b80;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* ==========================================
+   5. MOBILE
+   ========================================== */
+
+@media (max-width: 640px) {
+  .card.chat-room-list {
+    padding: 16px;
+  }
+}

@@ -1,0 +1,28 @@
+/* Base Badge styling */
+.badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+  align-items: center;
+  border-radius: var(--radius-pill, 999rem);
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+/* Solid purple Badge */
+.badge-solid {
+  color: var(--color-white, #ffffff);
+  background: var(--color-primary, #6847e8);
+}
+
+/* Soft purple Badge */
+.badge-soft {
+  color: var(--color-primary-dark, #4b35b5);
+  background: var(--color-primary-light, #efeafd);
+}
+
+/* Green success Badge */
+.badge-success {
+  color: var(--color-success-dark, #15803d);
+  background: var(--color-success-background, #f0fdf4);
+}

@@ -1,0 +1,247 @@
+/* ==========================================
+   1. PLATFORM LAYOUT
+   Main layout shared across student pages.
+   ========================================== */
+
+.platform {
+  min-height: 100vh;
+  color: #211c34;
+  background: #faf9fe;
+  font-family: "Alexandria", sans-serif;
+}
+
+.platform * {
+  box-sizing: border-box;
+}
+
+/* ==========================================
+   2. SIDEBAR
+   Navigation and student information.
+   ========================================== */
+
+.platform-sidebar {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-start: 0;
+  z-index: 10;
+  display: flex;
+  width: 280px;
+  padding: 32px 24px;
+  flex-direction: column;
+  border-inline-end: 1px solid #e8e4f0;
+  background: #ffffff;
+}
+
+.platform-sidebar-brand {
+  align-self: flex-start;
+  padding-inline: 16px;
+  text-decoration: none;
+}
+
+.platform-sidebar-nav {
+  display: flex;
+  margin-top: 48px;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.platform-sidebar-label {
+  margin-bottom: 4px;
+  padding-inline: 16px;
+  color: #aaa4b7;
+  font-size: 12px;
+}
+
+.platform-sidebar-nav .nav-link {
+  display: flex;
+  padding: 12px 16px;
+  align-items: center;
+  border-radius: 12px;
+  color: #716b80;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.platform-sidebar-nav .nav-link:hover,
+.platform-sidebar-nav .nav-link.is-active {
+  color: #6847e8;
+  background: #f6f3ff;
+}
+
+.platform-sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid #e8e4f0;
+}
+
+.platform-sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.platform-sidebar-user-text {
+  min-width: 0;
+}
+
+/* ==========================================
+   3. HEADER
+   Page title and student information.
+   ========================================== */
+
+.platform-main {
+  min-width: 0;
+  margin-inline-start: 280px;
+}
+
+.platform-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  min-height: 76px;
+  padding: 12px 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid #e8e4f0;
+  background: #faf9fe;
+}
+
+.platform-header-start {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 16px;
+}
+
+.platform-header .platform-header-title {
+  max-width: none;
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.platform-back {
+  padding: 8px 12px;
+  border: 1px solid #e8e4f0;
+  border-radius: 12px;
+  color: #211c34;
+  text-decoration: none;
+}
+
+.platform-user-chip {
+  display: flex;
+  padding: 6px 12px;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #e8e4f0;
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.platform-user-chip-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.platform-user-chip-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.platform-user-chip-major {
+  color: #716b80;
+  font-size: 11px;
+}
+
+/* ==========================================
+   4. PAGE CONTENT
+   Main content area.
+   ========================================== */
+
+.platform-content {
+  max-width: 1440px;
+  margin-inline: auto;
+  padding: 32px 40px 48px;
+}
+
+/* ==========================================
+   5. RESPONSIVE DESIGN
+   Tablet and mobile layouts.
+   ========================================== */
+
+@media (max-width: 1024px) {
+  .platform-sidebar {
+    position: static;
+    width: 100%;
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 20px 12px;
+    flex-direction: row;
+    align-items: center;
+    border-inline-end: none;
+    border-bottom: 1px solid #e8e4f0;
+  }
+
+  .platform-sidebar-nav {
+    margin-top: 0;
+    margin-inline-start: auto;
+    flex-direction: row;
+  }
+
+  .platform-sidebar-label,
+  .platform-sidebar-footer {
+    display: none;
+  }
+
+  .platform-main {
+    margin-inline-start: 0;
+  }
+
+  .platform-header {
+    position: static;
+    padding: 12px 20px;
+  }
+
+  .platform-content {
+    padding: 24px 20px 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .platform-sidebar {
+    display: grid;
+    grid-template-areas:
+      "brand"
+      "nav";
+    gap: 12px;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 16px 12px;
+  }
+
+  .platform-sidebar-brand {
+    grid-area: brand;
+    padding: 0;
+  }
+
+  .platform-sidebar-nav {
+    grid-area: nav;
+    width: 100%;
+    margin: 0;
+  }
+
+  .platform-sidebar-nav .nav-link {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .platform-header {
+    padding: 12px 16px;
+  }
+
+  .platform-user-chip-text {
+    display: none;
+  }
+
+  .platform-content {
+    padding: 20px 16px 40px;
+  }
+}

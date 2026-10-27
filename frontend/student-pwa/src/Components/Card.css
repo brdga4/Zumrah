@@ -1,0 +1,13 @@
+/* Shared Card component */
+
+/* Base styling for all Card components */
+.card {
+  /* Set the card border */
+  border: var(--border-width, 1px) solid var(--color-neutral-200, #e8e4f0);
+
+  /* Set the card corner radius */
+  border-radius: var(--radius-lg, 1rem);
+
+  /* Set the card background color */
+  background: var(--color-white, #ffffff);
+}

@@ -1,0 +1,37 @@
+/* Base styling for the Text component */
+.text {
+  margin: 0;
+}
+
+/* Default text color */
+.text-default {
+  color: var(--color-neutral-900, #211c34);
+}
+
+/* Muted text color */
+.text-muted {
+  color: var(--color-neutral-600, #716b80);
+}
+
+/* Normal text size */
+.text-body {
+  font-size: var(--font-size-md, 1rem);
+}
+
+/* Small text size */
+.text-small {
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+/* Font weights */
+.text-regular {
+  font-weight: 400;
+}
+
+.text-medium {
+  font-weight: 500;
+}
+
+.text-semibold {
+  font-weight: 600;
+}
