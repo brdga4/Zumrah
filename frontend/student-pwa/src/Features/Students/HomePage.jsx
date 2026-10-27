@@ -3,7 +3,7 @@ import Button from '../../Components/Button';
 import './HomePage.css';
 import { useState, useEffect } from 'react';
 import { getStudentProfile } from './studentApi';
-import { getAvailableCourses } from '../Courses/coursesApi';
+import { getAvailableCourses, getEnrolledCourses } from '../Courses/coursesApi';
 
 
 
@@ -13,6 +13,8 @@ export default function HomePage() {
   const [student, setStudent] = useState(null);
   // Store available courses received from the backend
   const [availableCourses, setAvailableCourses] = useState([]);
+  // Store enrolled courses received from the backend
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
   
   // Fetch student profile when the Home Page loads
   useEffect(() => {
@@ -49,6 +51,22 @@ export default function HomePage() {
     loadCourses();
   }, []);
 
+  // Fetch enrolled courses when the Home Page loads
+  useEffect(() => {
+    async function loadEnrolledCourses() {
+      try {
+        // Call our API function
+        const data = await getEnrolledCourses();
+
+        // Store the enrolled courses array in React state
+        setEnrolledCourses(data.courses);
+      } catch (error) {
+        console.error('Failed to load enrolled courses:', error);
+      }
+    }
+
+    loadEnrolledCourses();
+  }, []);
 
 
   // Temporary action until enrollment API integration.
@@ -87,7 +105,21 @@ export default function HomePage() {
             مع طلاب جامعتك.
           </p>
         </section>
+        {/* Enrolled Courses */}
+        <section>
+          <h2>مقرراتي</h2>
 
+          {enrolledCourses.length === 0 ? (
+            <p>لم تنضم إلى أي مقرر بعد.</p>
+          ) : (
+            enrolledCourses.map((course) => (
+              <div key={course.courseId}>
+                <h3>{course.courseName}</h3>
+                <p>{course.courseCode}</p>
+              </div>
+            ))
+          )}
+        </section>
         {/* Course Communities */}
         <section className="home-communities">
 
