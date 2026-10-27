@@ -3,34 +3,16 @@ import Button from '../../Components/Button';
 import './HomePage.css';
 import { useState, useEffect } from 'react';
 import { getStudentProfile } from './studentApi';
+import { getAvailableCourses } from '../Courses/coursesApi';
 
-// Temporary course data until the backend API is ready.
-const courses = [
-  {
-    courseId: 'demo-1',
-    courseCode: 'CS101',
-    courseName: 'مقدمة في البرمجة',
-    isEnrolled: false,
-  },
-  {
-    courseId: 'demo-2',
-    courseCode: 'MATH101',
-    courseName: 'التفاضل والتكامل',
-    isEnrolled: false,
-  },
-  {
-    courseId: 'demo-3',
-    courseCode: 'EE210',
-    courseName: 'الدوائر الكهربائية',
-    isEnrolled: true,
-  },
-];
+
 
 export default function HomePage() {
 
    // Store the student profile received from the backend
   const [student, setStudent] = useState(null);
-
+  // Store available courses received from the backend
+  const [availableCourses, setAvailableCourses] = useState([]);
   
   // Fetch student profile when the Home Page loads
   useEffect(() => {
@@ -48,6 +30,25 @@ export default function HomePage() {
 
     loadStudent();
   }, []);
+
+  
+  // Fetch available courses when the Home Page loads
+  useEffect(() => {
+    async function loadCourses() {
+      try {
+        // Call our API function
+        const data = await getAvailableCourses();
+
+        // Store the courses array in React state
+        setAvailableCourses(data.courses);
+      } catch (error) {
+        console.error('Failed to load available courses:', error);
+      }
+    }
+
+    loadCourses();
+  }, []);
+
 
 
   // Temporary action until enrollment API integration.
@@ -94,7 +95,7 @@ export default function HomePage() {
 
           <div className="home-courses-grid">
 
-            {courses.map((course) => (
+            {availableCourses.map((course) => (
               <div
                 className="home-course-card"
                 key={course.courseId}
