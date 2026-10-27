@@ -1,0 +1,211 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&display=swap');
+
+#root:has(.onboarding-page) {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: initial;
+}
+
+body:has(.onboarding-page) {
+  display: block;
+  margin: 0;
+  background: #FAF9FE;
+}
+
+.onboarding-page,
+.onboarding-page * {
+  box-sizing: border-box;
+}
+
+.onboarding-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Alexandria', sans-serif;
+  color: #172033;
+  background: #FAF9FE;
+}
+
+.onboarding-welcome {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(32px, 5vw, 80px);
+  background: linear-gradient(148deg, #6948E8, #4B35B5);
+  color: white;
+}
+
+.onboarding-welcome::before,
+.onboarding-welcome::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  border: 1px solid #ffffff24;
+  border-radius: 50%;
+}
+
+.onboarding-welcome::before {
+  width: 630px;
+  height: 630px;
+  bottom: -310px;
+  left: -200px;
+}
+
+.onboarding-welcome::after {
+  width: 440px;
+  height: 440px;
+  top: 8%;
+  left: -170px;
+}
+
+.onboarding-brand {
+  font-size: 42px;
+  font-weight: 700;
+}
+
+.onboarding-hero {
+  max-width: 530px;
+  margin: auto 0;
+}
+
+.onboarding-hero span {
+  color: #E0D9FF;
+  font-size: 13px;
+}
+
+.onboarding-hero p {
+  color: #E9E4FF;
+  font-size: 16px;
+  line-height: 2.2;
+}
+
+.onboarding-footer {
+  color: #D8D0FF;
+  font-size: 12px;
+}
+
+.onboarding-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 30px;
+}
+
+.onboarding-card {
+  width: 100%;
+  max-width: 440px;
+}
+
+.onboarding-pill {
+  display: inline-flex;
+  padding: 9px 13px;
+  border: 1px solid #E3DDFE;
+  border-radius: 100px;
+  background: #F2EEFF;
+  color: #4B35B5;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.onboarding-card h1 {
+  margin: 24px 0 11px;
+  font-size: 32px;
+  line-height: 1.5;
+  color: #172033;
+}
+
+.onboarding-subtitle {
+  margin-bottom: 28px;
+  color: #777D91;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.onboarding-university {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 25px;
+  padding: 17px 18px;
+  border: 1px solid #E3DDFE;
+  border-radius: 12px;
+  background: #F5F2FF;
+}
+
+.onboarding-university span {
+  color: #777D91;
+  font-size: 11px;
+}
+
+.onboarding-university strong {
+  color: #4B35B5;
+  font-size: 16px;
+}
+
+.onboarding-card .zumrah-field {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.onboarding-card .zumrah-button {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.onboarding-message {
+  min-height: 24px;
+  margin-top: 12px;
+  color: #4B35B5;
+  font-size: 12px;
+  line-height: 1.9;
+  text-align: center;
+}
+
+.onboarding-note {
+  margin-top: 20px;
+  color: #777D91;
+  font-size: 11px;
+  line-height: 2;
+  text-align: center;
+}
+
+.onboarding-copyright {
+  margin-top: 65px;
+  color: #A0A0AD;
+  font-size: 11px;
+}
+
+@media (max-width: 800px) {
+  .onboarding-page {
+    grid-template-columns: 1fr;
+  }
+
+  .onboarding-welcome {
+    min-height: 265px;
+    padding: 29px 26px;
+  }
+
+  .onboarding-hero {
+    margin: 35px 0 25px;
+  }
+
+  .onboarding-hero p {
+    font-size: 12px;
+  }
+
+  .onboarding-footer {
+    display: none;
+  }
+
+  .onboarding-panel {
+    padding: 45px 22px 25px;
+  }
+}
