@@ -244,4 +244,22 @@ public class AcademicManagementService
 
         return (major, false);
     }
+    public async Task<GetAdminCoursesResponse> GetCoursesAsync()
+    {
+        var courses = await _db.Courses
+            .AsNoTracking()
+            .OrderBy(c => c.CourseCode)
+            .Select(c => new AdminCourseItemResponse
+            {
+                CourseId = c.CourseId,
+                CourseCode = c.CourseCode,
+                CourseName = c.CourseName
+            })
+            .ToListAsync();
+
+        return new GetAdminCoursesResponse
+        {
+            Courses = courses
+        };
+    }
 }

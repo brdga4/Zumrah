@@ -20,6 +20,10 @@ public static class AdminAcademicEndpoints
         app.MapPatch("/api/admin/majors/{majorId}", UpdateMajor)
             .RequireAuthorization("Admin");
 
+
+        app.MapGet("/api/admin/courses", GetCourses)
+            .RequireAuthorization("Admin");
+
         return app;
     }
 
@@ -251,5 +255,12 @@ public static class AdminAcademicEndpoints
                 message = "Major name must be between 1 and 200 characters."
             });
         }
+    }
+    private static async Task<IResult> GetCourses(
+    AcademicManagementService service)
+    {
+        var courses = await service.GetCoursesAsync();
+
+        return Results.Ok(courses);
     }
 }
