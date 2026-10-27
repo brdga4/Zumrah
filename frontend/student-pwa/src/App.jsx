@@ -8,6 +8,7 @@ import LoginPage from './Features/Auth/Components/LoginPage';
 import SignupPage from './Features/Auth/SignupPage';
 import OtpVerification from './Features/Auth/OtpVerification';
 import HomePage from './Features/Students/HomePage';
+import ProfilePage from "./Features/Students/ProfilePage";
 
 // Redirect unauthenticated users to login.(home page is protected)
 function ProtectedRoute({ children }) {
@@ -38,6 +39,15 @@ export default function App() {
           }
         />
 
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
