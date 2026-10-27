@@ -20,8 +20,10 @@ public static class AdminAcademicEndpoints
         app.MapPatch("/api/admin/majors/{majorId}", UpdateMajor)
             .RequireAuthorization("Admin");
 
-
         app.MapGet("/api/admin/courses", GetCourses)
+            .RequireAuthorization("Admin");
+
+        app.MapPost("/api/admin/courses", CreateCourse)
             .RequireAuthorization("Admin");
 
         return app;
@@ -256,11 +258,54 @@ public static class AdminAcademicEndpoints
             });
         }
     }
+
     private static async Task<IResult> GetCourses(
-    AcademicManagementService service)
+        AcademicManagementService service)
     {
         var courses = await service.GetCoursesAsync();
 
         return Results.Ok(courses);
+    }
+
+    private static async Task<IResult> CreateCourse(
+        CreateCourseRequest request,
+        HttpContext httpContext,
+        AcademicManagementService service)
+    {
+        if (!Guid.TryParse(
+            httpContext.User.FindFirst("sub")?.Value,
+            out Guid adminId))
+        {
+            return Results.Unauthorized();
+        }
+
+        try
+        {
+            var course = await service.CreateCourseAsync(
+                request.CourseCode ?? string.Empty,
+                request.CourseName ?? string.Empty,
+                adminId);
+
+            if (course is null)
+            {
+                return Results.Conflict(new
+                {
+                    code = "COURSE_ALREADY_EXISTS",
+                    message = "Course code already exists."
+                });
+            }
+
+            return Results.Json(
+                course,
+                statusCode: StatusCodes.Status201Created);
+        }
+        catch (ArgumentException)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_COURSE_DATA",
+                message = "Course code must be between 1 and 30 characters, and course name between 1 and 200 characters."
+            });
+        }
     }
 }

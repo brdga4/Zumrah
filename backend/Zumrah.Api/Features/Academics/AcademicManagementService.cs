@@ -262,4 +262,76 @@ public class AcademicManagementService
             Courses = courses
         };
     }
+    public async Task<CreateCourseResponse?> CreateCourseAsync(
+    string courseCode,
+    string courseName,
+    Guid adminId)
+    {
+        courseCode = courseCode.Trim();
+        courseName = courseName.Trim();
+
+        if (string.IsNullOrWhiteSpace(courseCode) ||
+            courseCode.Length > 30 ||
+            string.IsNullOrWhiteSpace(courseName) ||
+            courseName.Length > 200)
+        {
+            throw new ArgumentException("Invalid course data.");
+        }
+
+        bool exists = await _db.Courses
+            .AnyAsync(c => c.CourseCode == courseCode);
+
+        if (exists)
+        {
+            return null;
+        }
+
+        var courseId = Guid.NewGuid();
+        var chatRoomId = Guid.NewGuid();
+        var createdAt = DateTime.UtcNow;
+
+        var course = new Course
+        {
+            CourseId = courseId,
+            CourseCode = courseCode,
+            CourseName = courseName,
+            CreatedByAdminId = adminId,
+            CreatedAt = createdAt
+        };
+
+        var chatRoom = new ChatRoom
+        {
+            ChatRoomId = chatRoomId,
+            RoomType = RoomType.COURSE,
+            CourseId = courseId,
+            MajorId = null,
+            IsActive = true,
+            CreatedAt = createdAt
+        };
+
+        _db.Courses.Add(course);
+        _db.ChatRooms.Add(chatRoom);
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is MySqlException { Number: 1062 })
+        {
+            _db.Entry(course).State = EntityState.Detached;
+            _db.Entry(chatRoom).State = EntityState.Detached;
+
+            return null;
+        }
+
+        return new CreateCourseResponse
+        {
+            CourseId = courseId,
+            CourseCode = courseCode,
+            CourseName = courseName,
+            ChatRoomId = chatRoomId,
+            CreatedAt = createdAt
+        };
+    }
 }
