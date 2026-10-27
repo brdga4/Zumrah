@@ -1,14 +1,11 @@
 
-import Button from '../../Components/Button';
+
 import './HomePage.css';
 import { useState, useEffect } from 'react';
 import { getStudentProfile } from './studentApi';
 import { getAvailableCourses, getEnrolledCourses, enrollInCourse, unenrollFromCourse } from '../Courses/coursesApi';
 import CourseCard from "../Courses/Components/CourseCard";
-// Shared UI components
-import Badge from "../../Components/Badge";
-import Heading from "../../Components/Heading";
-import Text from "../../Components/Text";
+
 
 import PlatformLayout from "../../Components/Platform/PlatformLayout";
 // Import the welcome section component
