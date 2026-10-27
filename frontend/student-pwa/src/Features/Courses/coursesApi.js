@@ -70,3 +70,29 @@ export async function enrollInCourse(courseId) {
   // Return the enrollment data from the backend
   return response.json();
 }
+
+  // Unenroll the student from a selected course
+export async function unenrollFromCourse(courseId) {
+  // Get the student's JWT from sessionStorage
+  const token = sessionStorage.getItem('accessToken');
+
+  // Send a DELETE request to the backend
+  const response = await fetch(`${API_BASE_URL}/api/enrollments/${courseId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  // Check if the request failed
+  if (!response.ok) {
+    // Create an Error object
+    const error = new Error('Failed to leave course');
+
+    // Store the HTTP status code
+    error.status = response.status;
+
+    // Pass the error to the catch block in HomePage.jsx
+    throw error;
+  }
+}

@@ -3,7 +3,7 @@ import Button from '../../Components/Button';
 import './HomePage.css';
 import { useState, useEffect } from 'react';
 import { getStudentProfile } from './studentApi';
-import { getAvailableCourses, getEnrolledCourses, enrollInCourse } from '../Courses/coursesApi';
+import { getAvailableCourses, getEnrolledCourses, enrollInCourse, unenrollFromCourse } from '../Courses/coursesApi';
 
 
 
@@ -108,6 +108,37 @@ export default function HomePage() {
 
   }
 
+  // Handle course unenrollment when the Leave button is clicked
+  async function handleLeave(courseId) {
+    try {
+      // Send the DELETE request to the backend
+      await unenrollFromCourse(courseId);
+
+      // Refresh available courses
+      const availableData = await getAvailableCourses();
+      setAvailableCourses(availableData.courses);
+
+      // Refresh enrolled courses
+      const enrolledData = await getEnrolledCourses();
+      setEnrolledCourses(enrolledData.courses);
+
+      // Show a success message
+      window.alert('تم حذف المقرر بنجاح');
+
+    } catch (error) {
+      // Log the error in the browser console
+      console.error('Failed to leave course:', error);
+
+      // Student is not enrolled in the course
+      if (error.status === 404) {
+        window.alert('أنت غير مسجل في هذا المقرر');
+      } else {
+        // Handle any other error
+        window.alert('تعذر الانسحاب من المقرر');
+      }
+    }
+  }
+
   return (
     <main className="zumrah-home" dir="rtl">
 
@@ -148,6 +179,10 @@ export default function HomePage() {
               <div key={course.courseId}>
                 <h3>{course.courseName}</h3>
                 <p>{course.courseCode}</p>
+              {/* Leave the selected course */}
+                <Button onClick={() => handleLeave(course.courseId)}>
+                 حذف المقرر
+                </Button>
               </div>
             ))
           )}
