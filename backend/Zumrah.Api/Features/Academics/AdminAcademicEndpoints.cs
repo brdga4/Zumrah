@@ -14,6 +14,9 @@ public static class AdminAcademicEndpoints
         app.MapPatch("/api/admin/colleges/{collegeId}", UpdateCollege)
             .RequireAuthorization("Admin");
 
+        app.MapPost("/api/admin/majors", CreateMajor)
+            .RequireAuthorization("Admin");
+
         return app;
     }
 
@@ -118,6 +121,66 @@ public static class AdminAcademicEndpoints
             {
                 code = "INVALID_COLLEGE_NAME",
                 message = "College name must be between 1 and 200 characters."
+            });
+        }
+    }
+
+    private static async Task<IResult> CreateMajor(
+        CreateMajorRequest request,
+        HttpContext httpContext,
+        AcademicManagementService service)
+    {
+        if (!Guid.TryParse(
+            httpContext.User.FindFirst("sub")?.Value,
+            out Guid adminId))
+        {
+            return Results.Unauthorized();
+        }
+
+        if (request.CollegeId == Guid.Empty)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_COLLEGE_ID",
+                message = "Invalid college ID."
+            });
+        }
+
+        try
+        {
+            var result = await service.CreateMajorAsync(
+                request.CollegeId,
+                request.MajorName ?? string.Empty,
+                adminId);
+
+            if (result.CollegeNotFound)
+            {
+                return Results.NotFound(new
+                {
+                    code = "COLLEGE_NOT_FOUND",
+                    message = "College not found."
+                });
+            }
+
+            if (result.Duplicate)
+            {
+                return Results.Conflict(new
+                {
+                    code = "MAJOR_ALREADY_EXISTS",
+                    message = "Major already exists in this college."
+                });
+            }
+
+            return Results.Json(
+                result.Major,
+                statusCode: StatusCodes.Status201Created);
+        }
+        catch (ArgumentException)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_MAJOR_NAME",
+                message = "Major name must be between 1 and 200 characters."
             });
         }
     }

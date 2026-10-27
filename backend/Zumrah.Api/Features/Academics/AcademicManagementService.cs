@@ -1,8 +1,8 @@
-
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 using Zumrah.Api.Data;
 using Zumrah.Api.Models;
+using Zumrah.Api.Models.Enums;
 using Zumrah.Api.Features.Academics.DTOs;
 
 namespace Zumrah.Api.Features.Academics;
@@ -112,5 +112,85 @@ public class AcademicManagementService
         }
 
         return (college, false);
+    }
+
+    public async Task<(CreateMajorResponse? Major, bool CollegeNotFound, bool Duplicate)> CreateMajorAsync(
+        Guid collegeId,
+        string majorName,
+        Guid adminId)
+    {
+        majorName = majorName.Trim();
+
+        if (string.IsNullOrWhiteSpace(majorName) ||
+            majorName.Length > 200)
+        {
+            throw new ArgumentException("Invalid major name.");
+        }
+
+        bool collegeExists = await _db.Colleges
+            .AnyAsync(c => c.CollegeId == collegeId);
+
+        if (!collegeExists)
+        {
+            return (null, true, false);
+        }
+
+        bool majorExists = await _db.Majors
+            .AnyAsync(m =>
+                m.CollegeId == collegeId &&
+                m.MajorName == majorName);
+
+        if (majorExists)
+        {
+            return (null, false, true);
+        }
+
+        var majorId = Guid.NewGuid();
+        var chatRoomId = Guid.NewGuid();
+        var createdAt = DateTime.UtcNow;
+
+        var major = new Major
+        {
+            MajorId = majorId,
+            CollegeId = collegeId,
+            MajorName = majorName,
+            CreatedByAdminId = adminId,
+            CreatedAt = createdAt
+        };
+
+        var chatRoom = new ChatRoom
+        {
+            ChatRoomId = chatRoomId,
+            RoomType = RoomType.MAJOR,
+            MajorId = majorId,
+            CourseId = null,
+            IsActive = true,
+            CreatedAt = createdAt
+        };
+
+        _db.Majors.Add(major);
+        _db.ChatRooms.Add(chatRoom);
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is MySqlException { Number: 1062 })
+        {
+            _db.Entry(major).State = EntityState.Detached;
+            _db.Entry(chatRoom).State = EntityState.Detached;
+
+            return (null, false, true);
+        }
+
+        return (new CreateMajorResponse
+        {
+            MajorId = majorId,
+            CollegeId = collegeId,
+            MajorName = majorName,
+            ChatRoomId = chatRoomId,
+            CreatedAt = createdAt
+        }, false, false);
     }
 }
