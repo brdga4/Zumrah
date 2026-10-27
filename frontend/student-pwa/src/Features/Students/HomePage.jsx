@@ -3,7 +3,7 @@ import Button from '../../Components/Button';
 import './HomePage.css';
 import { useState, useEffect } from 'react';
 import { getStudentProfile } from './studentApi';
-import { getAvailableCourses, getEnrolledCourses } from '../Courses/coursesApi';
+import { getAvailableCourses, getEnrolledCourses, enrollInCourse } from '../Courses/coursesApi';
 
 
 
@@ -69,11 +69,43 @@ export default function HomePage() {
   }, []);
 
 
-  // Temporary action until enrollment API integration.
-  function handleJoin() {
-    window.alert(
-      'سيتم تفعيل الانضمام بعد ربط الصفحة بالباك إند.'
-    );
+  // Handle course enrollment when the Join button is clicked
+  async function handleJoin(courseId) {
+    try {
+      // Send the selected course ID to the backend
+      await enrollInCourse(courseId);
+      
+      // Refresh available courses after enrollment
+      const availableData = await getAvailableCourses();
+      setAvailableCourses(availableData.courses);
+      // Refresh enrolled courses after enrollment
+      const enrolledData = await getEnrolledCourses();
+      setEnrolledCourses(enrolledData.courses);
+
+     // Show a success message
+      window.alert('تم الانضمام إلى المقرر بنجاح');
+    }  catch (error) {
+      // Log the error in the browser console
+      console.error('Failed to enroll in course:', error);
+
+      // Student is already enrolled
+      if (error.status === 409) {
+        window.alert('أنت مسجل في هذا المقرر بالفعل');
+
+      // Course does not exist
+      } else if (error.status === 404) {
+        window.alert('المقرر غير موجود');
+
+      // Course is not available for the student's major
+      } else if (error.status === 400) {
+        window.alert('هذا المقرر غير متاح لتخصصك');
+
+      // Handle any other error
+      } else {
+        window.alert('تعذر الانضمام إلى المقرر');
+      }
+    }   
+
   }
 
   return (
@@ -144,7 +176,7 @@ export default function HomePage() {
                   </span>
                 ) : (
                   <Button
-                    onClick={handleJoin}
+                    onClick={() => handleJoin(course.courseId)}
                   >
                     انضمام
                   </Button>
