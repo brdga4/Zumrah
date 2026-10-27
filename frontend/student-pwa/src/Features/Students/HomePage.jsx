@@ -1,11 +1,21 @@
 
-import Button from '../../Components/Button';
+
 import './HomePage.css';
 import { useState, useEffect } from 'react';
 import { getStudentProfile } from './studentApi';
 import { getAvailableCourses, getEnrolledCourses, enrollInCourse, unenrollFromCourse } from '../Courses/coursesApi';
+import CourseCard from "../Courses/Components/CourseCard";
 
 
+import PlatformLayout from "../../Components/Platform/PlatformLayout";
+// Import the welcome section component
+import WelcomeSection from "./Components/WelcomeSection";
+
+// Import the chat dialog component
+import ChatRoomDialog from "../Chat/Components/ChatRoomDialog";
+
+// Import the chat room list component
+import ChatRoomList from "../Chat/Components/ChatRoomList";
 
 export default function HomePage() {
 
@@ -15,6 +25,8 @@ export default function HomePage() {
   const [availableCourses, setAvailableCourses] = useState([]);
   // Store enrolled courses received from the backend
   const [enrolledCourses, setEnrolledCourses] = useState([]);
+  // Store the currently opened chat room
+  const [activeRoom, setActiveRoom] = useState(null);
   
   // Fetch student profile when the Home Page loads
   useEffect(() => {
@@ -138,54 +150,71 @@ export default function HomePage() {
       }
     }
   }
+    // Prepare chat rooms using real student and course data
+const chatRooms = [
+  // Major chat room
+  ...(student?.majorChatRoomId ? [{
+    id: student.majorChatRoomId,
+    kind: "major",
+    name: `محادثة ${student.major?.majorName || "التخصص"}`,
+    description: "المحادثة العامة لطلاب التخصص"
+    }] : []),
+
+  // Enrolled course chat rooms
+  ...enrolledCourses.map((course) => ({
+    id: course.courseId,
+    kind: "course",
+    name: course.courseName,
+    label: course.courseCode,
+    description: "محادثة طلاب المقرر"
+      }))
+    ];
+  
 
   return (
-    <main className="zumrah-home" dir="rtl">
+     <PlatformLayout
+    active="home"
+    title="الرئيسية"
+    student={student}
+    >
+      <div className="zumrah-home"> 
 
-      {/* Navigation Bar */}
-      <header className="home-header">
-        <div className="home-header-content">
 
-         <div className="home-logo">
-             زُمْرَة
-        </div>
-
-          <span className="home-account">
-            حسابي
-          </span>
-
-        </div>
-      </header>
-
-      {/* Welcome Section */}
+      
       <div className="home-container">
+         {/* Welcome Section */}
+        <WelcomeSection student={student} />
+          {/* Major Chat Section */}
+          {/* Chat Rooms Section */}
+          <ChatRoomList
+            rooms={chatRooms}
+            onOpenRoom={setActiveRoom}
+          />
 
-        <section className="home-welcome">
-          <h1>أهلًا، {student?.name || 'طالب'} 👋</h1>
-
-          <p>
-            مساحتك الجامعية للتواصل ومشاركة المعرفة
-            مع طلاب جامعتك.
-          </p>
-        </section>
         {/* Enrolled Courses */}
         <section>
           <h2>مقرراتي</h2>
-
+          <div className="home-courses-grid">
           {enrolledCourses.length === 0 ? (
             <p>لم تنضم إلى أي مقرر بعد.</p>
           ) : (
             enrolledCourses.map((course) => (
-              <div key={course.courseId}>
-                <h3>{course.courseName}</h3>
-                <p>{course.courseCode}</p>
-              {/* Leave the selected course */}
-                <Button onClick={() => handleLeave(course.courseId)}>
-                 حذف المقرر
-                </Button>
-              </div>
+              <CourseCard
+                key={course.courseId}
+                course={course}
+                status="enrolled"
+                onLeave={() => handleLeave(course.courseId)}
+
+                onOpenChat={() => setActiveRoom({
+                  id: course.courseId,
+                  name: course.courseName
+                })}
+
+                onOpenFiles={() => window.alert("الملفات قريبًا")}
+              />
             ))
           )}
+          </div>
         </section>
         {/* Course Communities */}
         <section className="home-communities">
@@ -194,37 +223,31 @@ export default function HomePage() {
 
           <div className="home-courses-grid">
 
-            {availableCourses.map((course) => (
-              <div
-                className="home-course-card"
-                key={course.courseId}
-              >
-
-                <div className="home-course-info">
-                  <h3>{course.courseName}</h3>
-                  <p>{course.courseCode}</p>
-                </div>
-
-                {course.isEnrolled ? (
-                  <span className="home-enrolled">
-                    منضم
-                  </span>
-                ) : (
-                  <Button
-                    onClick={() => handleJoin(course.courseId)}
-                  >
-                    انضمام
-                  </Button>
-                )}
-
-              </div>
+            {availableCourses
+            .filter((course) => !course.isEnrolled)
+            .map((course) => (
+              <CourseCard
+                  key={course.courseId}
+                  course={course}
+                  status={course.isEnrolled ? "enrolled" : "available"}
+                  onEnroll={() => handleJoin(course.courseId)}
+                  onLeave={() => handleLeave(course.courseId)}
+                  onOpenChat={() => window.alert("المحادثة قريبًا")}
+                  onOpenFiles={() => window.alert("الملفات قريبًا")}
+                />
             ))}
 
           </div>
         </section>
 
       </div>
-    </main>
+    </div>
+    {/* Display the selected course chat */}
+      <ChatRoomDialog
+        room={activeRoom}
+        onClose={() => setActiveRoom(null)}
+      />
+    </PlatformLayout>
   );
 }
 

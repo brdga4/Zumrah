@@ -1,0 +1,109 @@
+/* ==========================================
+   1. COURSE CARD CONTAINER
+   Main layout and spacing of the course card.
+   ========================================== */
+
+.card.course-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.card.course-card:hover {
+  border-color: #e3ddfe;
+  box-shadow: 0 16px 48px rgb(50 35 105 / 7%);
+}
+
+/* Highlight enrolled courses */
+.course-card-enrolled {
+  background: linear-gradient(180deg, #f6f3ff 0%, #ffffff 45%);
+}
+
+
+/* ==========================================
+   2. COURSE INFORMATION
+   Course code, status badge, and course name.
+   ========================================== */
+
+.course-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.course-card-code {
+  direction: ltr;
+}
+
+.course-card-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+/* ==========================================
+   3. COURSE ACTIONS
+   Layout of enrollment, chat, and files buttons.
+   ========================================== */
+
+.course-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #e8e4f0;
+}
+
+.course-card-primary-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.course-card-primary-actions .zumrah-button {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+  background: #ffffff;
+  color: #6847e8;
+  border: 1px solid #e3ddfe;
+}
+
+.course-card-primary-actions .zumrah-button:hover {
+  background: #f6f3ff;
+}
+
+
+/* ==========================================
+   4. LEAVE COURSE BUTTON
+   Separate red action for leaving a course.
+   ========================================== */
+
+.course-card-leave {
+  align-self: center;
+  background: transparent;
+  border: none;
+  color: #c63c52;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.course-card-leave:hover {
+  color: #a32f42;
+}
+
+
+/* ==========================================
+   5. RESPONSIVE DESIGN
+   Reduce padding on mobile screens.
+   ========================================== */
+
+@media (max-width: 640px) {
+  .card.course-card {
+    padding: 20px;
+  }
+}

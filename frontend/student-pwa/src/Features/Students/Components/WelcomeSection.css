@@ -1,0 +1,64 @@
+/* 1. Welcome section container */
+.welcome-section {
+  display: flex;
+  padding: 32px;
+  gap: 20px;
+  border: 1px solid #e8e4f0;
+  border-radius: 20px;
+  background: linear-gradient(270deg, #f6f3ff 0%, #ffffff 70%);
+}
+
+/* 2. Purple accent bar */
+.welcome-accent {
+  width: 4px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: #6847e8;
+}
+
+/* 3. Welcome content */
+.welcome-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* 4. College badge */
+.welcome-eyebrow {
+  margin-bottom: 4px;
+}
+
+/* 5. Welcome title */
+.welcome-section .welcome-title {
+  max-width: none;
+  margin: 0;
+  color: #172033;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* 6. Highlight student name */
+.welcome-name {
+  color: #6847e8;
+}
+
+/* 7. Welcome description */
+.welcome-section .welcome-meta {
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/* 8. Mobile responsive design */
+@media (max-width: 768px) {
+  .welcome-section {
+    padding: 24px 20px;
+    gap: 16px;
+  }
+
+  .welcome-section .welcome-meta {
+    font-size: 14px;
+  }
+}
