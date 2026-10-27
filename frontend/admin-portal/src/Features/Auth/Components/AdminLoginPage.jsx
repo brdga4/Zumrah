@@ -6,9 +6,11 @@ import {
   loginPasswordError,
 } from './authValidation';
 import './AdminLoginPage.css';
+import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../../config';
 
-// Admin login UI. Backend authentication will be added later.
 export default function AdminLoginPage() {
+    const navigate = useNavigate();
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
@@ -16,41 +18,91 @@ export default function AdminLoginPage() {
     password: '',
   });
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const identifierRef = useRef(null);
   const passwordRef = useRef(null);
 
   function validateIdentifier() {
     const error = adminIdentifierError(identifier);
-    setErrors((previous) => ({ ...previous, identifier: error }));
+    setErrors((previous) => ({
+      ...previous,
+      identifier: error,
+    }));
     return !error;
   }
 
   function validatePassword() {
     const error = loginPasswordError(password);
-    setErrors((previous) => ({ ...previous, password: error }));
+    setErrors((previous) => ({
+      ...previous,
+      password: error,
+    }));
     return !error;
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+
+    if (isLoading) return;
+
     setMessage('');
 
     const validIdentifier = validateIdentifier();
     const validPassword = validatePassword();
 
     if (!validIdentifier || !validPassword) {
-      (!validIdentifier ? identifierRef : passwordRef).current?.focus();
+      (!validIdentifier ? identifierRef : passwordRef)
+        .current?.focus();
       return;
     }
 
-    // TODO: Connect to POST /api/auth/admin.
-    setMessage('تم التحقق من الحقول. تسجيل دخول المسؤول ينتظر الربط بالباك إند.');
+    setIsLoading(true);
+    try {
+  const response = await fetch(`${API_BASE_URL}/api/auth/admin`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      identifier: identifier.trim(),
+      password: password,
+    }),
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      setMessage('اسم المستخدم أو البريد الإلكتروني أو كلمة المرور غير صحيحة.');
+    } else {
+      setMessage('تعذر تسجيل الدخول حاليًا. حاول مرة أخرى.');
+    }
+
+    return;
+  }
+
+  const data = await response.json();
+
+  if (!data.accessToken) {
+    setMessage('لم يتم استلام رمز الدخول من الخادم.');
+    return;
+  }
+
+  sessionStorage.setItem('accessToken', data.accessToken);
+  navigate('/dashboard', { replace: true });
+} catch (error) {
+  console.error('Admin login failed:', error);
+  setMessage('تعذر الاتصال بالخادم. تأكد من تشغيله ثم حاول مجددًا.');
+} finally {
+  setIsLoading(false);
+}
   }
 
   return (
     <main className="zumrah-login" dir="rtl">
-      <section className="welcome" aria-label="مرحبًا بك في زمرة">
+      <section
+        className="welcome"
+        aria-label="مرحبًا بك في زمرة"
+      >
         <div className="brand" aria-label="زُمْرَة">
           زُمْرَة
         </div>
@@ -70,9 +122,14 @@ export default function AdminLoginPage() {
         </div>
       </section>
 
-      <section className="login-panel" aria-label="دخول المسؤول">
+      <section
+        className="login-panel"
+        aria-label="دخول المسؤول"
+      >
         <div className="login-card">
-          <span className="pill">✦ بوابة المسؤولين</span>
+          <span className="pill">
+            ✦ بوابة المسؤولين
+          </span>
 
           <h1>تسجيل دخول المسؤول</h1>
 
@@ -164,10 +221,14 @@ export default function AdminLoginPage() {
             </div>
 
             <Button type="submit">
-              تسجيل الدخول
+              {isLoading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
             </Button>
 
-            <div className="message" role="status" aria-live="polite">
+            <div
+              className="message"
+              role="status"
+              aria-live="polite"
+            >
               {message}
             </div>
           </form>
