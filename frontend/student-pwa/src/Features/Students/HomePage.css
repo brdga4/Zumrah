@@ -1,40 +1,37 @@
 
 /* Zumrah Student Home Page */
+  /* Zumrah Student Home — layout only.
+   Shared Platform, WelcomeSection and CourseCard have their own CSS files.
+   Adapted for the current React JSX; do not import Figma's mock data. */
 
 @import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&display=swap');
 
-/* Reset default Vite styles for this page */
+/* Override the Vite starter layout only when Home is on screen. */
 body:has(.zumrah-home) {
   display: block;
   margin: 0;
   min-width: 320px;
-  background: #FAF9FE;
+  background: #faf9fe;
 }
 
 #root:has(.zumrah-home) {
+  display: block;
   width: 100%;
   max-width: none;
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  border: none;
   text-align: initial;
 }
 
-/* Main page */
+/* 1. Home content: PlatformLayout already provides outer spacing. */
 .zumrah-home {
-  --primary: #6847E8;
-  --primary-dark: #4B35B5;
-  --background: #FAF9FE;
-  --text: #172033;
-  --secondary: #777D91;
-  --border: #E8E7F0;
-
-  min-height: 100vh;
   width: 100%;
+  min-width: 0;
   direction: rtl;
-  color-scheme: light;
-  background: var(--background);
-  color: var(--text);
+  color: #211c34;
+  background: transparent;
   font-family: 'Alexandria', sans-serif;
   text-align: right;
 }
@@ -45,234 +42,60 @@ body:has(.zumrah-home) {
   box-sizing: border-box;
 }
 
-/* Navigation bar */
-.zumrah-home .home-header {
-  width: 100%;
-  background: #FFFFFF;
-  border-bottom: 1px solid var(--border);
-}
-
-.zumrah-home .home-header-content {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 22px 40px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* Zumrah text logo */
-.zumrah-home .home-logo {
-  font-family: 'Alexandria', sans-serif;
-  font-size: 34px;
-  font-weight: 700;
-  line-height: 1.6;
-  color: var(--primary);
-}
-
-/* Account placeholder */
-.zumrah-home .home-account {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 10px 18px;
-
-  background: #FFFFFF;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-
-  color: var(--text);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-/* Content container */
 .zumrah-home .home-container {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 40px 100px;
-}
-
-/* Welcome section */
-.zumrah-home .home-welcome {
-  padding-top: 100px;
-  margin-bottom: 105px;
-}
-
-.zumrah-home .home-welcome h1 {
-  margin: 0 0 22px;
-  color: var(--text);
-
-  font-family: 'Alexandria', sans-serif;
-  font-size: clamp(32px, 4vw, 56px);
-  font-weight: 700;
-  line-height: 1.6;
-}
-
-.zumrah-home .home-welcome p {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
   margin: 0;
-  color: var(--secondary);
-
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 2;
+  padding: 0;
+  flex-direction: column;
+  gap: 32px;
 }
 
-/* Course communities section */
-.zumrah-home .home-communities h2 {
-  margin: 0 0 32px;
-  color: var(--text);
 
-  font-size: 26px;
+/* 2. Course sections: spacing and headings inspired by Figma Home. */
+.zumrah-home .home-container > section {
+  min-width: 0;
+}
+
+.zumrah-home .home-container > section > h2 {
+  margin: 0 0 20px;
+  color: #211c34;
+  font-size: clamp(20px, 2.4vw, 26px);
   font-weight: 700;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
-/* Course cards grid */
+/* 3. Reusable grid for enrolled and available CourseCard components. */
 .zumrah-home .home-courses-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-}
-
-/* Course card */
-.zumrah-home .home-course-card {
-  min-width: 0;
-  min-height: 155px;
-  padding: 24px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: 20px;
+  align-items: stretch;
+}
 
-  background: #FFFFFF;
-  border: 1px solid var(--border);
+/* 4. Empty-state text in enrolled courses. */
+.zumrah-home .home-container > section > .home-courses-grid > p {
+  margin: 0;
+  padding: 32px 24px;
+  border: 1px dashed #e8e4f0;
   border-radius: 16px;
-
-  box-shadow: 0 4px 12px rgba(23, 32, 51, 0.025);
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.zumrah-home .home-course-card:hover {
-  border-color: #D9D0FF;
-  box-shadow: 0 8px 24px rgba(23, 32, 51, 0.05);
-}
-
-/* Course information */
-.zumrah-home .home-course-info {
-  width: 100%;
-}
-
-.zumrah-home .home-course-info h3 {
-  margin: 0 0 10px;
-  color: var(--text);
-
-  font-size: 16px;
-  font-weight: 600;
+  color: #716b80;
+  background: #fff;
+  text-align: center;
   line-height: 1.8;
 }
 
-.zumrah-home .home-course-info p {
-  margin: 0;
-  color: var(--secondary);
-
-  font-size: 13px;
-  font-weight: 400;
-  direction: ltr;
-  text-align: right;
-}
-
-/* Shared Button component */
-.zumrah-home .home-course-card .zumrah-button {
-  min-height: 40px;
-  padding: 9px 20px;
-  border-radius: 12px;
-
-  background: var(--primary);
-  color: #FFFFFF;
-
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.zumrah-home .home-course-card .zumrah-button:hover {
-  background: var(--primary-dark);
-}
-
-/* Enrolled status */
-.zumrah-home .home-enrolled {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-height: 40px;
-  padding: 9px 18px;
-
-  border-radius: 12px;
-  background: #F2EEFF;
-  color: var(--primary-dark);
-
-  font-size: 13px;
-  font-weight: 600;
-}
-
-/* Tablet */
-@media (max-width: 1000px) {
-  .zumrah-home .home-courses-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .zumrah-home .home-welcome {
-    padding-top: 75px;
-    margin-bottom: 75px;
-  }
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-  .zumrah-home .home-header-content {
-    padding: 16px 20px;
-  }
-
-  .zumrah-home .home-logo {
-    font-size: 28px;
-  }
-
+/* 5. Mobile layout. */
+@media (max-width: 640px) {
   .zumrah-home .home-container {
-    padding: 0 20px 60px;
-  }
-
-  .zumrah-home .home-welcome {
-    padding-top: 55px;
-    margin-bottom: 65px;
-  }
-
-  .zumrah-home .home-welcome h1 {
-    font-size: 30px;
-    margin-bottom: 16px;
-  }
-
-  .zumrah-home .home-welcome p {
-    font-size: 13px;
-  }
-
-  .zumrah-home .home-communities h2 {
-    font-size: 21px;
-    margin-bottom: 22px;
+    gap: 24px;
   }
 
   .zumrah-home .home-courses-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
   }
-
-  .zumrah-home .home-course-card {
-    min-height: 145px;
-    padding: 20px;
-  }
 }
+

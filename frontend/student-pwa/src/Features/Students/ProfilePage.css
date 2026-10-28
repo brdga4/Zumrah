@@ -1,0 +1,50 @@
+/* Student profile card */
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px;
+  text-align: right;
+}
+
+/* Section title */
+.profile-card .heading-2 {
+  font-size: 24px;
+  margin: 0 0 8px;
+}
+
+/* Student information */
+.profile-card p {
+  font-size: 15px;
+  line-height: 1.8;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Logout button */
+.profile-card button {
+  align-self: flex-start;
+  background: #fff1f2;
+  color: #dc2626;
+  border: 1px solid #fecdd3;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-card button:hover {
+  background: #ffe4e6;
+}
+
+@media (max-width: 640px) {
+  .profile-card {
+    padding: 20px;
+  }
+}

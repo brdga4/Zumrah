@@ -7,6 +7,9 @@ using Zumrah.Api.Models;
 using Zumrah.Api.Data;
 using Zumrah.Api.Features.Auth;
 using Zumrah.Api.Features;
+using Zumrah.Api.Features.Students;
+using Zumrah.Api.Features.Courses;
+using Zumrah.Api.Features.Academics;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -111,6 +114,11 @@ builder.Services.AddSingleton<OtpService>();
 
 builder.Services.AddScoped<IPasswordHasher<Student>, PasswordHasher<Student>>();
 builder.Services.AddScoped<IPasswordHasher<Admin>, PasswordHasher<Admin>>();
+
+builder.Services.AddScoped<StudentService>();
+builder.Services.AddScoped<AcademicManagementService>();
+builder.Services.AddScoped<CourseService>();
+
 var app = builder.Build();
 
 app.UseCors("ZumrahFrontends");

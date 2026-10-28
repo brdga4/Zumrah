@@ -1,0 +1,28 @@
+/* Shared Avatar styling */
+.avatar {
+  display: inline-grid;
+  width: var(--avatar-size, 2.75rem);
+  height: var(--avatar-size, 2.75rem);
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--color-primary-dark, #4B35B5);
+  background: var(--color-primary-light, #EFEAFD);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Small avatar */
+.avatar-small {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 0.75rem;
+}
+
+/* Large avatar */
+.avatar-large {
+  width: 5.5rem;
+  height: 5.5rem;
+  font-size: 1.25rem;
+}

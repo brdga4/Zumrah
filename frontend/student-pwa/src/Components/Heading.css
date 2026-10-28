@@ -1,0 +1,27 @@
+/* Base styling for all headings */
+.heading {
+  margin: 0;
+  color: var(--color-neutral-900, #211c34);
+  font-weight: 600;
+}
+
+/* Main heading (h1) */
+.heading-1 {
+  max-width: 10ch;
+  margin-top: 1.5rem;
+  font-size: clamp(2.5rem, 6vw, 4.75rem);
+  letter-spacing: -0.04em;
+  line-height: 1.25;
+}
+
+/* Section heading (h2) */
+.heading-2 {
+  font-size: 2rem;
+  line-height: 1.4;
+}
+
+/* Smaller heading (h3) */
+.heading-3 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
