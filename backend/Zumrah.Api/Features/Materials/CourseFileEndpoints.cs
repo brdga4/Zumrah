@@ -233,7 +233,7 @@ public static class CourseFileEndpoints
             };
         }
 
-        // Return only the metadata needed by the frontend
+        // Return file metadata
         var files = result.Files!.Select(f => new
         {
             fileId = f.FileId,
