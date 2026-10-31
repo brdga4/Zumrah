@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using Resend;
+using Azure.Identity;
+using Azure.Core;
+using Microsoft.Extensions.Azure;
 using Zumrah.Api.Models;
 using Zumrah.Api.Data;
 using Zumrah.Api.Features.Auth;
@@ -10,10 +13,12 @@ using Zumrah.Api.Features;
 using Zumrah.Api.Features.Students;
 using Zumrah.Api.Features.Courses;
 using Zumrah.Api.Features.Academics;
+using Zumrah.Api.Features.Materials;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Database connection
 var connectionString = builder.Configuration
     .GetConnectionString("ProdConnection") ?? throw new InvalidOperationException(
         "Database connection string is missing."
@@ -22,6 +27,8 @@ var connectionString = builder.Configuration
 builder.Services.AddDbContext<ZumrahDbContext>(options =>
     options.UseMySQL(connectionString));
 
+
+// Resend configuration
 builder.Services.AddResend(options =>
 {
     options.ApiToken = builder.Configuration["Resend:ApiKey"] ?? throw new InvalidOperationException(
@@ -84,6 +91,24 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("Admin", policy =>
         policy.RequireRole("Admin"));
 
+
+// Azure Blob Storage configuration
+var storageAccountName = builder.Configuration["BlobStorage:AccountName"]
+    ?? throw new InvalidOperationException("Blob storage account name is missing.");
+
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddBlobServiceClient(
+        new Uri($"https://{storageAccountName}.blob.core.windows.net"));
+
+    TokenCredential credential = builder.Environment.IsDevelopment()
+        ? new AzureCliCredential()
+        : new ManagedIdentityCredential(ManagedIdentityId.SystemAssigned);
+
+    clientBuilder.UseCredential(credential);
+});
+
+// Cors policies
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ZumrahFrontends", policy =>
@@ -105,8 +130,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Register services for DI
 builder.Services.AddSingleton<JwtTokenService>();
 builder.Services.AddSingleton<OtpService>();
+builder.Services.AddScoped<BlobStorageService>();
 
 builder.Services.AddScoped<IPasswordHasher<Student>, PasswordHasher<Student>>();
 builder.Services.AddScoped<IPasswordHasher<Admin>, PasswordHasher<Admin>>();
@@ -114,6 +141,7 @@ builder.Services.AddScoped<IPasswordHasher<Admin>, PasswordHasher<Admin>>();
 builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<AcademicManagementService>();
 builder.Services.AddScoped<CourseService>();
+builder.Services.AddScoped<FileService>();
 
 var app = builder.Build();
 
