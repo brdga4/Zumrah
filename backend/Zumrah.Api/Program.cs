@@ -6,6 +6,7 @@ using Resend;
 using Azure.Identity;
 using Azure.Core;
 using Microsoft.Extensions.Azure;
+using Zumrah.Api.Features.Chat;
 using Zumrah.Api.Models;
 using Zumrah.Api.Data;
 using Zumrah.Api.Features.Auth;
@@ -82,6 +83,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             NameClaimType = "sub",
             RoleClaimType = "role"
         };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken =
+                    context.Request.Query["access_token"].ToString();
+
+                var path = context.HttpContext.Request.Path;
+
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/chat"))
+                {
+                    context.Token = accessToken;
+                }
+
+                return Task.CompletedTask;
+            }
+        };
     });
 
 // Authorization policies
@@ -131,9 +150,12 @@ builder.Services.AddCors(options =>
 });
 
 // Register services for DI
+builder.Services.AddSignalR();
+
 builder.Services.AddSingleton<JwtTokenService>();
 builder.Services.AddSingleton<OtpService>();
 builder.Services.AddScoped<BlobStorageService>();
+builder.Services.AddScoped<ChatService>();
 
 builder.Services.AddScoped<IPasswordHasher<Student>, PasswordHasher<Student>>();
 builder.Services.AddScoped<IPasswordHasher<Admin>, PasswordHasher<Admin>>();
@@ -151,5 +173,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapAllEndpoints();
+
+app.MapHub<ChatHub>("/hubs/chat")
+    .RequireAuthorization("Student");
 
 app.Run();
