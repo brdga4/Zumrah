@@ -158,6 +158,7 @@ builder.Services.AddSingleton<OtpService>();
 builder.Services.AddScoped<BlobStorageService>();
 builder.Services.AddScoped<ChatService>();
 builder.Services.AddScoped<ReportService>();
+builder.Services.AddScoped<AdminModerationService>();
 
 builder.Services.AddScoped<IPasswordHasher<Student>, PasswordHasher<Student>>();
 builder.Services.AddScoped<IPasswordHasher<Admin>, PasswordHasher<Admin>>();
