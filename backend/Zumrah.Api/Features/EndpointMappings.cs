@@ -30,7 +30,7 @@ public static class EndpointMappings
         app.MapAdminFileReviewEndpoints();
         app.MapChatHistoryEndpoints();
         app.MapReportMessageEndpoints();
-
+        app.MapAdminModerationEndpoints();
         return app;
     }
 }
