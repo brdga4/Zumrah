@@ -334,4 +334,156 @@ public class AcademicManagementService
             CreatedAt = createdAt
         };
     }
+
+    public async Task<(Course? Course, bool Duplicate)> UpdateCourseAsync(
+        Guid courseId,
+        string courseCode,
+        string courseName,
+        Guid adminId)
+    {
+        courseCode = courseCode.Trim();
+        courseName = courseName.Trim();
+
+        if (string.IsNullOrWhiteSpace(courseCode) ||
+            courseCode.Length > 30 ||
+            string.IsNullOrWhiteSpace(courseName) ||
+            courseName.Length > 200)
+        {
+            throw new ArgumentException("Invalid course data.");
+        }
+
+        var course = await _db.Courses
+            .FirstOrDefaultAsync(c => c.CourseId == courseId);
+
+        if (course is null)
+        {
+            return (null, false);
+        }
+
+        bool exists = await _db.Courses
+            .AnyAsync(c =>
+                c.CourseId != courseId &&
+                c.CourseCode == courseCode);
+
+        if (exists)
+        {
+            return (null, true);
+        }
+
+        course.CourseCode = courseCode;
+        course.CourseName = courseName;
+        course.UpdatedByAdminId = adminId;
+        course.UpdatedAt = DateTime.UtcNow;
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is MySqlException { Number: 1062 })
+        {
+            _db.Entry(course).State = EntityState.Detached;
+            return (null, true);
+        }
+
+        return (course, false);
+    }
+
+
+    public async Task<GetMajorCoursesResponse?> GetMajorCoursesAsync(Guid majorId)
+    {
+        bool majorExists = await _db.Majors
+            .AnyAsync(m => m.MajorId == majorId);
+
+        if (!majorExists)
+        {
+            return null;
+        }
+
+        var courses = await _db.MajorCourses
+            .AsNoTracking()
+            .Where(mc => mc.MajorId == majorId)
+            .OrderBy(mc => mc.Course.CourseCode)
+            .Select(mc => new AdminCourseItemResponse
+            {
+                CourseId = mc.Course.CourseId,
+                CourseCode = mc.Course.CourseCode,
+                CourseName = mc.Course.CourseName
+            })
+            .ToListAsync();
+
+        return new GetMajorCoursesResponse
+        {
+            MajorId = majorId,
+            Courses = courses
+        };
+    }
+
+    public async Task<(
+        AssignCourseToMajorResponse? Assignment,
+        bool MajorNotFound,
+        bool CourseNotFound,
+        bool Duplicate)> AssignCourseToMajorAsync(
+            Guid majorId,
+            Guid courseId,
+            Guid adminId)
+    {
+        bool majorExists = await _db.Majors
+            .AnyAsync(m => m.MajorId == majorId);
+
+        if (!majorExists)
+        {
+            return (null, true, false, false);
+        }
+
+        bool courseExists = await _db.Courses
+            .AnyAsync(c => c.CourseId == courseId);
+
+        if (!courseExists)
+        {
+            return (null, false, true, false);
+        }
+
+        bool assignmentExists = await _db.MajorCourses
+            .AnyAsync(mc =>
+                mc.MajorId == majorId &&
+                mc.CourseId == courseId);
+
+        if (assignmentExists)
+        {
+            return (null, false, false, true);
+        }
+
+        var assignment = new MajorCourse
+        {
+            MajorCourseId = Guid.NewGuid(),
+            MajorId = majorId,
+            CourseId = courseId,
+            AddedByAdminId = adminId,
+            AddedAt = DateTime.UtcNow
+        };
+
+        _db.MajorCourses.Add(assignment);
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is MySqlException { Number: 1062 })
+        {
+            _db.Entry(assignment).State = EntityState.Detached;
+            return (null, false, false, true);
+        }
+
+        return (new AssignCourseToMajorResponse
+        {
+            MajorCourseId = assignment.MajorCourseId,
+            MajorId = assignment.MajorId,
+            CourseId = assignment.CourseId,
+            AddedAt = assignment.AddedAt
+        }, false, false, false);
+    }
+
+
 }
