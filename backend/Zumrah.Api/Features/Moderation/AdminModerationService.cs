@@ -119,4 +119,80 @@ public class AdminModerationService
         };
     }
 
+    public async Task<(ReviewAdminReportResponse? Response, string? Error)> ReviewReportAsync(
+        Guid reportId,
+        Guid adminId,
+        ReportStatus newStatus,
+        CancellationToken cancellationToken = default)
+    {
+        if (newStatus != ReportStatus.DISMISSED &&
+            newStatus != ReportStatus.MESSAGE_REMOVED)
+        {
+            return (null, "INVALID_REPORT_STATUS");
+        }
+
+        var reviewedAt = DateTime.UtcNow;
+
+        await using var transaction = await _db.Database.BeginTransactionAsync(
+            cancellationToken);
+
+        var affectedRows = await _db.Database.ExecuteSqlInterpolatedAsync(
+            $"""
+        UPDATE report
+        SET status = {newStatus.ToString()},
+            reviewed_by_admin_id = {adminId.ToString("D")},
+            reviewed_at = {reviewedAt}
+        WHERE report_id = {reportId.ToString("D")}
+          AND status = 'PENDING'
+        """,
+            cancellationToken);
+
+        if (affectedRows == 0)
+        {
+            await transaction.RollbackAsync(cancellationToken);
+
+            var reportExists = await _db.Reports
+                .AsNoTracking()
+                .AnyAsync(
+                    report => report.ReportId == reportId,
+                    cancellationToken);
+
+            if (!reportExists)
+            {
+                return (null, "REPORT_NOT_FOUND");
+            }
+
+            return (null, "REPORT_ALREADY_REVIEWED");
+        }
+
+        if (newStatus == ReportStatus.MESSAGE_REMOVED)
+        {
+            await _db.Database.ExecuteSqlInterpolatedAsync(
+                $"""
+            UPDATE message
+            SET is_deleted = 1,
+                deleted_by_admin_id = {adminId.ToString("D")},
+                deleted_at = {reviewedAt}
+            WHERE message_id = (
+                SELECT message_id
+                FROM report
+                WHERE report_id = {reportId.ToString("D")}
+            )
+              AND is_deleted = 0
+            """,
+                cancellationToken);
+        }
+
+        await transaction.CommitAsync(cancellationToken);
+
+        return (new ReviewAdminReportResponse
+        {
+            ReportId = reportId,
+            Status = newStatus.ToString(),
+            ReviewedByAdminId = adminId,
+            ReviewedAt = reviewedAt
+        }, null);
+    }
+
+
 }
