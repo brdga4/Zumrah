@@ -134,4 +134,79 @@ public class ChatService
 
         return (message, student.Name, null);
     }
+
+    public async Task<(List<Message>? Messages, Guid? NextBefore, string? Error)> GetChatMessagesAsync(
+        Guid studentId,
+        Guid chatRoomId,
+        Guid? before = null,
+        int limit = 50,
+        CancellationToken cancellationToken = default)
+    {
+        // Validates the message limit
+        if (limit < 1 || limit > 100)
+        {
+            return (null, null, "INVALID_LIMIT");
+        }
+
+        // Checks whether the student can access the room
+        var roomResult = await GetChatRoomAsync(
+            studentId, chatRoomId, cancellationToken);
+
+        if (roomResult.Error is not null)
+        {
+            return (null, null, roomResult.Error);
+        }
+
+        // Gets non-deleted messages from the requested room
+        var query = _db.Messages
+            .AsNoTracking()
+            .Where(m => m.ChatRoomId == chatRoomId && !m.IsDeleted);
+
+        // Filters messages older than the cursor
+        if (before.HasValue)
+        {
+            var cursor = await _db.Messages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(
+                    m => m.MessageId == before.Value &&
+                         m.ChatRoomId == chatRoomId,
+                    cancellationToken);
+
+            if (cursor is null)
+            {
+                return (null, null, "INVALID_CURSOR");
+            }
+
+            query = query.Where(m =>
+                m.SentAt < cursor.SentAt ||
+                (m.SentAt == cursor.SentAt &&
+                 m.MessageId.CompareTo(cursor.MessageId) < 0));
+        }
+
+        // Gets the newest messages within the requested range
+        var messages = await query
+            .Include(m => m.Student)
+            .OrderByDescending(m => m.SentAt)
+            .ThenByDescending(m => m.MessageId)
+            .Take(limit + 1)
+            .ToListAsync(cancellationToken);
+
+        // Checks whether older messages exist
+        var hasMore = messages.Count > limit;
+
+        if (hasMore)
+        {
+            messages.RemoveAt(messages.Count - 1);
+        }
+
+        // Gets the cursor for the next request
+        var nextBefore = hasMore
+            ? messages[^1].MessageId
+            : (Guid?)null;
+
+        // Orders messages from oldest to newest
+        messages.Reverse();
+
+        return (messages, nextBefore, null);
+    }
 }
