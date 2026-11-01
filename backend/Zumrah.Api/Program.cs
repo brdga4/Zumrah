@@ -166,6 +166,7 @@ builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<AcademicManagementService>();
 builder.Services.AddScoped<CourseService>();
 builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<AdminFileReviewService>();
 
 var app = builder.Build();
 

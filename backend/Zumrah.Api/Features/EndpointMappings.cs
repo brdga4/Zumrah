@@ -27,6 +27,7 @@ public static class EndpointMappings
         app.MapDeleteEnrollmentEndpoint();
         app.MapAdminAcademicEndpoints();
         app.MapCourseFileEndpoints();
+        app.MapAdminFileReviewEndpoints();
         app.MapChatHistoryEndpoints();
         app.MapReportMessageEndpoints();
 
