@@ -5,6 +5,8 @@ using Zumrah.Api.Features.Academics;
 using Zumrah.Api.Features.Students;
 using Zumrah.Api.Features.Courses;
 using Zumrah.Api.Features.Materials;
+using Zumrah.Api.Features.Chat;
+using Zumrah.Api.Features.Moderation;
 
 
 namespace Zumrah.Api.Features;
@@ -26,6 +28,8 @@ public static class EndpointMappings
         app.MapAdminAcademicEndpoints();
         app.MapCourseFileEndpoints();
         app.MapAdminFileReviewEndpoints();
+        app.MapChatHistoryEndpoints();
+        app.MapReportMessageEndpoints();
 
         return app;
     }
