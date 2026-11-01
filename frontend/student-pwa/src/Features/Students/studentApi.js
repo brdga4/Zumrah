@@ -23,3 +23,41 @@ export async function getStudentProfile() {
   // Convert the response body from JSON into a JavaScript value
   return response.json();
 }
+
+//-----------------------------------Profile--Page---------------------------------------------------------------------------
+
+// Update the current student's name or major
+export async function updateStudentProfile(changes) {
+  const token = sessionStorage.getItem("accessToken");
+
+  const response = await fetch(`${API_BASE_URL}/api/students/me`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(changes),
+  });
+
+  if (!response.ok) {
+    const error = new Error("Failed to update student profile");
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+}
+
+// Get available majors for a specific college
+export async function getMajorsByCollege(collegeId) {
+  const response = await fetch(
+    `${API_BASE_URL}/api/majors?collegeId=${encodeURIComponent(collegeId)}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to load majors");
+  }
+
+  return response.json();
+}
+// -----------------------------------------------------------------------------------------------------------------
