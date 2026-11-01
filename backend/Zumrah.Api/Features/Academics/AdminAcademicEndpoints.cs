@@ -26,6 +26,11 @@ public static class AdminAcademicEndpoints
         app.MapPost("/api/admin/courses", CreateCourse)
             .RequireAuthorization("Admin");
 
+
+        app.MapPatch("/api/admin/courses/{courseId}", UpdateCourse)
+            .RequireAuthorization("Admin");
+
+
         return app;
     }
 
@@ -308,4 +313,71 @@ public static class AdminAcademicEndpoints
             });
         }
     }
+
+    private static async Task<IResult> UpdateCourse(
+        string courseId,
+        UpdateCourseRequest request,
+        HttpContext httpContext,
+        AcademicManagementService service)
+    {
+        if (!Guid.TryParse(courseId, out Guid parsedCourseId))
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_COURSE_ID",
+                message = "Invalid course ID."
+            });
+        }
+
+        if (!Guid.TryParse(
+            httpContext.User.FindFirst("sub")?.Value,
+            out Guid adminId))
+        {
+            return Results.Unauthorized();
+        }
+
+        try
+        {
+            var result = await service.UpdateCourseAsync(
+                parsedCourseId,
+                request.CourseCode ?? string.Empty,
+                request.CourseName ?? string.Empty,
+                adminId);
+
+            if (result.Duplicate)
+            {
+                return Results.Conflict(new
+                {
+                    code = "COURSE_ALREADY_EXISTS",
+                    message = "Course code already exists."
+                });
+            }
+
+            if (result.Course is null)
+            {
+                return Results.NotFound(new
+                {
+                    code = "COURSE_NOT_FOUND",
+                    message = "Course not found."
+                });
+            }
+
+            return Results.Ok(new
+            {
+                courseId = result.Course.CourseId,
+                courseCode = result.Course.CourseCode,
+                courseName = result.Course.CourseName,
+                updatedAt = result.Course.UpdatedAt
+            });
+        }
+        catch (ArgumentException)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_COURSE_DATA",
+                message = "Course code must be between 1 and 30 characters, and course name between 1 and 200 characters."
+            });
+        }
+    }
+
 }

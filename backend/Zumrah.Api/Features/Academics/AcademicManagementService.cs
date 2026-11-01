@@ -334,4 +334,59 @@ public class AcademicManagementService
             CreatedAt = createdAt
         };
     }
+
+    public async Task<(Course? Course, bool Duplicate)> UpdateCourseAsync(
+        Guid courseId,
+        string courseCode,
+        string courseName,
+        Guid adminId)
+    {
+        courseCode = courseCode.Trim();
+        courseName = courseName.Trim();
+
+        if (string.IsNullOrWhiteSpace(courseCode) ||
+            courseCode.Length > 30 ||
+            string.IsNullOrWhiteSpace(courseName) ||
+            courseName.Length > 200)
+        {
+            throw new ArgumentException("Invalid course data.");
+        }
+
+        var course = await _db.Courses
+            .FirstOrDefaultAsync(c => c.CourseId == courseId);
+
+        if (course is null)
+        {
+            return (null, false);
+        }
+
+        bool exists = await _db.Courses
+            .AnyAsync(c =>
+                c.CourseId != courseId &&
+                c.CourseCode == courseCode);
+
+        if (exists)
+        {
+            return (null, true);
+        }
+
+        course.CourseCode = courseCode;
+        course.CourseName = courseName;
+        course.UpdatedByAdminId = adminId;
+        course.UpdatedAt = DateTime.UtcNow;
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is MySqlException { Number: 1062 })
+        {
+            _db.Entry(course).State = EntityState.Detached;
+            return (null, true);
+        }
+
+        return (course, false);
+    }
+
 }
