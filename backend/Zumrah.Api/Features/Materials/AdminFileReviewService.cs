@@ -153,4 +153,55 @@ public class AdminFileReviewService
     }
 
 
+    public async Task<(ReviewAdminFileResponse? Response, string? Error)> ReviewFileAsync(
+        Guid fileId,
+        Guid adminId,
+        FileStatus newStatus,
+        CancellationToken cancellationToken = default)
+    {
+        if (newStatus != FileStatus.APPROVED &&
+            newStatus != FileStatus.REJECTED)
+        {
+            return (null, "INVALID_FILE_STATUS");
+        }
+
+        var reviewedAt = DateTime.UtcNow;
+
+        var affectedRows = await _db.Database.ExecuteSqlInterpolatedAsync(
+            $"""
+        UPDATE course_file
+        SET status = {newStatus.ToString()},
+            reviewed_by_admin_id = {adminId.ToString("D")},
+            reviewed_at = {reviewedAt}
+        WHERE file_id = {fileId.ToString("D")}
+          AND status = 'PENDING'
+        """,
+            cancellationToken);
+
+        if (affectedRows == 0)
+        {
+            var fileExists = await _db.CourseFiles
+                .AsNoTracking()
+                .AnyAsync(
+                    file => file.FileId == fileId,
+                    cancellationToken);
+
+            if (!fileExists)
+            {
+                return (null, "FILE_NOT_FOUND");
+            }
+
+            return (null, "FILE_ALREADY_REVIEWED");
+        }
+
+        return (new ReviewAdminFileResponse
+        {
+            FileId = fileId,
+            Status = newStatus.ToString(),
+            ReviewedByAdminId = adminId,
+            ReviewedAt = reviewedAt
+        }, null);
+    }
+
+
 }
