@@ -94,6 +94,6 @@ public class ChatHub : Hub
                 studentName = result.StudentName,
                 content = message.Content,
                 sentAt = message.SentAt
-            }, Context.ConnectionAborted);
+            });
     }
 }
