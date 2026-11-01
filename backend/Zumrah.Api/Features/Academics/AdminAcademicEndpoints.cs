@@ -26,8 +26,10 @@ public static class AdminAcademicEndpoints
         app.MapPost("/api/admin/courses", CreateCourse)
             .RequireAuthorization("Admin");
 
-
         app.MapPatch("/api/admin/courses/{courseId}", UpdateCourse)
+            .RequireAuthorization("Admin");
+
+        app.MapGet("/api/admin/majors/{majorId}/courses", GetMajorCourses)
             .RequireAuthorization("Admin");
 
 
@@ -379,5 +381,34 @@ public static class AdminAcademicEndpoints
             });
         }
     }
+
+    private static async Task<IResult> GetMajorCourses(
+        string majorId,
+        AcademicManagementService service)
+    {
+        if (!Guid.TryParse(majorId, out Guid parsedMajorId) ||
+            parsedMajorId == Guid.Empty)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_MAJOR_ID",
+                message = "Invalid major ID."
+            });
+        }
+
+        var result = await service.GetMajorCoursesAsync(parsedMajorId);
+
+        if (result is null)
+        {
+            return Results.NotFound(new
+            {
+                code = "MAJOR_NOT_FOUND",
+                message = "Major not found."
+            });
+        }
+
+        return Results.Ok(result);
+    }
+
 
 }

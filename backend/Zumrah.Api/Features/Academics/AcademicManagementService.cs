@@ -389,4 +389,34 @@ public class AcademicManagementService
         return (course, false);
     }
 
+
+    public async Task<GetMajorCoursesResponse?> GetMajorCoursesAsync(Guid majorId)
+    {
+        bool majorExists = await _db.Majors
+            .AnyAsync(m => m.MajorId == majorId);
+
+        if (!majorExists)
+        {
+            return null;
+        }
+
+        var courses = await _db.MajorCourses
+            .AsNoTracking()
+            .Where(mc => mc.MajorId == majorId)
+            .OrderBy(mc => mc.Course.CourseCode)
+            .Select(mc => new AdminCourseItemResponse
+            {
+                CourseId = mc.Course.CourseId,
+                CourseCode = mc.Course.CourseCode,
+                CourseName = mc.Course.CourseName
+            })
+            .ToListAsync();
+
+        return new GetMajorCoursesResponse
+        {
+            MajorId = majorId,
+            Courses = courses
+        };
+    }
+
 }
