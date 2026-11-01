@@ -15,6 +15,7 @@ using Zumrah.Api.Features.Students;
 using Zumrah.Api.Features.Courses;
 using Zumrah.Api.Features.Academics;
 using Zumrah.Api.Features.Materials;
+using Zumrah.Api.Features.Moderation;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -156,6 +157,7 @@ builder.Services.AddSingleton<JwtTokenService>();
 builder.Services.AddSingleton<OtpService>();
 builder.Services.AddScoped<BlobStorageService>();
 builder.Services.AddScoped<ChatService>();
+builder.Services.AddScoped<ReportService>();
 
 builder.Services.AddScoped<IPasswordHasher<Student>, PasswordHasher<Student>>();
 builder.Services.AddScoped<IPasswordHasher<Admin>, PasswordHasher<Admin>>();
