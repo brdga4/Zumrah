@@ -65,4 +65,58 @@ public class AdminModerationService
             }).ToList()
         };
     }
+
+    public async Task<AdminReportDetailsResponse?> GetReportByIdAsync(
+        Guid reportId,
+        CancellationToken cancellationToken = default)
+    {
+        var report = await _db.Reports
+            .AsNoTracking()
+            .Where(report => report.ReportId == reportId)
+            .Select(report => new
+            {
+                report.ReportId,
+                report.Reason,
+                report.Status,
+                report.CreatedAt,
+                MessageId = report.Message.MessageId,
+                MessageContent = report.Message.Content,
+                MessageSentAt = report.Message.SentAt,
+                SenderId = report.Message.Student.StudentId,
+                SenderName = report.Message.Student.Name,
+                ReportedById = report.ReportedByStudent.StudentId,
+                ReportedByName = report.ReportedByStudent.Name
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (report is null)
+        {
+            return null;
+        }
+
+        return new AdminReportDetailsResponse
+        {
+            ReportId = report.ReportId,
+            Reason = report.Reason,
+            Status = report.Status.ToString(),
+            CreatedAt = report.CreatedAt,
+            Message = new AdminReportDetailMessageResponse
+            {
+                MessageId = report.MessageId,
+                Content = report.MessageContent,
+                SentAt = report.MessageSentAt,
+                Sender = new AdminReportStudentResponse
+                {
+                    StudentId = report.SenderId,
+                    Name = report.SenderName
+                }
+            },
+            ReportedBy = new AdminReportStudentResponse
+            {
+                StudentId = report.ReportedById,
+                Name = report.ReportedByName
+            }
+        };
+    }
+
 }
