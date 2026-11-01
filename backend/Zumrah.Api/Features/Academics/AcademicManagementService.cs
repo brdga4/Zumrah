@@ -419,4 +419,71 @@ public class AcademicManagementService
         };
     }
 
+    public async Task<(
+        AssignCourseToMajorResponse? Assignment,
+        bool MajorNotFound,
+        bool CourseNotFound,
+        bool Duplicate)> AssignCourseToMajorAsync(
+            Guid majorId,
+            Guid courseId,
+            Guid adminId)
+    {
+        bool majorExists = await _db.Majors
+            .AnyAsync(m => m.MajorId == majorId);
+
+        if (!majorExists)
+        {
+            return (null, true, false, false);
+        }
+
+        bool courseExists = await _db.Courses
+            .AnyAsync(c => c.CourseId == courseId);
+
+        if (!courseExists)
+        {
+            return (null, false, true, false);
+        }
+
+        bool assignmentExists = await _db.MajorCourses
+            .AnyAsync(mc =>
+                mc.MajorId == majorId &&
+                mc.CourseId == courseId);
+
+        if (assignmentExists)
+        {
+            return (null, false, false, true);
+        }
+
+        var assignment = new MajorCourse
+        {
+            MajorCourseId = Guid.NewGuid(),
+            MajorId = majorId,
+            CourseId = courseId,
+            AddedByAdminId = adminId,
+            AddedAt = DateTime.UtcNow
+        };
+
+        _db.MajorCourses.Add(assignment);
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is MySqlException { Number: 1062 })
+        {
+            _db.Entry(assignment).State = EntityState.Detached;
+            return (null, false, false, true);
+        }
+
+        return (new AssignCourseToMajorResponse
+        {
+            MajorCourseId = assignment.MajorCourseId,
+            MajorId = assignment.MajorId,
+            CourseId = assignment.CourseId,
+            AddedAt = assignment.AddedAt
+        }, false, false, false);
+    }
+
+
 }

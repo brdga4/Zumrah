@@ -33,6 +33,11 @@ public static class AdminAcademicEndpoints
             .RequireAuthorization("Admin");
 
 
+        app.MapPost("/api/admin/majors/{majorId}/courses", AssignCourseToMajor)
+            .RequireAuthorization("Admin");
+
+
+
         return app;
     }
 
@@ -409,6 +414,78 @@ public static class AdminAcademicEndpoints
 
         return Results.Ok(result);
     }
+
+
+    private static async Task<IResult> AssignCourseToMajor(
+        string majorId,
+        AssignCourseToMajorRequest request,
+        HttpContext httpContext,
+        AcademicManagementService service)
+    {
+        if (!Guid.TryParse(majorId, out Guid parsedMajorId) ||
+            parsedMajorId == Guid.Empty)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_MAJOR_ID",
+                message = "Invalid major ID."
+            });
+        }
+
+        if (!request.CourseId.HasValue ||
+            request.CourseId.Value == Guid.Empty)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_COURSE_ID",
+                message = "Invalid course ID."
+            });
+        }
+
+        if (!Guid.TryParse(
+            httpContext.User.FindFirst("sub")?.Value,
+            out Guid adminId))
+        {
+            return Results.Unauthorized();
+        }
+
+        var result = await service.AssignCourseToMajorAsync(
+            parsedMajorId,
+            request.CourseId.Value,
+            adminId);
+
+        if (result.MajorNotFound)
+        {
+            return Results.NotFound(new
+            {
+                code = "MAJOR_NOT_FOUND",
+                message = "Major not found."
+            });
+        }
+
+        if (result.CourseNotFound)
+        {
+            return Results.NotFound(new
+            {
+                code = "COURSE_NOT_FOUND",
+                message = "Course not found."
+            });
+        }
+
+        if (result.Duplicate)
+        {
+            return Results.Conflict(new
+            {
+                code = "COURSE_ALREADY_ASSIGNED",
+                message = "Course is already assigned to this major."
+            });
+        }
+
+        return Results.Json(
+            result.Assignment,
+            statusCode: StatusCodes.Status201Created);
+    }
+
 
 
 }
