@@ -12,6 +12,9 @@ public static class AdminModerationEndpoints
         app.MapGet("/api/admin/reports", GetReports)
             .RequireAuthorization("Admin");
 
+        app.MapGet("/api/admin/reports/{reportId:guid}", GetReportById)
+            .RequireAuthorization("Admin");
+
         return app;
     }
 
@@ -49,5 +52,35 @@ public static class AdminModerationEndpoints
             cancellationToken);
 
         return Results.Ok(response);
+    }
+
+    private static async Task<IResult> GetReportById(
+        Guid reportId,
+        AdminModerationService moderationService,
+        CancellationToken cancellationToken)
+    {
+        if (reportId == Guid.Empty)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_REPORT_ID",
+                message = "A valid report ID is required."
+            });
+        }
+
+        var report = await moderationService.GetReportByIdAsync(
+            reportId,
+            cancellationToken);
+
+        if (report is null)
+        {
+            return Results.NotFound(new
+            {
+                code = "REPORT_NOT_FOUND",
+                message = "Report not found."
+            });
+        }
+
+        return Results.Ok(report);
     }
 }
