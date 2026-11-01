@@ -12,6 +12,9 @@ public static class AdminFileReviewEndpoints
         app.MapGet("/api/admin/files", GetFiles)
             .RequireAuthorization("Admin");
 
+        app.MapGet("/api/admin/files/{fileId}", GetFileById)
+            .RequireAuthorization("Admin");
+
         return app;
     }
 
@@ -50,4 +53,35 @@ public static class AdminFileReviewEndpoints
 
         return Results.Ok(response);
     }
+
+    private static async Task<IResult> GetFileById(
+        Guid fileId,
+        AdminFileReviewService fileReviewService,
+        CancellationToken cancellationToken)
+    {
+        if (fileId == Guid.Empty)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_FILE_ID",
+                message = "A valid file ID is required."
+            });
+        }
+
+        var file = await fileReviewService.GetFileByIdAsync(
+            fileId,
+            cancellationToken);
+
+        if (file is null)
+        {
+            return Results.NotFound(new
+            {
+                code = "FILE_NOT_FOUND",
+                message = "File not found."
+            });
+        }
+
+        return Results.Ok(file);
+    }
+
 }

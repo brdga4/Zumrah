@@ -65,4 +65,51 @@ public class AdminFileReviewService
             }).ToList()
         };
     }
+
+    public async Task<AdminFileItemResponse?> GetFileByIdAsync(
+        Guid fileId,
+        CancellationToken cancellationToken = default)
+    {
+        var file = await _db.CourseFiles
+            .AsNoTracking()
+            .Where(file => file.FileId == fileId)
+            .Select(file => new
+            {
+                file.FileId,
+                file.FileName,
+                file.Status,
+                file.UploadedAt,
+                file.Course.CourseId,
+                file.Course.CourseCode,
+                file.Course.CourseName,
+                StudentId = file.UploadedByStudent.StudentId,
+                StudentName = file.UploadedByStudent.Name
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (file is null)
+        {
+            return null;
+        }
+
+        return new AdminFileItemResponse
+        {
+            FileId = file.FileId,
+            FileName = file.FileName,
+            Status = file.Status.ToString(),
+            UploadedAt = file.UploadedAt,
+            Course = new AdminFileCourseResponse
+            {
+                CourseId = file.CourseId,
+                CourseCode = file.CourseCode,
+                CourseName = file.CourseName
+            },
+            UploadedBy = new AdminFileUploaderResponse
+            {
+                StudentId = file.StudentId,
+                Name = file.StudentName
+            }
+        };
+    }
+
 }
