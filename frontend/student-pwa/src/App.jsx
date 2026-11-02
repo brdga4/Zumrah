@@ -9,6 +9,7 @@ import SignupPage from './Features/Auth/SignupPage';
 import OtpVerification from './Features/Auth/OtpVerification';
 import HomePage from './Features/Students/HomePage';
 import ProfilePage from "./Features/Students/ProfilePage";
+import CoursesPage from './Features/Courses/CoursesPage';
 
 // Redirect unauthenticated users to login.(home page is protected)
 function ProtectedRoute({ children }) {
@@ -35,6 +36,15 @@ export default function App() {
           element={
             <ProtectedRoute>
               <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/courses"
+          element={
+            <ProtectedRoute>
+              <CoursesPage />
             </ProtectedRoute>
           }
         />

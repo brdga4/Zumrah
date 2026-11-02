@@ -53,49 +53,11 @@ body:has(.zumrah-home) {
   gap: 32px;
 }
 
-
-/* 2. Course sections: spacing and headings inspired by Figma Home. */
-.zumrah-home .home-container > section {
-  min-width: 0;
-}
-
-.zumrah-home .home-container > section > h2 {
-  margin: 0 0 20px;
-  color: #211c34;
-  font-size: clamp(20px, 2.4vw, 26px);
-  font-weight: 700;
-  line-height: 1.5;
-}
-
-/* 3. Reusable grid for enrolled and available CourseCard components. */
-.zumrah-home .home-courses-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
-  gap: 20px;
-  align-items: stretch;
-}
-
-/* 4. Empty-state text in enrolled courses. */
-.zumrah-home .home-container > section > .home-courses-grid > p {
-  margin: 0;
-  padding: 32px 24px;
-  border: 1px dashed #e8e4f0;
-  border-radius: 16px;
-  color: #716b80;
-  background: #fff;
-  text-align: center;
-  line-height: 1.8;
-}
-
 /* 5. Mobile layout. */
 @media (max-width: 640px) {
   .zumrah-home .home-container {
     gap: 24px;
   }
 
-  .zumrah-home .home-courses-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
-  }
 }
 
