@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Avatar from "../Avatar";
 import Heading from "../Heading";
 import Text from "../Text";
-
+import Logo from "../Logo";
 // ==========================================
 // 2. RECEIVE PROPS FROM PLATFORM LAYOUT
 // ==========================================
@@ -17,6 +17,7 @@ export default function Header({
   studentName,
   majorName,
   backHref,
+  brand = false,
 }) {
   return (
     <header className="platform-header">
@@ -32,7 +33,7 @@ export default function Header({
 
         <div className="platform-header-text">
           <Heading level={1} className="platform-header-title">
-            {title}
+            {brand ? <Logo size="small" /> : title}
           </Heading>
 
           {subtitle && (
@@ -44,7 +45,7 @@ export default function Header({
       </div>
 
       {/* 4. Display the student's information */}
-      <div className="platform-user-chip">
+      <Link to="/profile" className="platform-user-chip">
         <div className="platform-user-chip-text">
           <span className="platform-user-chip-name">
             {studentName}
@@ -56,7 +57,7 @@ export default function Header({
         </div>
 
         <Avatar name={studentName} size="small" />
-      </div>
+      </Link>
 
     </header>
   );

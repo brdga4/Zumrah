@@ -143,9 +143,33 @@ useEffect(() => {
           placeholder="اكتب رسالتك..."
           value={messageText}
           onChange={(event) => setMessageText(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              handleSendMessage();
+            }
+          }}
         />
-        <button type="button" onClick={handleSendMessage}>
-          إرسال
+        <button
+          type="button"
+          onClick={handleSendMessage}
+          disabled={!messageText.trim()}
+          aria-label="إرسال الرسالة"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m22 2-7 20-4-9-9-4Z" />
+            <path d="M22 2 11 13" />
+          </svg>
         </button>
       </div>
     </div>

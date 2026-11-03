@@ -1,8 +1,6 @@
-// ==========================================
-// 1. IMPORT SHARED COMPONENTS
-// ==========================================
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
-import Card from "../../../Components/Card";
 import Badge from "../../../Components/Badge";
 import Heading from "../../../Components/Heading";
 import Text from "../../../Components/Text";
@@ -14,19 +12,34 @@ import "./ChatRoomList.css";
 // Receive rooms and the function to open a chat.
 // ==========================================
 
-export default function ChatRoomList({ rooms, onOpenRoom }) {
+export default function ChatRoomList({ rooms, activeRoom, onOpenRoom }) {
 
-  // Separate major and course chat rooms
-  const majorRooms = rooms.filter((room) => room.kind === "major");
-  const courseRooms = rooms.filter((room) => room.kind === "course");
+  const [query, setQuery] = useState("");
+
+  const search = query.trim().toLowerCase();
+
+  const filteredRooms = rooms.filter((room) =>
+    `${room.name} ${room.description || ""}`
+      .toLowerCase()
+      .includes(search)
+  );
+
+  const majorRooms = filteredRooms.filter((room) => room.kind === "major");
+  const courseRooms = filteredRooms.filter((room) => room.kind === "course");
 
   return (
-    <Card className="chat-room-list">
+    <div className="chat-room-list">
 
-      <Heading level={2}>غرف المحادثة</Heading>
-      <Text size="small" tone="muted">
-        اختر غرفة لفتح المحادثة.
-      </Text>
+      <Heading level={2}>المحادثات</Heading>
+
+      <input
+        className="chat-room-search"
+        type="search"
+        placeholder="ابحث عن غرفة"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        aria-label="ابحث عن غرفة"
+      />
 
       {/* 3. Major chat rooms */}
       <div className="chat-room-group">
@@ -36,6 +49,7 @@ export default function ChatRoomList({ rooms, onOpenRoom }) {
           <ChatRoomEntry
             key={room.id}
             room={room}
+            isActive={activeRoom?.id === room.id}
             onOpen={() => onOpenRoom(room)}
           />
         ))}
@@ -50,6 +64,7 @@ export default function ChatRoomList({ rooms, onOpenRoom }) {
             <ChatRoomEntry
               key={room.id}
               room={room}
+              isActive={activeRoom?.id === room.id}
               onOpen={() => onOpenRoom(room)}
             />
           ))
@@ -59,8 +74,11 @@ export default function ChatRoomList({ rooms, onOpenRoom }) {
           </Text>
         )}
       </div>
-
-    </Card>
+      {/* Discover courses */}
+      <Link to="/courses" className="chat-room-discover">
+        استكشف المقررات
+      </Link>
+    </div>
   );
 }
 
@@ -69,11 +87,11 @@ export default function ChatRoomList({ rooms, onOpenRoom }) {
 // Reusable button for each room.
 // ==========================================
 
-function ChatRoomEntry({ room, onOpen }) {
+function ChatRoomEntry({ room, onOpen, isActive }) {
   return (
     <button
       type="button"
-      className={`chat-room-entry chat-room-entry-${room.kind}`}
+      className={`chat-room-entry chat-room-entry-${room.kind} ${isActive ? "chat-room-entry--active" : ""}`}
       onClick={onOpen}
     >
       <span className="chat-room-entry-top">

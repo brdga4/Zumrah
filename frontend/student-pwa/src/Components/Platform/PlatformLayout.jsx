@@ -13,6 +13,7 @@ export default function PlatformLayout({
   student,
   children,
   showSidebar = true,
+  brandHeader = false,
 }) {
   // 3. Extract student information from the backend response
   const studentName = student?.name || "طالب";
@@ -40,6 +41,7 @@ export default function PlatformLayout({
           backHref={backHref}
           studentName={studentName}
           majorName={majorName}
+          brand={brandHeader}
         />
 
         {/* 5. Display the page content */}

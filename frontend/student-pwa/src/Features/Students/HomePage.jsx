@@ -110,6 +110,8 @@ const chatRooms = [
       title="الرئيسية"
       student={student}
       showSidebar={false}
+      brandHeader
+      subtitle="محادثات زمرتك ومقرراتك في مكان واحد"
     >
       <div className="zumrah-home">
 

@@ -15,6 +15,7 @@ export default function ChatWorkspace({
             <aside className="chat-workspace-rooms">
                 <ChatRoomList
                     rooms={rooms}
+                    activeRoom={activeRoom}
                     onOpenRoom={onOpenRoom}
                 />
             </aside>

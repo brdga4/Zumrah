@@ -1,13 +1,21 @@
-/* Main chat workspace layout */
+/* Main chat workspace - Figma layout */
 .chat-workspace {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
-  gap: 16px;
+  grid-template-columns: clamp(240px, 22%, 320px) minmax(0, 1fr);
+  direction: rtl;
+
   width: 100%;
   min-width: 0;
-  direction: rtl;
-  height: calc(100dvh - 156px);
   min-height: 0;
+  height: calc(100dvh - 156px);
+
+  gap: 0;
+  overflow: hidden;
+
+  background: #FFFFFF;
+  border: 1px solid #E8E7F0;
+  border-radius: 24px;
+  box-shadow: 0 16px 48px rgba(50, 35, 105, 0.07);
 }
 
 /* Chat rooms sidebar */
@@ -35,8 +43,7 @@
   min-width: 0;
   min-height: 0;
   background: #ffffff;
-  border: 1px solid #e8e7f0;
-  border-radius: 16px;
+  border-inline-start: 1px solid #E8E7F0;
   overflow: hidden;
 }
 
