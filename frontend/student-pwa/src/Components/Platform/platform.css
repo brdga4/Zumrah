@@ -94,6 +94,11 @@
   margin-inline-start: 280px;
 }
 
+/* Remove sidebar spacing when hidden */
+.platform--no-sidebar .platform-main {
+  margin-inline-start: 0;
+}
+
 .platform-header {
   position: sticky;
   top: 0;

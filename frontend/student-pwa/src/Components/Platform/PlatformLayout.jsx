@@ -12,6 +12,7 @@ export default function PlatformLayout({
   backHref,
   student,
   children,
+  showSidebar = true,
 }) {
   // 3. Extract student information from the backend response
   const studentName = student?.name || "طالب";
@@ -19,12 +20,18 @@ export default function PlatformLayout({
 
   // 4. Render the shared page layout
   return (
-    <div className="platform" dir="rtl">
-      <Sidebar
-        active={active}
-        studentName={studentName}
-        majorName={majorName}
-      />
+    <div
+      className={showSidebar ? "platform" : "platform platform--no-sidebar"}
+      dir="rtl"
+    >
+      
+      {showSidebar && (
+        <Sidebar
+          active={active}
+          studentName={studentName}
+          majorName={majorName}
+        />
+      )}
 
       <div className="platform-main">
         <Header

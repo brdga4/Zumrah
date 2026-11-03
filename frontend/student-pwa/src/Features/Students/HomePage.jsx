@@ -7,11 +7,11 @@ import { getStudentProfile } from './studentApi';
 import { getEnrolledCourses } from '../Courses/coursesApi';
 
 import PlatformLayout from "../../Components/Platform/PlatformLayout";
-import WelcomeSection from "./Components/WelcomeSection";
-// Import the chat dialog component
-import ChatRoomDialog from "../Chat/Components/ChatRoomDialog";
-// Import the chat room list component
-import ChatRoomList from "../Chat/Components/ChatRoomList";
+
+import ChatWorkspace from "../Chat/Components/ChatWorkspace";
+import ChatMessages from "../Chat/Components/ChatMessages";
+
+
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 export default function HomePage() {
 
@@ -95,7 +95,7 @@ const chatRooms = [
 
   // Enrolled course chat rooms
   ...enrolledCourses.map((course) => ({
-    id: course.courseId,
+    id: course.chatRoomId,
     kind: "course",
     name: course.courseName,
     label: course.courseCode,
@@ -109,26 +109,25 @@ const chatRooms = [
       active="home"
       title="الرئيسية"
       student={student}
+      showSidebar={false}
     >
       <div className="zumrah-home">
 
         <div className="home-container">
-          {/* Welcome Section */}
-          <WelcomeSection student={student} />
-
-          {/* Chat Rooms */}
-          <ChatRoomList
+          {/* Main chat workspace */}
+          <ChatWorkspace
             rooms={chatRooms}
+            activeRoom={activeRoom}
             onOpenRoom={setActiveRoom}
-          />
+          >
+            <ChatMessages
+              roomId={activeRoom?.id}
+              studentId={student?.studentId}
+            />
+          </ChatWorkspace>
 
         </div>
       </div>
-      {/* Display the selected chat room */}
-      <ChatRoomDialog
-        room={activeRoom}
-        onClose={() => setActiveRoom(null)}
-      />
     </PlatformLayout>
   );
 }
