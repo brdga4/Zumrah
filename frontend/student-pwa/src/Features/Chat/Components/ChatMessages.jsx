@@ -12,7 +12,9 @@ import { createChatConnection } from "../chatConnection";
 export default function ChatMessages({ roomId, studentId  }) {
   // State to store the chat messages
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  
+  const [loadedRoomId, setLoadedRoomId] = useState(null);
+const loading = Boolean(roomId) && loadedRoomId !== roomId;
 
   // Reference to the SignalR connection
    const connectionRef = useRef(null);
@@ -26,7 +28,7 @@ export default function ChatMessages({ roomId, studentId  }) {
     if (!roomId) return;
 
     let active = true;
-    setLoading(true);
+    
 
     getChatHistory(roomId)
       .then((data) => {
@@ -36,7 +38,7 @@ export default function ChatMessages({ roomId, studentId  }) {
         console.error("Failed to load chat history:", error);
       })
       .finally(() => {
-        if (active) setLoading(false);
+        if (active) setLoadedRoomId(roomId);
       });
 
     return () => {

@@ -21,7 +21,8 @@ export default function HomePage() {
   // Store enrolled courses received from the backend
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   // Store the currently opened chat room
-  const [activeRoom, setActiveRoom] = useState(null);
+  //const [activeRoom, setActiveRoom] = useState(null);
+  const [manualRoom, setManualRoom] = useState(null);
   // Read the course chat room ID passed from CoursesPage
   const location = useLocation();
  // ------------------------------------------------------------------------------------------------------------------------------------------------------------- 
@@ -63,24 +64,28 @@ export default function HomePage() {
     loadEnrolledCourses();
   }, []);
 
-  // Open the selected course chat when navigating from CoursesPage
-  useEffect(() => {
-    const roomId = location.state?.roomId;
+  // Get the room selected from CoursesPage
+const roomId = location.state?.roomId;
 
-    if (roomId == null) return;
-
-    const course = enrolledCourses.find(
+const course = roomId == null
+  ? null
+  : enrolledCourses.find(
       (course) => String(course.chatRoomId) === String(roomId)
     );
 
-    if (course) {
-      setActiveRoom({
-        id: course.chatRoomId,
-        kind: "course",
-        name: course.courseName,
-      });
+const routedRoom = course
+  ? {
+      id: course.chatRoomId,
+      kind: "course",
+      name: course.courseName,
     }
-  }, [location.state?.roomId, enrolledCourses]);
+  : null;
+
+// Prefer a manually selected room for the current navigation
+const activeRoom =
+  manualRoom?.locationKey === location.key
+    ? manualRoom.room
+    : routedRoom;
   // -------------------------------------------------------------------------------------------------------------------------------------------------------------
   
     // Prepare chat rooms using real student and course data
@@ -120,7 +125,9 @@ const chatRooms = [
           <ChatWorkspace
             rooms={chatRooms}
             activeRoom={activeRoom}
-            onOpenRoom={setActiveRoom}
+            onOpenRoom={(room) =>
+              setManualRoom({ room, locationKey: location.key })
+            }
           >
             <ChatMessages
               roomId={activeRoom?.id}
