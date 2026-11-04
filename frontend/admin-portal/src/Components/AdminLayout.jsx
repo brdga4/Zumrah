@@ -84,19 +84,31 @@ export default function AdminLayout() {
             المقررات
           </NavLink>
 
-          <span className="navigation-item navigation-item--disabled">
+          <NavLink
+            className={getNavigationClass}
+            to="/academics/course-assignments"
+            onClick={closeMenu}
+          >
             إسناد المقررات
-          </span>
+          </NavLink>
 
           <p className="navigation-label">الإشراف على المحتوى</p>
 
-          <span className="navigation-item navigation-item--disabled">
+          <NavLink
+            className={getNavigationClass}
+            to="/moderation/files"
+            onClick={closeMenu}
+          >
             مراجعة الملفات
-          </span>
+          </NavLink>
 
-          <span className="navigation-item navigation-item--disabled">
+          <NavLink
+            className={getNavigationClass}
+            to="/moderation/reports"
+            onClick={closeMenu}
+          >
             بلاغات الرسائل
-          </span>
+          </NavLink>
         </nav>
 
         <div className="admin-sidebar__footer">

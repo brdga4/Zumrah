@@ -31,6 +31,7 @@ const academicModules = [
     title: 'إسناد المقررات',
     description: 'اختر تخصصًا واربط به المقررات التي تظهر لطلابه عند التسجيل.',
     action: 'إسناد المقررات',
+    path: '/academics/course-assignments',
     icon: 'link',
   },
 ];
@@ -40,12 +41,14 @@ const moderationModules = [
     title: 'مراجعة الملفات',
     description: 'ملفات رفعها الطلاب بانتظار الاعتماد أو الرفض قبل ظهورها.',
     action: 'مراجعة الملفات',
+    path: '/moderation/files',
     icon: 'file',
   },
   {
     title: 'بلاغات الرسائل',
     description: 'رسائل أبلغ عنها الطلاب في غرف المحادثة لمراجعتها.',
     action: 'مراجعة البلاغات',
+    path: '/moderation/reports',
     icon: 'message',
   },
 ];
@@ -59,20 +62,21 @@ export default function AdminDashboard() {
   return (
     <section className="dashboard-page" dir="rtl">
       <header className="dashboard-page__heading">
-  <div>
-    <h1>لوحة التحكم</h1>
-    <p>نظرة عامة على وحدات إدارة زمرة</p>
-  </div>
+        <div>
+          <h1>لوحة التحكم</h1>
+          <p>نظرة عامة على وحدات إدارة زمرة</p>
+        </div>
 
-  <div className="dashboard-page__admin">
-    <span>{adminInitial}</span>
+        <div className="dashboard-page__admin">
+          <span>{adminInitial}</span>
 
-    <div>
-      <strong>{adminName}</strong>
-      <small>مشرف المنصة</small>
-    </div>
-  </div>
-</header>
+          <div>
+            <strong>{adminName}</strong>
+            <small>مشرف المنصة</small>
+          </div>
+        </div>
+      </header>
+
       <section className="dashboard-welcome">
         <span className="dashboard-welcome__accent" />
 

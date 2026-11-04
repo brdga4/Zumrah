@@ -13,3 +13,16 @@ export function createCourse(courseCode, courseName) {
     },
   });
 }
+
+export function getMajorCourses(majorId) {
+  return apiRequest(`/api/admin/majors/${majorId}/courses`);
+}
+
+export function assignCourseToMajor(majorId, courseId) {
+  return apiRequest(`/api/admin/majors/${majorId}/courses`, {
+    method: 'POST',
+    body: {
+      courseId,
+    },
+  });
+}
