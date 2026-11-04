@@ -148,7 +148,8 @@ builder.Services.AddCors(options =>
             "http://127.0.0.1:5174"
         )
         .AllowAnyHeader()
-        .AllowAnyMethod();
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
