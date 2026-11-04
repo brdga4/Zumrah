@@ -135,6 +135,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
             // Production frontends
+            "https://zumrah.tech",
+            "https://admin.zumrah.tech",
             "https://zumrah-student.pages.dev",
             "https://zumrah-admin.pages.dev",
 

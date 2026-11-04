@@ -43,7 +43,30 @@ export default function ReportReviewPage() {
   }
 
   useEffect(() => {
-    loadReports();
+    let active = true;
+
+    getAdminReports()
+      .then((data) => {
+        if (active) {
+          setReports(data.reports || []);
+        }
+      })
+      .catch((requestError) => {
+        console.error('Failed to load reports:', requestError);
+
+        if (active) {
+          setError('تعذر تحميل بلاغات الرسائل. حاول مجددًا.');
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   async function openReport(reportId) {
@@ -126,7 +149,9 @@ export default function ReportReviewPage() {
       </section>
 
       {isLoading && (
-        <p className="report-review-page__state">جارٍ تحميل البلاغات...</p>
+        <p className="report-review-page__state">
+          جارٍ تحميل البلاغات...
+        </p>
       )}
 
       {error && (
@@ -139,7 +164,9 @@ export default function ReportReviewPage() {
         <section className="report-review-page__empty">
           <div className="report-review-page__empty-icon">✓</div>
           <h2>لا توجد بلاغات بانتظار المراجعة</h2>
-          <p>راجعت جميع البلاغات. ستظهر البلاغات الجديدة هنا فور إرسالها.</p>
+          <p>
+            راجعت جميع البلاغات. ستظهر البلاغات الجديدة هنا فور إرسالها.
+          </p>
         </section>
       )}
 
@@ -148,7 +175,9 @@ export default function ReportReviewPage() {
           {reports.map((report) => (
             <article className="report-card" key={report.reportId}>
               <div className="report-card__top">
-                <span className="report-card__status">بانتظار المراجعة</span>
+                <span className="report-card__status">
+                  بانتظار المراجعة
+                </span>
 
                 <div className="report-card__icon" aria-hidden="true">
                   !
@@ -164,7 +193,9 @@ export default function ReportReviewPage() {
               <dl className="report-card__details">
                 <div>
                   <dt>أبلغ عنها</dt>
-                  <dd>{report.reportedBy?.name || 'طالب غير معروف'}</dd>
+                  <dd>
+                    {report.reportedBy?.name || 'طالب غير معروف'}
+                  </dd>
                 </div>
 
                 <div>
@@ -241,7 +272,9 @@ export default function ReportReviewPage() {
 
                     <div>
                       <dt>مقدم البلاغ</dt>
-                      <dd>{selectedReport.reportedBy?.name || 'غير متوفر'}</dd>
+                      <dd>
+                        {selectedReport.reportedBy?.name || 'غير متوفر'}
+                      </dd>
                     </div>
 
                     <div>
