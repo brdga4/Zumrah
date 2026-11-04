@@ -5,12 +5,16 @@ import {
   Route,
   Routes,
 } from 'react-router-dom';
+
+import AdminLayout from './Components/AdminLayout';
+import CollegeManagementPage from './Features/Academics/Components/CollegeManagementPage';
+import CourseAssignmentPage from './Features/Academics/Components/CourseAssignmentPage';
+import CourseManagementPage from './Features/Academics/Components/CourseManagementPage';
 import MajorManagementPage from './Features/Academics/Components/MajorManagementPage';
 import AdminLoginPage from './Features/Auth/Components/AdminLoginPage';
 import AdminDashboard from './Features/Dashboard/AdminDashboard';
-import CollegeManagementPage from './Features/Academics/Components/CollegeManagementPage';
-import AdminLayout from './Components/AdminLayout';
-import CourseManagementPage from './Features/Academics/Components/CourseManagementPage';
+import FileReviewPage from './Features/Moderation/Components/FileReviewPage';
+import ReportReviewPage from './Features/Moderation/Components/ReportReviewPage';
 
 function ProtectedAdminRoute() {
   const accessToken = sessionStorage.getItem('accessToken');
@@ -33,9 +37,27 @@ function App() {
         <Route element={<ProtectedAdminRoute />}>
           <Route element={<AdminLayout />}>
             <Route path="/dashboard" element={<AdminDashboard />} />
-            <Route path="/academics/colleges" element={<CollegeManagementPage />} />
-            <Route path="/academics/majors" element={<MajorManagementPage />} />
-            <Route path="/academics/courses" element={<CourseManagementPage />} />
+            <Route
+              path="/academics/colleges"
+              element={<CollegeManagementPage />}
+            />
+            <Route
+              path="/academics/majors"
+              element={<MajorManagementPage />}
+            />
+            <Route
+              path="/academics/courses"
+              element={<CourseManagementPage />}
+            />
+            <Route
+              path="/academics/course-assignments"
+              element={<CourseAssignmentPage />}
+            />
+            <Route path="/moderation/files" element={<FileReviewPage />} />
+            <Route
+              path="/moderation/reports"
+              element={<ReportReviewPage />}
+            />
           </Route>
         </Route>
 
