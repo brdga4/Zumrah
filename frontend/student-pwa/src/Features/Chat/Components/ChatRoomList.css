@@ -2,18 +2,47 @@
    1. CHAT ROOM LIST CONTAINER
    ========================================== */
 
-.card.chat-room-list {
+/* Chat room list container */
+.chat-room-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 24px;
+  gap: 16px;
+  padding: 20px 16px;
   min-width: 0;
+  background: #ffffff;
 }
 
 /* Chat room list heading */
 .chat-room-list .heading-2 {
   font-size: 18px;
   margin: 0;
+}
+
+/* Search chat rooms */
+.chat-room-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+
+  background: #F8F7FC;
+  border: 1px solid #E8E7F0;
+  border-radius: 12px;
+
+  color: #172033;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: right;
+  outline: none;
+}
+
+.chat-room-search::placeholder {
+  color: #928CA0;
+}
+
+.chat-room-search:focus {
+  background: #FFFFFF;
+  border-color: #6847E8;
+  box-shadow: 0 0 0 3px rgba(104, 71, 232, 0.1);
 }
 
 /* ==========================================
@@ -50,10 +79,15 @@
   background: #f6f3ff;
 }
 
-/* Highlight the major chat room */
-.chat-room-entry-major {
-  background: #f6f3ff;
-  border-color: #e3ddfe;
+/* Highlight the currently selected chat room */
+.chat-room-entry--active {
+  background: #F3EFFF;
+  border-color: #6847E8;
+}
+
+.chat-room-entry--active .chat-room-entry-name {
+  color: #6847E8;
+  font-weight: 700;
 }
 
 /* ==========================================
@@ -86,4 +120,38 @@
   .card.chat-room-list {
     padding: 16px;
   }
+}
+
+
+
+/* Keep the discover button at the bottom */
+.chat-room-list {
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+/* Room section headings */
+.chat-room-group > :first-child {
+  font-size: 13px;
+  font-weight: 700;
+  color: #716b80;
+}
+
+/* Discover courses button */
+.chat-room-discover {
+  display: block;
+  margin-top: auto;
+  padding: 14px;
+  border: 1px solid #E3DDFE;
+  border-radius: 12px;
+  background: #F6F3FF;
+  color: #6847E8;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+
+.chat-room-discover:hover {
+  background: #EDE7FF;
 }

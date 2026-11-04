@@ -1,0 +1,93 @@
+/* Main chat workspace - Figma layout */
+.chat-workspace {
+  display: grid;
+  grid-template-columns: clamp(240px, 22%, 320px) minmax(0, 1fr);
+  direction: rtl;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: calc(100dvh - 156px);
+
+  gap: 0;
+  overflow: hidden;
+
+  background: #FFFFFF;
+  border: 1px solid #E8E7F0;
+  border-radius: 24px;
+  box-shadow: 0 16px 48px rgba(50, 35, 105, 0.07);
+}
+
+/* Chat rooms sidebar */
+.chat-workspace-rooms {
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #C8C2DD transparent;
+}
+
+.chat-workspace-rooms::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-workspace-rooms::-webkit-scrollbar-thumb {
+  background: #C8C2DD;
+  border-radius: 10px;
+}
+
+/* Main conversation panel */
+.chat-workspace-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: #ffffff;
+  border-inline-start: 1px solid #E8E7F0;
+  overflow: hidden;
+}
+
+/* Active chat room header */
+.chat-workspace-header {
+  flex-shrink: 0;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e8e7f0;
+  background: #ffffff;
+}
+
+.chat-workspace-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #172033;
+}
+
+/* Messages and composer container */
+.chat-workspace-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+
+/* Mobile chat layout */
+@media (max-width: 640px) {
+  .chat-workspace {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    gap: 12px;
+  }
+
+  .chat-workspace-rooms {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .chat-workspace-main {
+    width: 100%;
+    height: 500px;
+    min-width: 0;
+  }
+}

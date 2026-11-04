@@ -26,6 +26,18 @@ public static class AdminAcademicEndpoints
         app.MapPost("/api/admin/courses", CreateCourse)
             .RequireAuthorization("Admin");
 
+        app.MapPatch("/api/admin/courses/{courseId}", UpdateCourse)
+            .RequireAuthorization("Admin");
+
+        app.MapGet("/api/admin/majors/{majorId}/courses", GetMajorCourses)
+            .RequireAuthorization("Admin");
+
+
+        app.MapPost("/api/admin/majors/{majorId}/courses", AssignCourseToMajor)
+            .RequireAuthorization("Admin");
+
+
+
         return app;
     }
 
@@ -308,4 +320,172 @@ public static class AdminAcademicEndpoints
             });
         }
     }
+
+    private static async Task<IResult> UpdateCourse(
+        string courseId,
+        UpdateCourseRequest request,
+        HttpContext httpContext,
+        AcademicManagementService service)
+    {
+        if (!Guid.TryParse(courseId, out Guid parsedCourseId))
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_COURSE_ID",
+                message = "Invalid course ID."
+            });
+        }
+
+        if (!Guid.TryParse(
+            httpContext.User.FindFirst("sub")?.Value,
+            out Guid adminId))
+        {
+            return Results.Unauthorized();
+        }
+
+        try
+        {
+            var result = await service.UpdateCourseAsync(
+                parsedCourseId,
+                request.CourseCode ?? string.Empty,
+                request.CourseName ?? string.Empty,
+                adminId);
+
+            if (result.Duplicate)
+            {
+                return Results.Conflict(new
+                {
+                    code = "COURSE_ALREADY_EXISTS",
+                    message = "Course code already exists."
+                });
+            }
+
+            if (result.Course is null)
+            {
+                return Results.NotFound(new
+                {
+                    code = "COURSE_NOT_FOUND",
+                    message = "Course not found."
+                });
+            }
+
+            return Results.Ok(new
+            {
+                courseId = result.Course.CourseId,
+                courseCode = result.Course.CourseCode,
+                courseName = result.Course.CourseName,
+                updatedAt = result.Course.UpdatedAt
+            });
+        }
+        catch (ArgumentException)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_COURSE_DATA",
+                message = "Course code must be between 1 and 30 characters, and course name between 1 and 200 characters."
+            });
+        }
+    }
+
+    private static async Task<IResult> GetMajorCourses(
+        string majorId,
+        AcademicManagementService service)
+    {
+        if (!Guid.TryParse(majorId, out Guid parsedMajorId) ||
+            parsedMajorId == Guid.Empty)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_MAJOR_ID",
+                message = "Invalid major ID."
+            });
+        }
+
+        var result = await service.GetMajorCoursesAsync(parsedMajorId);
+
+        if (result is null)
+        {
+            return Results.NotFound(new
+            {
+                code = "MAJOR_NOT_FOUND",
+                message = "Major not found."
+            });
+        }
+
+        return Results.Ok(result);
+    }
+
+
+    private static async Task<IResult> AssignCourseToMajor(
+        string majorId,
+        AssignCourseToMajorRequest request,
+        HttpContext httpContext,
+        AcademicManagementService service)
+    {
+        if (!Guid.TryParse(majorId, out Guid parsedMajorId) ||
+            parsedMajorId == Guid.Empty)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_MAJOR_ID",
+                message = "Invalid major ID."
+            });
+        }
+
+        if (!request.CourseId.HasValue ||
+            request.CourseId.Value == Guid.Empty)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_COURSE_ID",
+                message = "Invalid course ID."
+            });
+        }
+
+        if (!Guid.TryParse(
+            httpContext.User.FindFirst("sub")?.Value,
+            out Guid adminId))
+        {
+            return Results.Unauthorized();
+        }
+
+        var result = await service.AssignCourseToMajorAsync(
+            parsedMajorId,
+            request.CourseId.Value,
+            adminId);
+
+        if (result.MajorNotFound)
+        {
+            return Results.NotFound(new
+            {
+                code = "MAJOR_NOT_FOUND",
+                message = "Major not found."
+            });
+        }
+
+        if (result.CourseNotFound)
+        {
+            return Results.NotFound(new
+            {
+                code = "COURSE_NOT_FOUND",
+                message = "Course not found."
+            });
+        }
+
+        if (result.Duplicate)
+        {
+            return Results.Conflict(new
+            {
+                code = "COURSE_ALREADY_ASSIGNED",
+                message = "Course is already assigned to this major."
+            });
+        }
+
+        return Results.Json(
+            result.Assignment,
+            statusCode: StatusCodes.Status201Created);
+    }
+
+
+
 }

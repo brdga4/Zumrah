@@ -1,0 +1,253 @@
+.dashboard-page {
+  color: #211c34;
+}
+
+.dashboard-page h1,
+.dashboard-page h2,
+.dashboard-page h3,
+.dashboard-page p {
+  margin: 0;
+}
+
+.dashboard-welcome {
+  display: flex;
+  gap: 24px;
+  padding: 42px;
+  border: 1px solid #e8e4f0;
+  border-radius: 30px;
+  background: linear-gradient(270deg, #f3f0ff 0%, #ffffff 72%);
+}
+
+.dashboard-welcome__accent {
+  width: 6px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: #6847e8;
+}
+
+.dashboard-welcome__eyebrow,
+.module-card__step {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: #6847e8;
+  background: #f0ecff;
+  font-weight: 700;
+}
+
+.dashboard-welcome p {
+  max-width: 800px;
+  margin-top: 14px;
+  color: #716b80;
+  font-size: 18px;
+  line-height: 1.9;
+}
+
+.dashboard-section {
+  margin-top: 72px;
+}
+
+.dashboard-section__header {
+  margin-bottom: 28px;
+}
+
+.dashboard-section__header h2 {
+  font-size: 30px;
+}
+
+.dashboard-section__header p {
+  margin-top: 8px;
+  color: #716b80;
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.dashboard-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.module-card {
+  display: flex;
+  min-height: 270px;
+  padding: 32px;
+  flex-direction: column;
+  border: 1px solid #e8e4f0;
+  border-radius: 22px;
+  background: #ffffff;
+}
+
+.module-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.module-card__icon {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  border-radius: 18px;
+  color: #6847e8;
+  background: #f0ecff;
+}
+
+.module-card__icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.module-card h3 {
+  margin-top: 24px;
+  font-size: 25px;
+}
+
+.module-card p {
+  margin-top: 12px;
+  color: #716b80;
+  line-height: 1.8;
+}
+
+.module-card button {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: auto;
+  padding: 20px 0 0;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  color: #6847e8;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.module-card button svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.module-card--disabled {
+  opacity: 0.72;
+}
+
+.module-card__coming-soon {
+  display: inline-block;
+  width: fit-content;
+  margin-top: auto;
+  padding-top: 20px;
+  color: #a59eb5;
+  font-weight: 700;
+}
+
+@media (max-width: 850px) {
+  .dashboard-grid,
+  .dashboard-grid--two {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-welcome {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 550px) {
+  .dashboard-welcome {
+    gap: 16px;
+    padding: 24px;
+  }
+
+  .dashboard-welcome p {
+    font-size: 16px;
+  }
+
+  .module-card {
+    min-height: 0;
+    padding: 24px;
+  }
+}
+
+.dashboard-page__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.dashboard-page__heading h1 {
+  font-size: 32px;
+}
+
+.dashboard-page__heading p {
+  margin-top: 8px;
+  color: #716b80;
+  font-size: 17px;
+}
+
+.dashboard-page__admin {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px 8px 18px;
+  border: 1px solid #e8e4f0;
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.dashboard-page__admin > span {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 50%;
+  color: #6847e8;
+  background: #f0ecff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.dashboard-page__admin > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dashboard-page__admin strong {
+  color: #211c34;
+}
+
+.dashboard-page__admin small {
+  color: #716b80;
+  font-size: 13px;
+}
+
+.dashboard-welcome h2 {
+  margin-top: 16px;
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1.25;
+}
+
+.dashboard-welcome h2 span {
+  color: #6847e8;
+}
+
+@media (max-width: 650px) {
+  .dashboard-page__heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
