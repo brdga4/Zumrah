@@ -1,0 +1,268 @@
+
+/* Course Files Page - Zumrah Figma Design */
+
+.course-files-page {
+  min-height: 100vh;
+  background: #FAF9FE;
+  color: #172033;
+  font-family: "Alexandria", sans-serif;
+}
+
+.course-files-page * {
+  box-sizing: border-box;
+}
+
+/* Course header */
+.course-files-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 36px;
+  border-bottom: 1px solid #E8E7F0;
+}
+
+.course-files-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #172033;
+}
+
+/* Secondary button - Zumrah standard */
+.course-files-back {
+  padding: 14px 24px;
+  border: 1px solid #E8E7F0;
+  border-radius: 16px;
+  background: #FFFFFF;
+  color: #6847E8;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  box-shadow: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+/* Hover and keyboard focus - single purple border */
+.course-files-back:hover,
+.course-files-back:focus-visible {
+  background: #F5F3FF;
+  border-color: #6847E8;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Main content */
+.course-files-content {
+  padding: 36px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* Section title and upload button */
+.course-files-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.course-files-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.course-files-title h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.course-files-count {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #EFEAFF;
+  color: #4B35B5;
+  font-weight: 600;
+}
+
+.course-files-heading p {
+  margin: 12px 0 0;
+  color: #716B80;
+  font-size: 16px;
+}
+
+.course-files-upload {
+  flex-shrink: 0;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  background: #6847E8;
+  color: white;
+  font-family: inherit;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+/* Highlight the upload button when hovering */
+.course-files-upload:hover:not(:disabled) {
+  background: #4B35B5;
+}
+.course-files-upload:disabled {
+  cursor: not-allowed;
+}
+
+/* Files list */
+.course-files-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  border: 1px solid #E8E7F0;
+  border-radius: 20px;
+  background: white;
+}
+
+/* Each file row */
+.course-file-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 36px;
+  border-bottom: 1px solid #E8E7F0;
+  transition: background 0.2s;
+}
+
+.course-file-row:last-child {
+  border-bottom: none;
+}
+
+.course-file-row:hover {
+  background: #F6F3FF;
+}
+
+/* File type */
+.course-file-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 70px;
+  height: 68px;
+  padding: 8px;
+  border-radius: 16px;
+  background: #EFEAFF;
+  color: #6847E8;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* File information */
+.course-file-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.course-file-info strong {
+  font-size: 18px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.course-file-info span {
+  color: #716B80;
+  font-size: 14px;
+}
+
+/* Download button */
+.course-file-download {
+  flex-shrink: 0;
+  padding: 14px 24px;
+  border: 1px solid #E8E7F0;
+  border-radius: 16px;
+  background: white;
+  color: #6847E8;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+/* Highlight the download button when hovering */
+.course-file-download:hover:not(:disabled) {
+  background: #F5F3FF;
+  border-color: #6847E8;
+}
+
+
+/* Empty state */
+.course-files-empty {
+  padding: 64px 24px;
+  border: 1px dashed #E8E7F0;
+  border-radius: 20px;
+  background: white;
+  text-align: center;
+}
+
+.course-files-empty h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+
+.course-files-empty p {
+  margin: 0;
+  color: #716B80;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .course-files-header {
+    padding: 20px 16px;
+    gap: 12px;
+  }
+
+  .course-files-header h1 {
+    font-size: 20px;
+  }
+
+  .course-files-content {
+    padding: 24px 16px;
+  }
+
+  .course-files-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .course-files-title h2 {
+    font-size: 22px;
+  }
+
+  .course-file-row {
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .course-file-icon {
+    min-width: 52px;
+    height: 56px;
+  }
+
+  .course-file-info strong {
+    font-size: 14px;
+  }
+
+  .course-file-download {
+    padding: 12px;
+    font-size: 13px;
+  }
+}
