@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Zumrah.Api.Data;
+using Zumrah.Api.Features.Chat;
 using Zumrah.Api.Models;
 
 namespace Zumrah.Api.Features.Courses;
@@ -7,10 +9,12 @@ namespace Zumrah.Api.Features.Courses;
 public class CourseService
 {
     private readonly ZumrahDbContext _db;
+    private readonly IHubContext<ChatHub> _hubContext;
 
-    public CourseService(ZumrahDbContext db)
+    public CourseService(ZumrahDbContext db, IHubContext<ChatHub> hubContext)
     {
         _db = db;
+        _hubContext = hubContext;
     }
 
     public async Task<(List<MajorCourse>? MajorCourses, List<Guid> EnrolledCourseIds)> GetAvailableCoursesAsync(Guid studentId)
@@ -42,7 +46,6 @@ public class CourseService
         return (majorCourses, enrolledCourseIds);
     }
 
-
     public async Task<List<Enrollment>?> GetEnrolledCoursesAsync(Guid studentId)
     {
         // Checks whether the student exists
@@ -65,7 +68,6 @@ public class CourseService
 
         return enrollments;
     }
-
 
     public async Task<(Enrollment? Enrollment, string? Error)> CreateEnrollmentAsync(Guid studentId, Guid courseId)
     {
@@ -132,7 +134,6 @@ public class CourseService
         return (enrollment, null);
     }
 
-
     public async Task<bool> DeleteEnrollmentAsync(Guid studentId, Guid courseId)
     {
         // Gets the student's enrollment for the requested course
@@ -147,11 +148,23 @@ public class CourseService
             return false;
         }
 
+        // Find its existing chat room before deleting enrollment.
+        var roomId = await _db.ChatRooms
+            .Where(room => room.CourseId == courseId)
+            .Select(room => (Guid?)room.ChatRoomId)
+            .FirstOrDefaultAsync();
+
         // Marks the enrollment for deletion
         _db.Enrollments.Remove(enrollment);
 
         // Deletes the enrollment from MySQL
         await _db.SaveChangesAsync();
+
+        // Remove every active connection of this student from the course room.
+        if (roomId.HasValue)
+        {
+            await ChatHub.RevokeRoomAccessAsync(_hubContext, studentId, [roomId.Value]);
+        }
 
         return true;
     }

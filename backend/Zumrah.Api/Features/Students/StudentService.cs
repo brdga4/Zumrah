@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Zumrah.Api.Data;
+using Zumrah.Api.Features.Chat;
 using Zumrah.Api.Models;
 
 namespace Zumrah.Api.Features.Students;
@@ -7,10 +9,14 @@ namespace Zumrah.Api.Features.Students;
 public class StudentService
 {
     private readonly ZumrahDbContext _db;
+    private readonly IHubContext<ChatHub> _hubContext;
 
-    public StudentService(ZumrahDbContext db)
+    public StudentService(
+        ZumrahDbContext db,
+        IHubContext<ChatHub> hubContext)
     {
         _db = db;
+        _hubContext = hubContext;
     }
 
     public async Task<Student?> GetProfileAsync(Guid studentId)
@@ -23,7 +29,6 @@ public class StudentService
             .AsNoTracking()
             .SingleOrDefaultAsync(s => s.StudentId == studentId);
     }
-
 
     public async Task<(Student? Student, string? Error)> UpdateProfileAsync(Guid studentId, string? name, Guid? majorId)
     {
@@ -42,8 +47,11 @@ public class StudentService
 
         var major = student.Major;
 
+        // Rooms to revoke if the student changes major
+        List<Guid> roomsToRevoke = [];
+
         // Changes the major if a different major was provided
-        if (majorId.HasValue && (majorId.Value != student.MajorId))
+        if (majorId.HasValue && majorId.Value != student.MajorId)
         {
             var newMajor = await _db.Majors
                 .Include(m => m.College)
@@ -60,9 +68,27 @@ public class StudentService
                 return (null, "MAJOR_CHAT_ROOM_MISSING");
             }
 
+            // Remember the old major before changing it
+            var oldMajorId = student.MajorId;
+
             // Gets all student enrollments
             var enrollments = await _db.Enrollments
                 .Where(e => e.StudentId == studentId)
+                .ToListAsync();
+
+            // Collects the IDs of previously enrolled courses
+            var oldCourseIds = enrollments
+                .Select(e => e.CourseId)
+                .ToList();
+
+            // Finds the old major and course chat rooms
+            roomsToRevoke = await _db.ChatRooms
+                .AsNoTracking()
+                .Where(room =>
+                    room.MajorId == oldMajorId ||
+                    (room.CourseId.HasValue &&
+                     oldCourseIds.Contains(room.CourseId.Value)))
+                .Select(room => room.ChatRoomId)
                 .ToListAsync();
 
             // Removes all enrollments
@@ -86,8 +112,18 @@ public class StudentService
             student.Name = name.Trim();
         }
 
-        // Saves changes
+        // Saves changes to MySQL
         await _db.SaveChangesAsync();
+
+        // Revokes old room memberships after a successful major change
+        if (roomsToRevoke.Count > 0)
+        {
+            await ChatHub.RevokeRoomAccessAsync(
+                _hubContext,
+                studentId,
+                roomsToRevoke
+            );
+        }
 
         return (student, null);
     }
