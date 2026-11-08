@@ -48,16 +48,33 @@ export async function updateStudentProfile(changes) {
   return response.json();
 }
 
-// Get available majors for a specific college
-export async function getMajorsByCollege(collegeId) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/majors?collegeId=${encodeURIComponent(collegeId)}`
-  );
 
+// -----------------------------------------------------------------------------------------------------------------
+
+ // Get available majors for the student's college
+export async function getMajorsByCollege(collegeId) {
+
+  // Fetch all colleges and their majors from the backend
+  const response = await fetch(`${API_BASE_URL}/api/colleges`);
+
+  // Check if the request failed
   if (!response.ok) {
-    throw new Error("Failed to load majors");
+    throw new Error("Failed to load colleges");
   }
 
-  return response.json();
+  // Convert the JSON response into a JavaScript object
+  const data = await response.json();
+
+  // Find the college that matches the student's collegeId
+  const college = data.colleges.find(
+    (item) => String(item.collegeId) === String(collegeId)
+  );
+
+  // Handle the case where the student's college is not found
+  if (!college) {
+    throw new Error("Student college not found");
+  }
+
+  // Return only the majors belonging to the student's college
+  return { majors: college.majors ?? [] };
 }
-// -----------------------------------------------------------------------------------------------------------------
