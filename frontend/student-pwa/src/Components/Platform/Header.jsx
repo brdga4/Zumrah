@@ -18,6 +18,7 @@ export default function Header({
   majorName,
   backHref,
   brand = false,
+  showUserInfo = true,
 }) {
   return (
     <header className="platform-header">
@@ -44,20 +45,22 @@ export default function Header({
         </div>
       </div>
 
-      {/* 4. Display the student's information */}
-      <Link to="/profile" className="platform-user-chip">
-        <div className="platform-user-chip-text">
-          <span className="platform-user-chip-name">
-            {studentName}
-          </span>
+      {/* 4. Display student information only when showUserInfo is true */}
+      {showUserInfo && (
+        <Link to="/profile" className="platform-user-chip">
+          <div className="platform-user-chip-text">
+            <span className="platform-user-chip-name">
+              {studentName}
+            </span>
 
-          <span className="platform-user-chip-major">
-            {majorName}
-          </span>
-        </div>
+            <span className="platform-user-chip-major">
+              {majorName}
+            </span>
+          </div>
 
-        <Avatar name={studentName} size="small" />
-      </Link>
+          <Avatar name={studentName} size="small" />
+        </Link>
+      )}
 
     </header>
   );

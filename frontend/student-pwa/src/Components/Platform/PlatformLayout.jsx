@@ -31,10 +31,12 @@ export default function PlatformLayout({
           active={active}
           studentName={studentName}
           majorName={majorName}
+          showUserInfo={active !== "profile"}
         />
       )}
 
       <div className="platform-main">
+        {/* Hide the header avatar only on the profile page */}
         <Header
           title={title}
           subtitle={subtitle}
@@ -42,6 +44,7 @@ export default function PlatformLayout({
           studentName={studentName}
           majorName={majorName}
           brand={brandHeader}
+          showUserInfo={active !== "profile"}
         />
 
         {/* 5. Display the page content */}

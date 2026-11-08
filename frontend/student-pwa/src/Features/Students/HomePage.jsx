@@ -73,11 +73,14 @@ const course = roomId == null
       (course) => String(course.chatRoomId) === String(roomId)
     );
 
+// Opens the selected course chat when navigating from CoursesPage.
+// Unlike chatRooms (all rooms), routedRoom represents one selected room.
 const routedRoom = course
   ? {
       id: course.chatRoomId,
       kind: "course",
       name: course.courseName,
+      courseId: course.courseId,
     }
   : null;
 
@@ -91,12 +94,13 @@ const activeRoom =
     // Prepare chat rooms using real student and course data
 const chatRooms = [
   // Major chat room
-  ...(student?.majorChatRoomId ? [{
+  // ?. is optional chaining to avoid errors if student or majorChatRoomId is undefined
+  ...(student?.majorChatRoomId ? [{     
     id: student.majorChatRoomId,
     kind: "major",
-    name: `محادثة ${student.major?.majorName || "التخصص"}`,
+    name: `زمرة ${student.major?.majorName || "التخصص"}`,
     description: "المحادثة العامة لطلاب التخصص"
-    }] : []),
+    }] : []),  // : = or 
 
   // Enrolled course chat rooms
   ...enrolledCourses.map((course) => ({
@@ -104,7 +108,8 @@ const chatRooms = [
     kind: "course",
     name: course.courseName,
     label: course.courseCode,
-    description: "محادثة طلاب المقرر"
+    description: "محادثة طلاب المقرر",
+    courseId: course.courseId,
       }))
     ];
   

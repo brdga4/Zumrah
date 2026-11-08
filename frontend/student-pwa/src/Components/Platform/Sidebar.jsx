@@ -10,8 +10,14 @@ const items = [
   { id: "profile", label: "الملف الشخصي", href: "/profile" },
 ];
 
-// 3. Receive student data and active page
-export default function Sidebar({ active, studentName, majorName }) {
+// showUserInfo controls whether the student information is visible
+// Default is true to preserve the layout on other pages
+export default function Sidebar({
+  active,
+  studentName,
+  majorName,
+  showUserInfo = true,
+}) {
   return (
     <aside className="platform-sidebar">
 
@@ -36,22 +42,24 @@ export default function Sidebar({ active, studentName, majorName }) {
         ))}
       </nav>
 
-      {/* 6. Display student information */}
-      <div className="platform-sidebar-footer">
-        <div className="platform-sidebar-user">
-          <Avatar name={studentName} />
+      {/* 6. Display student information only when showUserInfo is true */}
+      {showUserInfo && (
+        <div className="platform-sidebar-footer">
+          <div className="platform-sidebar-user">
+            <Avatar name={studentName} />
 
-          <div className="platform-sidebar-user-text">
-            <Text size="small" weight="semibold">
-              {studentName}
-            </Text>
+            <div className="platform-sidebar-user-text">
+              <Text size="small" weight="semibold">
+                {studentName}
+              </Text>
 
-            <Text size="small" tone="muted">
-              {majorName}
-            </Text>
+              <Text size="small" tone="muted">
+                {majorName}
+              </Text>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
     </aside>
   );
