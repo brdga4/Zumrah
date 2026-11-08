@@ -7,7 +7,7 @@ import {
 } from './authValidation';
 import './AdminLoginPage.css';
 import { useNavigate } from 'react-router-dom';
-import { API_BASE_URL } from '../../../config';
+import { loginAdmin } from '../api/adminAuthApi';
 
 export default function AdminLoginPage() {
     const navigate = useNavigate();
@@ -59,28 +59,7 @@ export default function AdminLoginPage() {
 
     setIsLoading(true);
     try {
-  const response = await fetch(`${API_BASE_URL}/api/auth/admin`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      identifier: identifier.trim(),
-      password: password,
-    }),
-  });
-
-  if (!response.ok) {
-    if (response.status === 401) {
-      setMessage('اسم المستخدم أو البريد الإلكتروني أو كلمة المرور غير صحيحة.');
-    } else {
-      setMessage('تعذر تسجيل الدخول حاليًا. حاول مرة أخرى.');
-    }
-
-    return;
-  }
-
-  const data = await response.json();
+  const data = await loginAdmin(identifier.trim(), password);
 
   if (!data.accessToken) {
     setMessage('لم يتم استلام رمز الدخول من الخادم.');
@@ -88,10 +67,22 @@ export default function AdminLoginPage() {
   }
 
   sessionStorage.setItem('accessToken', data.accessToken);
+
+  if (data.admin) {
+    sessionStorage.setItem('admin', JSON.stringify(data.admin));
+  }
+
   navigate('/dashboard', { replace: true });
 } catch (error) {
   console.error('Admin login failed:', error);
-  setMessage('تعذر الاتصال بالخادم. تأكد من تشغيله ثم حاول مجددًا.');
+
+  if (error.status === 401) {
+    setMessage('اسم المستخدم أو البريد الإلكتروني أو كلمة المرور غير صحيحة.');
+  } else if (!error.status) {
+    setMessage('تعذر الاتصال بالخادم. تأكد من تشغيله ثم حاول مجددًا.');
+  } else {
+    setMessage(error.message || 'تعذر تسجيل الدخول حاليًا. حاول مرة أخرى.');
+  }
 } finally {
   setIsLoading(false);
 }

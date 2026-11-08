@@ -1,0 +1,215 @@
+
+/* Dark background behind the popup */
+.upload-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(25, 20, 45, 0.45);
+}
+
+/* Main popup window */
+.upload-dialog {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 768px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 48px;
+  border-radius: 36px;
+  background: #FFFFFF;
+  color: #172033;
+  font-family: "Alexandria", sans-serif;
+  box-shadow: 0 24px 70px rgba(30, 20, 65, 0.15);
+}
+
+/* Popup header */
+.upload-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.upload-dialog-header h2 {
+  margin: 0 0 8px;
+  color: #211C34;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.upload-dialog-header p {
+  margin: 0;
+  color: #716B80;
+  font-size: 16px;
+}
+
+/* Close button */
+.upload-dialog-close {
+  border: none;
+  background: transparent;
+  color: #716B80;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.upload-dialog-close:hover {
+  color: #6847E8;
+}
+
+/* File selection area */
+.upload-dialog-dropzone {
+  display: flex;
+  min-height: 260px;
+  padding: 32px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px dashed #DED6FF;
+  border-radius: 24px;
+  background: #F6F3FF;
+  text-align: center;
+  cursor: pointer;
+}
+
+.upload-dialog-dropzone:hover {
+  background: #EFEAFF;
+  border-color: #6847E8;
+}
+
+/* Hide the native input but keep it usable */
+.upload-dialog-dropzone input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.upload-dialog-dropzone:focus-within {
+  outline: 2px solid #6847E8;
+  outline-offset: 3px;
+}
+
+/* Upload icon */
+.upload-dialog-icon {
+  display: flex;
+  width: 64px;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #DED6FF;
+  border-radius: 50%;
+  background: white;
+  color: #6847E8;
+  font-size: 30px;
+}
+
+/* File picker text */
+.upload-dialog-dropzone strong {
+  color: #6847E8;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.upload-dialog-dropzone p {
+  margin: 0;
+  color: #716B80;
+}
+
+.upload-dialog-dropzone small {
+  margin-top: 12px;
+  color: #9A94AC;
+  font-size: 12px;
+}
+
+/* Selected file */
+.upload-dialog-selected {
+  margin: 16px 0 0;
+  overflow-wrap: anywhere;
+  color: #4B35B5;
+  font-size: 14px;
+}
+
+/* Error message */
+.upload-dialog-error {
+  margin: 16px 0 0;
+  color: #D42F4D;
+  font-size: 14px;
+}
+
+/* Bottom buttons */
+.upload-dialog-actions {
+  display: flex;
+  gap: 18px;
+  margin-top: 30px;
+}
+
+.upload-dialog-actions button {
+  flex: 1;
+  padding: 18px;
+  border-radius: 16px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Cancel button */
+.upload-dialog-cancel {
+  border: 1px solid #E8E7F0;
+  border-radius: 16px;
+  background: #FFFFFF;
+  color: var(--color-error, #D42F4D);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+/* Cancel button hover */
+.upload-dialog-cancel:hover:not(:disabled) {
+  background: #FFF1F3;
+  border-color: var(--color-error, #D42F4D);
+}
+
+/* Confirm upload button */
+.upload-dialog-confirm {
+  border: none;
+  background: #6847E8;
+  color: white;
+}
+
+.upload-dialog-confirm:hover:not(:disabled) {
+  background: #4B35B5;
+}
+
+/* Disabled buttons */
+.upload-dialog-actions button:disabled {
+  background: #F1EEF6;
+  color: #AAA4B9;
+  cursor: not-allowed;
+}
+
+/* Mobile layout */
+@media (max-width: 640px) {
+  .upload-dialog {
+    padding: 24px;
+    border-radius: 22px;
+  }
+
+  .upload-dialog-header h2 {
+    font-size: 22px;
+  }
+
+  .upload-dialog-dropzone {
+    min-height: 220px;
+    padding: 20px;
+  }
+
+  .upload-dialog-actions {
+    flex-direction: column-reverse;
+  }
+}

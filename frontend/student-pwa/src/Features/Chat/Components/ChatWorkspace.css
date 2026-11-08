@@ -1,0 +1,183 @@
+/* Main chat workspace - Figma layout */
+.chat-workspace {
+  display: grid;
+  grid-template-columns: clamp(240px, 22%, 320px) minmax(0, 1fr);
+  direction: rtl;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: calc(100dvh - 156px);
+
+  gap: 0;
+  overflow: hidden;
+
+  background: #FFFFFF;
+  border: 1px solid #E8E7F0;
+  border-radius: 24px;
+  box-shadow: 0 16px 48px rgba(50, 35, 105, 0.07);
+}
+
+/* Chat rooms sidebar */
+.chat-workspace-rooms {
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #C8C2DD transparent;
+}
+
+.chat-workspace-rooms::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-workspace-rooms::-webkit-scrollbar-thumb {
+  background: #C8C2DD;
+  border-radius: 10px;
+}
+
+/* Main conversation panel */
+.chat-workspace-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: #ffffff;
+  border-inline-start: 1px solid #E8E7F0;
+  overflow: hidden;
+}
+
+/* Active chat room header */
+.chat-workspace-header {
+  flex-shrink: 0;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e8e7f0;
+  background: #ffffff;
+  display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.chat-workspace-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #172033;
+}
+
+.chat-workspace-files-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 16px;
+  border: 1px solid #E8E7F0;
+  border-radius: 12px;
+  background: #F5F3FF;
+  color: #6847E8;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.chat-workspace-files-button:hover {
+  background: #EDE9FF;
+  border-color: #6847E8;
+}
+/* Messages and composer container */
+.chat-workspace-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+
+
+/* Hide the mobile back button on desktop */
+.chat-workspace-back-button {
+  display: none;
+}
+
+/* Mobile chat layout */
+@media (max-width: 640px) {
+
+  /* Show one chat panel at a time */
+  .chat-workspace {
+    grid-template-columns: minmax(0, 1fr);
+    height: calc(100dvh - 156px);
+    gap: 0;
+  }
+
+  /* Show the room list by default */
+  .chat-workspace-rooms {
+    max-height: none;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  /* Hide messages until a room is selected */
+  .chat-workspace-main {
+    display: none;
+  }
+
+  /* Hide the room list when a chat is opened */
+  .chat-workspace.mobile-chat-open .chat-workspace-rooms {
+    display: none;
+  }
+
+  /* Display the selected conversation */
+  .chat-workspace.mobile-chat-open .chat-workspace-main {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    border-inline-start: none;
+  }
+
+  /* Compact header for mobile */
+  .chat-workspace-header {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .chat-workspace-header h2 {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Back button using Zumrah's secondary button style */
+  .chat-workspace-back-button {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 10px 12px;
+    border: 1px solid #E8E7F0;
+    border-radius: 16px;
+    background: #FFFFFF;
+    color: #6847E8;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .chat-workspace-back-button:hover {
+    background: #F5F3FF;
+    border-color: #6847E8;
+  }
+
+  /* Keep the files button compact */
+  .chat-workspace-files-button {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+

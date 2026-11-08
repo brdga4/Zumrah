@@ -1,0 +1,139 @@
+
+/* Message layout */
+.chat-message {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.chat-message.incoming {
+  justify-content: flex-end;
+  direction: rtl;
+}
+
+.chat-message.outgoing {
+  justify-content: flex-start;
+}
+
+/* Message bubble */
+.chat-bubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  background-color: #F3F0FF;
+  border-radius: 16px;
+  color: #172033;
+  overflow-wrap: anywhere;
+}
+
+.chat-sender {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6847E8;
+}
+
+.chat-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.chat-message.outgoing .chat-bubble {
+  background-color: #6847E8;
+  color: #FFFFFF;
+}
+
+.chat-message.outgoing .chat-sender {
+  color: #FFFFFF;
+}
+
+.chat-time {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.7;
+  direction: ltr;
+  text-align: right;
+}
+
+/* Message options */
+.chat-message-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  align-self: center;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.chat-message-options-button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: #FFFFFF;
+  color: #6847E8;
+  border: 1px solid #E8E7F0;
+  border-radius: 16px;
+  font: inherit;
+  font-size: 22px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.chat-message-options-button:hover {
+  background: #F5F3FF;
+  border-color: #6847E8;
+}
+
+/* Message dropdown */
+.chat-message-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  min-width: 215px;
+  padding: 6px;
+  background: #FFFFFF;
+  border: 1px solid #E8E7F0;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(23, 32, 51, 0.12);
+}
+
+/* Destructive report option - Figma */
+.chat-message-report-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: #C63B53;
+  border: none;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.chat-message-report-option:hover:not(:disabled) {
+  background: #FFF1F3;
+}
+
+.chat-message-report-option:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.chat-message-options-button:focus-visible,
+.chat-message-report-option:focus-visible {
+  outline: 2px solid #172033;
+  outline-offset: 2px;
+}
