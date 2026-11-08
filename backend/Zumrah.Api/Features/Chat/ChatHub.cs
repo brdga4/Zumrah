@@ -50,8 +50,7 @@ public class ChatHub : Hub
             {
                 await hubContext.Groups.RemoveFromGroupAsync(connectionId, groupName);
 
-                // For UI updates only. Removing group membership above
-                // is what stops future room broadcasts to this connection.
+                // For UI update
                 await hubContext.Clients.Client(connectionId)
                     .SendAsync("ChatAccessRevoked", new { chatRoomId = roomId });
             }
