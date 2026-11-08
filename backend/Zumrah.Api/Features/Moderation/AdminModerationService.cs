@@ -1,6 +1,7 @@
-
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Zumrah.Api.Data;
+using Zumrah.Api.Features.Chat;
 using Zumrah.Api.Features.Moderation.DTOs;
 using Zumrah.Api.Models.Enums;
 
@@ -9,10 +10,14 @@ namespace Zumrah.Api.Features.Moderation;
 public class AdminModerationService
 {
     private readonly ZumrahDbContext _db;
+    private readonly IHubContext<ChatHub> _hubContext;
 
-    public AdminModerationService(ZumrahDbContext db)
+    public AdminModerationService(
+        ZumrahDbContext db,
+        IHubContext<ChatHub> hubContext)
     {
         _db = db;
+        _hubContext = hubContext;
     }
 
     public async Task<GetAdminReportsResponse> GetReportsAsync(
@@ -133,6 +138,10 @@ public class AdminModerationService
 
         var reviewedAt = DateTime.UtcNow;
 
+        // Store the IDs needed for broadcasting
+        Guid? removedMessageId = null;
+        Guid? removedChatRoomId = null;
+
         await using var transaction = await _db.Database.BeginTransactionAsync(
             cancellationToken);
 
@@ -167,7 +176,19 @@ public class AdminModerationService
 
         if (newStatus == ReportStatus.MESSAGE_REMOVED)
         {
-            await _db.Database.ExecuteSqlInterpolatedAsync(
+            // Find the reported message and its chat room
+            var messageInfo = await _db.Reports
+                .AsNoTracking()
+                .Where(report => report.ReportId == reportId)
+                .Select(report => new
+                {
+                    report.MessageId,
+                    report.Message.ChatRoomId
+                })
+                .SingleAsync(cancellationToken);
+
+            // Soft-delete the message in MySQL
+            var deletedRows = await _db.Database.ExecuteSqlInterpolatedAsync(
                 $"""
             UPDATE message
             SET is_deleted = 1,
@@ -181,9 +202,38 @@ public class AdminModerationService
               AND is_deleted = 0
             """,
                 cancellationToken);
+
+            // Broadcast only if the message was actually deleted
+            if (deletedRows > 0)
+            {
+                removedMessageId = messageInfo.MessageId;
+                removedChatRoomId = messageInfo.ChatRoomId;
+            }
         }
 
+        // Commit the database changes before broadcasting
         await transaction.CommitAsync(cancellationToken);
+
+        // Notify all connected students in the affected room
+        if (removedMessageId.HasValue && removedChatRoomId.HasValue)
+        {
+            try
+            {
+                await _hubContext.Clients
+                    .Group(removedChatRoomId.Value.ToString("D"))
+                    .SendAsync("MessageRemoved", new
+                    {
+                        messageId = removedMessageId.Value,
+                        chatRoomId = removedChatRoomId.Value
+                    });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(
+                    $"SignalR broadcast failed: {ex}"
+                );
+            }
+        }
 
         return (new ReviewAdminReportResponse
         {
@@ -193,6 +243,4 @@ public class AdminModerationService
             ReviewedAt = reviewedAt
         }, null);
     }
-
-
 }
