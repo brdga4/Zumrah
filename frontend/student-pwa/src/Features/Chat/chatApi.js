@@ -1,21 +1,33 @@
 
 import { API_BASE_URL } from "../../config";
 
-// Fetch chat history for the selected room
-export async function getChatHistory(chatRoomId) {
+// Fetch chat history for the selected room.
+// Optionally fetch older messages using a pagination cursor.
+export async function getChatHistory(chatRoomId, { before, signal } = {}) {
   const token = sessionStorage.getItem("accessToken");
 
+  // Request 50 messages per page.
+  const query = new URLSearchParams({ limit: "50" });
+
+  // Add the cursor when requesting older messages.
+  if (before) {
+    query.set("before", before);
+  }
+
   const response = await fetch(
-    `${API_BASE_URL}/api/chat-rooms/${chatRoomId}/messages?limit=50`,
+    `${API_BASE_URL}/api/chat-rooms/${chatRoomId}/messages?${query}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      signal,
     }
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch chat history");
+    const error = new Error("Failed to fetch chat history");
+    error.status = response.status;
+    throw error;
   }
 
   return response.json();

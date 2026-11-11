@@ -31,7 +31,7 @@ export default function PlatformLayout({
           active={active}
           studentName={studentName}
           majorName={majorName}
-          showUserInfo={active !== "profile"}
+          showUserInfo={active !== "profile"  && active !== "courses" }
         />
       )}
 

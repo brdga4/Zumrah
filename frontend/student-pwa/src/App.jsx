@@ -2,7 +2,8 @@
 // Routes: Groups all the routes together.
 // Route: Maps a URL path to a specific component.
 // Navigate: Redirects the user to another route.
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 import LoginPage from './Features/Auth/Components/LoginPage';
 import SignupPage from './Features/Auth/SignupPage';
@@ -14,9 +15,42 @@ import CourseFilesPage from "./Features/Materials/CourseFilesPage";
 
 // Redirect unauthenticated users to login.(home page is protected)
 function ProtectedRoute({ children }) {
+  const navigate = useNavigate();
   const token = sessionStorage.getItem('accessToken');
 
-  if (!token) {
+  let expiryTime = 0;
+
+  // Read the expiration time from the JWT token.
+  if (token) {
+    try {
+      const payload = JSON.parse(
+        atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))
+      );
+
+      expiryTime = payload.exp * 1000;
+    } catch {
+      expiryTime = 0;
+    }
+  }
+
+  useEffect(() => {
+    // Redirect immediately if the token is missing or expired.
+    if (!token || expiryTime <= Date.now()) {
+      sessionStorage.removeItem('accessToken');
+      navigate('/login', { replace: true });
+      return;
+    }
+
+    // Automatically log out when the token expires.
+    const timeoutId = setTimeout(() => {
+      sessionStorage.removeItem('accessToken');
+      navigate('/login', { replace: true });
+    }, expiryTime - Date.now());
+
+    return () => clearTimeout(timeoutId);
+  }, [token, expiryTime, navigate]);
+
+  if (!token || !expiryTime) {
     return <Navigate to="/login" replace />;
   }
 

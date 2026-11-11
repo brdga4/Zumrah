@@ -13,6 +13,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
+  // Track whether the login request is in progress.
+  const [isLoading, setIsLoading] = useState(false);
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -40,7 +42,8 @@ export default function LoginPage() {
       (!validEmail ? emailRef : passwordRef).current?.focus();
       return;
     }
-
+    // Start loading before sending the login request.
+    setIsLoading(true);
     // try to log in the user by sending a request to the backend API.
     
 try {
@@ -58,19 +61,22 @@ try {
     }
   );
   if (!response.ok) {
-  setMessage('فشل تسجيل الدخول. تحقق من بياناتك وحاول مرة أخرى.');
-  return;
-}
+    setMessage('فشل تسجيل الدخول. تحقق من بياناتك وحاول مرة أخرى.');
+    return;
+  }
   const data = await response.json();
   if (!data.accessToken) {
-  setMessage('لم يتم استلام رمز تسجيل الدخول.');
-  return;
-}
+    setMessage('لم يتم استلام رمز تسجيل الدخول.');
+    return;
+  }
   sessionStorage.setItem('accessToken', data.accessToken);
   navigate('/home'); // Redirect to the home page after successful login.
 } catch (error) {
   console.error('Login failed:', error);
   setMessage('تعذر الاتصال بالخادم. حاول مجددًا.');
+} finally {
+  // Stop loading when the request finishes.
+  setIsLoading(false);
 }
 
   }
@@ -191,8 +197,15 @@ try {
               </span>
             </div>
 
-            <Button type="submit">
-              تسجيل الدخول
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <span className="login-loading">
+                  <span className="login-spinner" aria-hidden="true" />
+                  جاري تسجيل الدخول...
+                </span>
+              ) : (
+                "تسجيل الدخول"
+              )}
             </Button>
 
             <div
