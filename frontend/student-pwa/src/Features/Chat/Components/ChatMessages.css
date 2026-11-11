@@ -98,3 +98,40 @@
   background: #C8C2DD;
   border-radius: 10px;
 }
+/* Loading indicator for older chat messages */
+.chat-history-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: fit-content;
+  margin: 12px auto;
+  padding: 10px 16px;
+
+  background: #F5F3FF;
+  color: #6847E8;
+  border: 1px solid #E8E7F0;
+  border-radius: 999px;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Small animated spinner */
+.chat-history-loading::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid #DDD6FE;
+  border-top-color: #6847E8;
+  border-radius: 50%;
+  animation: chat-history-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes chat-history-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
