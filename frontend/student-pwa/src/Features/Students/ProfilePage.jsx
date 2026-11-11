@@ -8,7 +8,7 @@ import PlatformLayout from "../../Components/Platform/PlatformLayout";
 
 import {
   getStudentProfile,
-  getMajorsByCollege,
+  getColleges,
   updateStudentProfile,
 } from "./studentApi";
 
@@ -24,6 +24,11 @@ export default function ProfilePage() {
 
   // Store available majors for the student's college
   const [majors, setMajors] = useState([]);
+  // Store all available colleges.
+  const [colleges, setColleges] = useState([]);
+
+  // Store the college selected by the student.
+  const [collegeId, setCollegeId] = useState("");
   const [majorsError, setMajorsError] = useState(false);
 
   // Track loading and saving operations
@@ -55,29 +60,31 @@ export default function ProfilePage() {
         // Fill the editable fields with current values
         setName(data.name || "");
         setMajorId(String(data.major?.majorId || ""));
+        // Set the student's current college as the initial selection.
+        setCollegeId(String(data.college?.collegeId || ""));
 
-        // Load majors belonging to the student's college
-        if (data.college?.collegeId) {
-          try {
-            const result = await getMajorsByCollege(
-              data.college.collegeId
-            );
+        // Load all colleges and their majors.
+        try {
+          const allColleges = await getColleges();
 
-            if (!active) return;
+          if (!active) return;
 
-            // Support both { majors: [...] } and direct arrays
-            const availableMajors = result.majors ?? result;
+          setColleges(allColleges);
 
-            setMajors(
-              Array.isArray(availableMajors) ? availableMajors : []
-            );
+          // Find the student's current college.
+          const currentCollege = allColleges.find(
+            (college) =>
+              String(college.collegeId) === String(data.college?.collegeId)
+          );
 
-          } catch (error) {
-            console.error("Failed to load majors:", error);
+          // Display majors from the student's current college.
+          setMajors(currentCollege?.majors ?? []);
 
-            if (active) {
-              setMajorsError(true);
-            }
+        } catch (error) {
+          console.error("Failed to load colleges:", error);
+
+          if (active) {
+            setMajorsError(true);
           }
         }
       })
@@ -167,6 +174,16 @@ export default function ProfilePage() {
       setStudent(updatedStudent);
       setName(updatedStudent.name || "");
       setMajorId(String(updatedStudent.major?.majorId || ""));
+      // Update the selected college after saving.
+      const savedCollegeId = String(updatedStudent.college?.collegeId || "");
+      setCollegeId(savedCollegeId);
+
+      // Display majors belonging to the saved college.
+      const savedCollege = colleges.find(
+        (college) => String(college.collegeId) === savedCollegeId
+      );
+
+      setMajors(savedCollege?.majors ?? []);
 
       // Show success feedback
       setFeedback({
@@ -209,6 +226,16 @@ export default function ProfilePage() {
     // Restore the original values without calling the backend
     setName(student.name || "");
     setMajorId(String(student.major?.majorId || ""));
+    // Restore the student's original college.
+    const originalCollegeId = String(student.college?.collegeId || "");
+    setCollegeId(originalCollegeId);
+
+    // Restore majors belonging to the original college.
+    const originalCollege = colleges.find(
+      (college) => String(college.collegeId) === originalCollegeId
+    );
+
+    setMajors(originalCollege?.majors ?? []);
 
     // Clear previous feedback
     setFeedback(null);
@@ -323,112 +350,139 @@ export default function ProfilePage() {
                   setFeedback(null);
                 }}
               />
-            </label>
+                </label>
 
-            <hr className="profile-section-divider" />
+                <hr className="profile-section-divider" />
 
 
-            {/* Academic information section */}
-            <div>
-              <h2 className="profile-section-title">
-                المعلومات الأكاديمية
-              </h2>
+                {/* Academic information section */}
+                <div>
+                  <h2 className="profile-section-title">
+                    المعلومات الأكاديمية
+                  </h2>
 
-              <p className="profile-section-description">
-                البريد الجامعي والكلية مرتبطان بسجلك الجامعي
-                ولا يمكن تعديلهما.
-              </p>
-            </div>
-
-            {/* Read-only university email */}
-            <div className="profile-field">
-              <span className="profile-field-label">
-                البريد الجامعي
-              </span>
-
-              <div
-                className="profile-field-readonly"
-                dir="ltr"
-              >
-                {student.universityEmail}
-              </div>
-
-              <p className="profile-readonly-note">
-                للقراءة فقط
-              </p>
-            </div>
-
-            {/* College and major fields */}
-            <div className="profile-academic-grid">
-
-              {/* Read-only college */}
-              <div className="profile-field">
-                <span className="profile-field-label">
-                  الكلية
-                </span>
-
-                <div className="profile-field-readonly">
-                  {student.college?.collegeName || "غير محددة"}
+                  <p className="profile-section-description">
+                    يمكنك تحديث بياناتك الأكاديمية، باستثناء البريد الجامعي
+                  </p>
                 </div>
 
-                <p className="profile-readonly-note">
-                  للقراءة فقط
-                </p>
-              </div>
+                {/* Read-only university email */}
+                <div className="profile-field">
+                  <span className="profile-field-label">
+                    البريد الجامعي
+                  </span>
 
-              {/* Editable major */}
-              <label className="profile-field">
-                <span className="profile-field-label">
-                  التخصص
-                </span>
+                  <div
+                    className="profile-field-readonly"
+                    dir="ltr"
+                  >
+                    {student.universityEmail}
+                  </div>
 
-                <select
-                  className="profile-field-select"
-                  value={majorId}
-                  disabled={isSaving || majorsError}
-                  onChange={(event) => {
-                    setMajorId(event.target.value);
-                    setFeedback(null);
-                  }}
-                >
-                  {/* Keep the current major visible while options load */}
-                  {!majors.some(
-                    (major) =>
-                      String(major.majorId) === originalMajorId
-                  ) && originalMajorId && (
-                    <option value={originalMajorId}>
-                      {student.major?.majorName}
-                    </option>
-                  )}
+                  <p className="profile-readonly-note">
+                    للقراءة فقط
+                  </p>
+                </div>
 
-                  {/* Majors returned by the backend */}
-                  {majors.map((major) => (
-                    <option
-                      key={major.majorId}
-                      value={major.majorId}
+                {/* College and major fields */}
+                <div className="profile-academic-grid">
+
+                  {/* Editable college */}
+                  <label className="profile-field">
+                    <span className="profile-field-label">
+                      الكلية
+                    </span>
+
+                    <select
+                      className="profile-field-select"
+                      value={collegeId}
+                      disabled={isSaving || majorsError}
+                      onChange={(event) => {
+                        const selectedCollegeId = event.target.value;
+
+                        // Update the selected college.
+                        setCollegeId(selectedCollegeId);
+
+                        // Find the majors belonging to the selected college.
+                        const selectedCollege = colleges.find(
+                          (college) => String(college.collegeId) === selectedCollegeId
+                        );
+
+                        // Reset the major when the college changes.
+                        setMajorId("");
+                        setMajors(selectedCollege?.majors ?? []);
+                        setFeedback(null);
+                      }}
                     >
-                      {major.majorName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+                      <option value="" disabled>اختر الكلية</option>
 
-            {/* Explain why the major cannot be changed if loading failed */}
-            {majorsError && (
-              <p className="profile-feedback profile-feedback--error">
-                تعذر تحميل قائمة التخصصات.
-              </p>
-            )}
+                      {colleges.map((college) => (
+                        <option key={college.collegeId} value={college.collegeId}>
+                          {college.collegeName}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
 
-            {/* Warning about changing the major */}
-            <div className="profile-major-warning">
-              <span className="profile-warning-icon" aria-hidden="true">
-                !
-              </span>
+                  {/* Editable major */}
+                  <label className="profile-field">
+                    <span className="profile-field-label">
+                      التخصص
+                    </span>
 
-              <span>
-                تغيير التخصص يلغي جميع تسجيلاتك الحالية في المقررات.
+                    <select
+                      className="profile-field-select"
+                      value={majorId}
+                      disabled={isSaving || majorsError}
+                      onChange={(event) => {
+                        setMajorId(event.target.value);
+                        setFeedback(null);
+                      }}
+                    >
+                      {/* Ask the student to select a major when none is selected. */}
+                      <option value="" disabled>
+                        اختر التخصص
+                      </option>
+
+                      {/* Show the original major only for the student's original college. */}
+                      {collegeId === String(student.college?.collegeId || "") &&
+                        !majors.some(
+                          (major) => String(major.majorId) === originalMajorId
+                        ) &&
+                        originalMajorId && (
+                          <option value={originalMajorId}>
+                            {student.major?.majorName}
+                          </option>
+                        )}
+
+                      {/* Majors returned by the backend */}
+                      {majors.map((major) => (
+                        <option
+                          key={major.majorId}
+                          value={major.majorId}
+                        >
+                          {major.majorName}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+
+                {/* Explain why the major cannot be changed if loading failed */}
+                {majorsError && (
+                  <p className="profile-feedback profile-feedback--error">
+                    تعذر تحميل قائمة التخصصات.
+                  </p>
+                )}
+
+                {/* Warning about changing the major */}
+                <div className="profile-major-warning">
+                  <span className="profile-warning-icon" aria-hidden="true">
+                    !
+                  </span>
+
+                  <span>
+                    تغيير التخصص يلغي جميع تسجيلاتك الحالية في المقررات.
               </span>
             </div>
 

@@ -151,7 +151,6 @@ export default function CoursesPage() {
       student={student}
     >
       <div className="zumrah-courses" dir="rtl">
-        <h1>المقررات</h1>
         {/* Enrolled Courses */}
         <section>
           <h2>مقرراتي</h2>
@@ -170,7 +169,7 @@ export default function CoursesPage() {
                     state: { roomId: course.chatRoomId },
                   })}
 
-                  onOpenFiles={() => window.alert("الملفات قريبًا")}
+                  onOpenFiles={() => navigate(`/courses/${course.courseId}/files`)}
                 />
               ))
             )}
@@ -192,8 +191,6 @@ export default function CoursesPage() {
                   status={course.isEnrolled ? "enrolled" : "available"}
                   onEnroll={() => handleJoin(course.courseId)}
                   onLeave={() => handleLeave(course.courseId)}
-                  onOpenChat={() => window.alert("المحادثة قريبًا")}
-                  onOpenFiles={() => window.alert("الملفات قريبًا")}
                 />
               ))}
 

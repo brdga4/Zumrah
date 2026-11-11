@@ -335,3 +335,27 @@ body:has(.zumrah-login) {
     transition: none !important;
   }
 }
+/* Align the spinner and loading text inside the login button. */
+.login-loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Create a circular loading indicator. */
+.login-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: login-spin 0.8s linear infinite;
+}
+
+/* Rotate the loading indicator continuously. */
+@keyframes login-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
