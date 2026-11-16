@@ -29,7 +29,7 @@
   padding: 6px;
 
   background: #F9F8FC;
-  border: 1px solid #E8E7F0;
+  border: 1px solid var(--color-neutral-200);
   border-radius: 20px;
 
   direction: rtl;
@@ -47,7 +47,7 @@
   border: none;
   outline: none;
 
-  color: #172033;
+  color: var(--color-neutral-900);
   font-family: inherit;
   font-size: 15px;
   text-align: right;
@@ -64,8 +64,8 @@
   border: none;
   border-radius: 14px;
 
-  background: #6847E8;
-  color: #FFFFFF;
+  background: var(--color-primary);
+  color: var(--color-white);
 
   font-family: inherit;
   font-weight: 600;
@@ -76,7 +76,7 @@
 }
 
 .chat-composer button:hover {
-  background: #4B35B5;
+  background: var(--color-primary-dark);
 }
 
 .chat-composer button:disabled {
@@ -109,8 +109,8 @@
   padding: 10px 16px;
 
   background: #F5F3FF;
-  color: #6847E8;
-  border: 1px solid #E8E7F0;
+  color: var(--color-primary);
+  border: 1px solid var(--color-neutral-200);
   border-radius: 999px;
 
   font-family: inherit;
@@ -124,7 +124,7 @@
   width: 14px;
   height: 14px;
   border: 2px solid #DDD6FE;
-  border-top-color: #6847E8;
+  border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: chat-history-spin 0.8s linear infinite;
   flex-shrink: 0;

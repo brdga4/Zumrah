@@ -20,8 +20,8 @@
   overflow-y: auto;
   padding: 48px;
   border-radius: 36px;
-  background: #FFFFFF;
-  color: #172033;
+  background: var(--color-white);
+  color: var(--color-neutral-900);
   font-family: "Alexandria", sans-serif;
   box-shadow: 0 24px 70px rgba(30, 20, 65, 0.15);
 }
@@ -37,14 +37,14 @@
 
 .upload-dialog-header h2 {
   margin: 0 0 8px;
-  color: #211C34;
+  color: var(--color-neutral-900);
   font-size: 28px;
   font-weight: 700;
 }
 
 .upload-dialog-header p {
   margin: 0;
-  color: #716B80;
+  color: var(--color-neutral-600);
   font-size: 16px;
 }
 
@@ -52,13 +52,13 @@
 .upload-dialog-close {
   border: none;
   background: transparent;
-  color: #716B80;
+  color: var(--color-neutral-600);
   font-size: 28px;
   cursor: pointer;
 }
 
 .upload-dialog-close:hover {
-  color: #6847E8;
+  color: var(--color-primary);
 }
 
 /* File selection area */
@@ -79,7 +79,7 @@
 
 .upload-dialog-dropzone:hover {
   background: #EFEAFF;
-  border-color: #6847E8;
+  border-color: var(--color-primary);
 }
 
 /* Hide the native input but keep it usable */
@@ -91,7 +91,7 @@
 }
 
 .upload-dialog-dropzone:focus-within {
-  outline: 2px solid #6847E8;
+  outline: 2px solid var(--color-primary);
   outline-offset: 3px;
 }
 
@@ -104,21 +104,21 @@
   justify-content: center;
   border: 1px solid #DED6FF;
   border-radius: 50%;
-  background: white;
-  color: #6847E8;
+  background: var(--color-white);
+  color: var(--color-primary);
   font-size: 30px;
 }
 
 /* File picker text */
 .upload-dialog-dropzone strong {
-  color: #6847E8;
+  color: var(--color-primary);
   font-size: 18px;
   font-weight: 600;
 }
 
 .upload-dialog-dropzone p {
   margin: 0;
-  color: #716B80;
+  color: var(--color-neutral-600);
 }
 
 .upload-dialog-dropzone small {
@@ -131,14 +131,14 @@
 .upload-dialog-selected {
   margin: 16px 0 0;
   overflow-wrap: anywhere;
-  color: #4B35B5;
+  color: var(--color-primary-dark);
   font-size: 14px;
 }
 
 /* Error message */
 .upload-dialog-error {
   margin: 16px 0 0;
-  color: #D42F4D;
+  color: var(--color-error);
   font-size: 14px;
 }
 
@@ -161,29 +161,29 @@
 
 /* Cancel button */
 .upload-dialog-cancel {
-  border: 1px solid #E8E7F0;
+  border: 1px solid var(--color-neutral-200);
   border-radius: 16px;
-  background: #FFFFFF;
-  color: var(--color-error, #D42F4D);
+  background: var(--color-white);
+  color: var(--color-primary);
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
 }
 
 /* Cancel button hover */
 .upload-dialog-cancel:hover:not(:disabled) {
-  background: #FFF1F3;
-  border-color: var(--color-error, #D42F4D);
+  background: #F5F3FF;
+  border-color: var(--color-primary);
 }
 
 /* Confirm upload button */
 .upload-dialog-confirm {
   border: none;
-  background: #6847E8;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 .upload-dialog-confirm:hover:not(:disabled) {
-  background: #4B35B5;
+  background: var(--color-primary-dark);
 }
 
 /* Disabled buttons */

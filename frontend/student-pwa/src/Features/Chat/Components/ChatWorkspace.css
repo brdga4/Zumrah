@@ -12,8 +12,8 @@
   gap: 0;
   overflow: hidden;
 
-  background: #FFFFFF;
-  border: 1px solid #E8E7F0;
+  background: var(--color-white);
+  border: 1px solid var(--color-neutral-200);
   border-radius: 24px;
   box-shadow: 0 16px 48px rgba(50, 35, 105, 0.07);
 }
@@ -42,8 +42,8 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  background: #ffffff;
-  border-inline-start: 1px solid #E8E7F0;
+  background: var(--color-white);
+  border-inline-start: 1px solid var(--color-neutral-200);
   overflow: hidden;
 }
 
@@ -51,8 +51,8 @@
 .chat-workspace-header {
   flex-shrink: 0;
   padding: 20px 24px;
-  border-bottom: 1px solid #e8e7f0;
-  background: #ffffff;
+  border-bottom: 1px solid var(--color-neutral-200);
+  background: var(--color-white);
   display: flex;
     align-items: center;
     justify-content: space-between;
@@ -63,7 +63,7 @@
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #172033;
+  color: var(--color-neutral-900);
 }
 
 .chat-workspace-files-button {
@@ -72,10 +72,10 @@
   gap: 8px;
 
   padding: 10px 16px;
-  border: 1px solid #E8E7F0;
+  border: 1px solid var(--color-neutral-200);
   border-radius: 12px;
   background: #F5F3FF;
-  color: #6847E8;
+  color: var(--color-primary);
 
   font-family: inherit;
   font-size: 14px;
@@ -86,7 +86,7 @@
 }
 .chat-workspace-files-button:hover {
   background: #EDE9FF;
-  border-color: #6847E8;
+  border-color: var(--color-primary);
 }
 /* Messages and composer container */
 .chat-workspace-content {
@@ -160,10 +160,10 @@
     align-items: center;
     flex-shrink: 0;
     padding: 10px 12px;
-    border: 1px solid #E8E7F0;
+    border: 1px solid var(--color-neutral-200);
     border-radius: 16px;
-    background: #FFFFFF;
-    color: #6847E8;
+    background: var(--color-white);
+    color: var(--color-primary);
     font-family: inherit;
     font-size: 13px;
     cursor: pointer;
@@ -171,7 +171,7 @@
 
   .chat-workspace-back-button:hover {
     background: #F5F3FF;
-    border-color: #6847E8;
+    border-color: var(--color-primary);
   }
 
   /* Keep the files button compact */
