@@ -5,12 +5,12 @@
 
 /* Default text color */
 .text-default {
-  color: var(--color-neutral-900, #211c34);
+  color: var(--color-neutral-900);
 }
 
 /* Muted text color */
 .text-muted {
-  color: var(--color-neutral-600, #716b80);
+  color: var(--color-neutral-600);
 }
 
 /* Normal text size */
