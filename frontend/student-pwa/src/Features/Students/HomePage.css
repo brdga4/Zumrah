@@ -4,7 +4,6 @@
    Shared Platform, WelcomeSection and CourseCard have their own CSS files.
    Adapted for the current React JSX; do not import Figma's mock data. */
 
-@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&display=swap');
 
 /* Override the Vite starter layout only when Home is on screen. */
 body:has(.zumrah-home) {

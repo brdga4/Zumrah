@@ -2,8 +2,6 @@
 /* Zumrah Sign-up Page */
 /* Based on the approved auth.css design */
 
-@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&display=swap');
-
 /* Override default Vite layout styles */
 body:has(.zumrah-signup) {
   display: block;

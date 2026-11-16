@@ -1,8 +1,6 @@
 /* Zumrah Login Page */
 /* Original design colours and Alexandria typography */
 
-@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&display=swap');
-
 /* Prevent Vite default styles from changing the layout */
 body:has(.zumrah-login) {
   margin: 0;
