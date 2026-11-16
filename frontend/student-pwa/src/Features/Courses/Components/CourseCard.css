@@ -18,7 +18,7 @@
 
 /* Highlight enrolled courses */
 .course-card-enrolled {
-  background: linear-gradient(180deg, #f6f3ff 0%, #ffffff 45%);
+  background: linear-gradient(180deg, #f6f3ff 0%, var(--color-white) 45%);
 }
 
 
@@ -55,7 +55,7 @@
   gap: 12px;
   margin-top: auto;
   padding-top: 16px;
-  border-top: 1px solid #e8e4f0;
+  border-top: 1px solid var(--color-neutral-200);
 }
 
 .course-card-primary-actions {
@@ -67,8 +67,8 @@
   flex: 1;
   min-width: 0;
   padding: 12px;
-  background: #ffffff;
-  color: #6847e8;
+  background: var(--color-white);
+  color: var(--color-primary);
   border: 1px solid #e3ddfe;
 }
 
@@ -86,7 +86,7 @@
   align-self: center;
   background: transparent;
   border: none;
-  color: #c63c52;
+  color: var(--color-error);
   font-family: inherit;
   font-size: 12px;
   cursor: pointer;

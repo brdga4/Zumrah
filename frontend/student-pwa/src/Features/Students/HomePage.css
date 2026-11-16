@@ -10,7 +10,7 @@ body:has(.zumrah-home) {
   display: block;
   margin: 0;
   min-width: 320px;
-  background: #faf9fe;
+  background: var(--color-background);
 }
 
 #root:has(.zumrah-home) {
@@ -29,7 +29,7 @@ body:has(.zumrah-home) {
   width: 100%;
   min-width: 0;
   direction: rtl;
-  color: #211c34;
+  color: var(--color-neutral-900);
   background: transparent;
   font-family: 'Alexandria', sans-serif;
   text-align: right;

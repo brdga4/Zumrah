@@ -5,7 +5,7 @@
 
 .zumrah-courses > section > h2 {
   margin: 0 0 20px;
-  color: #211c34;
+  color: var(--color-neutral-900);
   font-size: clamp(20px, 2.4vw, 26px);
   font-weight: 700;
   line-height: 1.5;
@@ -20,13 +20,13 @@
 }
 
 /* 4. Empty-state text in enrolled courses. */
-.zumrah-courses > section > .home-courses-grid > p {
+.zumrah-courses > section > .courses-grid  > p {
   margin: 0;
   padding: 32px 24px;
-  border: 1px dashed #e8e4f0;
+  border: 1px dashed var(--color-neutral-200);
   border-radius: 16px;
-  color: #716b80;
-  background: #fff;
+  color: var(--color-neutral-600);
+  background: var(--color-white);
   text-align: center;
   line-height: 1.8;
 }
