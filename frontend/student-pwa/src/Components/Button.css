@@ -1,17 +1,78 @@
-
 .zumrah-button {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  border: none;
+  box-sizing: border-box;
   border-radius: 12px;
-  padding: 16px 24px;
-  min-height: 58px;
   font-family: inherit;
-  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 }
 
-.zumrah-button:hover {
+/* The base class retains the primary appearance for existing consumers. */
+.zumrah-button,
+.zumrah-button--primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+}
+
+.zumrah-button:where(:not(.zumrah-button--secondary, .zumrah-button--danger)):hover:not(:disabled) {
   background-color: var(--color-primary-dark);
+}
+
+.zumrah-button--secondary {
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.zumrah-button--secondary:hover:not(:disabled) {
+  background-color: var(--color-primary-subtle);
+  border-color: var(--color-primary);
+}
+
+.zumrah-button--danger {
+  background-color: var(--color-error-background);
+  color: var(--color-error);
+  border: 1px solid transparent;
+}
+
+.zumrah-button--danger:hover:not(:disabled) {
+  border-color: var(--color-error);
+}
+
+.zumrah-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.zumrah-button--danger:focus-visible {
+  outline-color: var(--color-error);
+}
+
+/* Default sizing remains identical to the original large button. */
+.zumrah-button,
+.zumrah-button--lg {
+  min-height: 58px;
+  padding: 16px 24px;
+  font-size: 14px;
+}
+
+.zumrah-button--md {
+  min-height: 52px;
+  padding: 12px 20px;
+}
+
+.zumrah-button--sm {
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 12px;
+}
+
+.zumrah-button--full-width {
+  width: 100%;
+}
+
+.zumrah-button:disabled {
+  opacity: 0.5;
+  /* Prevent existing page-specific hover effects on disabled buttons. */
+  pointer-events: none;
 }
