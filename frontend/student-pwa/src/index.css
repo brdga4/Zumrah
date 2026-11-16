@@ -2,6 +2,8 @@
   /* Zumrah Design Tokens - Colors */
   --color-primary: #6847E8;
   --color-primary-dark: #4B35B5;
+  --color-primary-subtle: #F5F3FF;
+  --color-primary-border: #E3DDFE;
 
   --color-background: #FAF9FE;
   --color-white: #FFFFFF;
@@ -11,6 +13,7 @@
   --color-neutral-200: #E8E4F0;
 
   --color-error: #C63C52;
+  --color-error-background: #FFF1F3;
 
   --color-success: #16A34A;
   --color-success-dark: #15803D;

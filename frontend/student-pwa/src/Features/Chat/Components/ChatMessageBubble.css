@@ -86,7 +86,7 @@
 }
 
 .chat-message-options-button:hover {
-  background: #F5F3FF;
+  background: var(--color-primary-subtle);
   border-color: var(--color-primary);
 }
 
@@ -124,7 +124,7 @@
 }
 
 .chat-message-report-option:hover:not(:disabled) {
-  background: #FFF1F3;
+  background: var(--color-error-background);
 }
 
 .chat-message-report-option:disabled {

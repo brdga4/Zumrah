@@ -106,7 +106,7 @@ body:has(.otp-page) {
 .otp-pill {
   display: inline-flex;
   padding: 9px 13px;
-  border: 1px solid #E3DDFE;
+  border: 1px solid var(--color-primary-border);
   border-radius: 100px;
   background: #F2EEFF;
   color: var(--color-primary-dark);
@@ -134,7 +134,7 @@ body:has(.otp-page) {
   gap: 8px;
   margin-bottom: 28px;
   padding: 17px 18px;
-  border: 1px solid #E3DDFE;
+  border: 1px solid var(--color-primary-border);
   border-radius: 12px;
   background: #F5F2FF;
 }

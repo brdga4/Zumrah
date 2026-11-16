@@ -134,7 +134,7 @@ body:has(.zumrah-signup) {
   display: inline-flex;
   gap: 7px;
   align-items: center;
-  border: 1px solid #E3DDFE;
+  border: 1px solid var(--color-primary-border);
   background: #F2EEFF;
   color: var(--color-primary-dark);
   border-radius: 100px;
@@ -221,7 +221,7 @@ body:has(.zumrah-signup) {
 
 /* University detected from email */
 .zumrah-signup .signup-university {
-  border: 1px solid #E3DDFE;
+  border: 1px solid var(--color-primary-border);
   background: #F5F2FF;
   border-radius: 12px;
   padding: 12px 16px;

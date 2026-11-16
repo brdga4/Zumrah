@@ -34,7 +34,7 @@
   width: 54px;
   height: 54px;
   margin-bottom: 18px;
-  background: #FFF1F3;
+  background: var(--color-error-background);
   color: var(--color-error);
   border-radius: 50%;
   font-size: 28px;
@@ -115,7 +115,7 @@
 }
 
 .report-dialog-reason.selected {
-  background: #F5F3FF;
+  background: var(--color-primary-subtle);
   color: var(--color-primary-dark);
   border-color: var(--color-primary);
 }
@@ -194,7 +194,7 @@
 }
 
 .report-dialog-cancel:hover:not(:disabled) {
-  background: #F5F3FF;
+  background: var(--color-primary-subtle);
   border-color: var(--color-primary);
 }
 

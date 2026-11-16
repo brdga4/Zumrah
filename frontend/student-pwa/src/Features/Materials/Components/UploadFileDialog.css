@@ -171,7 +171,7 @@
 
 /* Cancel button hover */
 .upload-dialog-cancel:hover:not(:disabled) {
-  background: #F5F3FF;
+  background: var(--color-primary-subtle);
   border-color: var(--color-primary);
 }
 

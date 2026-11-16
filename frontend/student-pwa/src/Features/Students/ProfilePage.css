@@ -92,7 +92,7 @@
   width: 100%;
   min-height: 52px;
   padding: 14px 24px;
-  background: #FFF1F3;
+  background: var(--color-error-background);
   color: var(--color-error);
   border: 1px solid var(--color-error);
   border-radius: 16px;
@@ -208,7 +208,7 @@
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: #F5F3FF;
+  background: var(--color-primary-subtle);
   color: var(--color-neutral-900);
   border: 1px solid #DDD6FE;
   border-radius: 12px;
@@ -278,7 +278,7 @@
 }
 
 .profile-cancel-button:hover:not(:disabled) {
-  background: #F5F3FF;
+  background: var(--color-primary-subtle);
   border-color: var(--color-primary);
 }
 
@@ -303,7 +303,7 @@
 }
 
 .profile-feedback--error {
-  background: #FFF1F3;
+  background: var(--color-error-background);
   color: var(--color-error);
 }
 

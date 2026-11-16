@@ -12,7 +12,7 @@
 }
 
 .card.course-card:hover {
-  border-color: #e3ddfe;
+  border-color: var(--color-primary-border);
   box-shadow: 0 16px 48px rgb(50 35 105 / 7%);
 }
 
@@ -69,7 +69,7 @@
   padding: 12px;
   background: var(--color-white);
   color: var(--color-primary);
-  border: 1px solid #e3ddfe;
+  border: 1px solid var(--color-primary-border);
 }
 
 .course-card-primary-actions .zumrah-button:hover {

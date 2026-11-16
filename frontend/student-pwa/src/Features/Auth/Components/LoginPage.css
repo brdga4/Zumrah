@@ -125,7 +125,7 @@ body:has(.zumrah-login) {
   display: inline-flex;
   gap: 7px;
   align-items: center;
-  border: 1px solid #E3DDFE;
+  border: 1px solid var(--color-primary-border);
   background: #F2EEFF;
   color: var(--color-primary-dark);
   border-radius: 100px;
