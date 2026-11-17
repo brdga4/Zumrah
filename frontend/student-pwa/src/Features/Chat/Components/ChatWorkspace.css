@@ -2,20 +2,19 @@
 .chat-workspace {
   display: grid;
   grid-template-columns: clamp(240px, 22%, 320px) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   direction: rtl;
 
   width: 100%;
   min-width: 0;
   min-height: 0;
-  height: calc(100dvh - 156px);
+  height: auto;
+  flex: 1;
 
   gap: 0;
   overflow: hidden;
 
   background: var(--color-white);
-  border: 1px solid var(--color-neutral-200);
-  border-radius: 24px;
-  box-shadow: 0 16px 48px rgba(50, 35, 105, 0.07);
 }
 
 /* Chat rooms sidebar */
@@ -50,7 +49,8 @@
 /* Active chat room header */
 .chat-workspace-header {
   flex-shrink: 0;
-  padding: 20px 24px;
+  min-height: 72px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--color-neutral-200);
   background: var(--color-white);
   display: flex;
@@ -60,9 +60,13 @@
 }
 
 .chat-workspace-header h2 {
+  flex: 1;
+  min-width: 0;
   margin: 0;
   font-size: 18px;
   font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
   color: var(--color-neutral-900);
 }
 
@@ -110,7 +114,6 @@
   /* Show one chat panel at a time */
   .chat-workspace {
     grid-template-columns: minmax(0, 1fr);
-    height: calc(100dvh - 156px);
     gap: 0;
   }
 
@@ -143,15 +146,6 @@
   .chat-workspace-header {
     padding: 12px;
     gap: 8px;
-  }
-
-  .chat-workspace-header h2 {
-    flex: 1;
-    min-width: 0;
-    font-size: 14px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   /* Back button using Zumrah's secondary button style */

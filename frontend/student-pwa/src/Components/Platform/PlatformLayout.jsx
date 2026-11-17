@@ -12,11 +12,11 @@ export default function PlatformLayout({
   const isHome = active === "home";
 
   return (
-    <div className="platform" dir="rtl">
+    <div className={isHome ? "platform platform--home" : "platform"} dir="rtl">
       <Sidebar active={active} />
 
       <div className="platform-main">
-        <main className="platform-content">
+        <main className={isHome ? "platform-content platform-content--home" : "platform-content"}>
           {title && (
             <Heading
               level={1}

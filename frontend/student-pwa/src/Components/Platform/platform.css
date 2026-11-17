@@ -6,6 +6,13 @@
   font-family: "Alexandria", sans-serif;
 }
 
+.platform--home {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .platform * {
   box-sizing: border-box;
 }
@@ -22,6 +29,10 @@
   align-items: center;
   border-inline-end: 1px solid var(--color-neutral-200);
   background: var(--color-white);
+}
+
+.platform--home > .platform-sidebar {
+  flex-shrink: 0;
 }
 
 .platform-sidebar-brand {
@@ -144,10 +155,30 @@
   margin-inline-start: 88px;
 }
 
+.platform--home > .platform-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .platform-content {
   max-width: 1440px;
   margin-inline: auto;
   padding: 32px 40px 48px;
+}
+
+/* Home layout only */
+.platform-content.platform-content--home {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
 }
 
 .platform-content .platform-page-title {

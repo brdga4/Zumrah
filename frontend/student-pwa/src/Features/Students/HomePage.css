@@ -8,26 +8,31 @@
 /* Override the Vite starter layout only when Home is on screen. */
 body:has(.zumrah-home) {
   display: block;
-  margin: 0;
-  min-width: 320px;
-  background: var(--color-background);
-}
+    margin: 0;
+    min-width: 320px;
+    background: var(--color-background);
+  }
 
-#root:has(.zumrah-home) {
-  display: block;
-  width: 100%;
-  max-width: none;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  border: none;
-  text-align: initial;
-}
-
+  #root:has(.zumrah-home) {
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border: none;
+    text-align: initial;
+  }
 /* 1. Home content: PlatformLayout already provides outer spacing. */
 .zumrah-home {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   width: 100%;
   min-width: 0;
+  min-height: 0;
   direction: rtl;
   color: var(--color-neutral-900);
   background: transparent;
@@ -43,8 +48,10 @@ body:has(.zumrah-home) {
 
 .zumrah-home .home-container {
   display: flex;
+  flex: 1;
   width: 100%;
   min-width: 0;
+  min-height: 0;
   max-width: none;
   margin: 0;
   padding: 0;
