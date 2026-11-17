@@ -147,13 +147,12 @@ export default function CoursesPage() {
 
     <PlatformLayout
       active="courses"
-      title="المقررات"
       student={student}
     >
       <div className="zumrah-courses" dir="rtl">
         {/* Enrolled Courses */}
         <section>
-          <h2>مقرراتي</h2>
+          <h2>المقررات المسجّلة</h2>
           <div className="courses-grid">
             {enrolledCourses.length === 0 ? (
               <p>لم تنضم إلى أي مقرر بعد.</p>
@@ -178,7 +177,7 @@ export default function CoursesPage() {
         {/* Course Communities */}
         <section className="home-communities">
 
-          <h2>استكشف مجتمعات زمرة</h2>
+          <h2>المقررات المتاحة لتخصصك</h2>
 
           <div className="courses-grid">
 
