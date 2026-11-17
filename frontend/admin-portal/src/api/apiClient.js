@@ -11,7 +11,7 @@ export async function apiRequest(
   const headers = {};
 
   if (requiresAuth) {
-    const accessToken = sessionStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('accessToken');
 
     if (!accessToken) {
       const error = new Error('انتهت جلسة الدخول. سجل الدخول مجددًا.');
@@ -48,4 +48,4 @@ export async function apiRequest(
   }
 
   return data;
-}
+}
