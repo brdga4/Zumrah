@@ -14,8 +14,15 @@
   border: none;
 }
 
+.zumrah-button:where(:not(.zumrah-button--secondary, .zumrah-button--danger)) {
+  box-shadow: 0 10px 24px #6847e820;
+  transition: background .15s, transform .15s, box-shadow .15s;
+}
+
 .zumrah-button:where(:not(.zumrah-button--secondary, .zumrah-button--danger)):hover:not(:disabled) {
   background-color: var(--color-primary-dark);
+  box-shadow: 0 12px 25px #6847e82e;
+  transform: translateY(-1px);
 }
 
 .zumrah-button--secondary {
@@ -75,4 +82,12 @@
   opacity: 0.5;
   /* Prevent existing page-specific hover effects on disabled buttons. */
   pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zumrah-button:where(:not(.zumrah-button--secondary, .zumrah-button--danger)) {
+    transition: none;
+    /* Override more-specific legacy primary hover movement. */
+    transform: none !important;
+  }
 }

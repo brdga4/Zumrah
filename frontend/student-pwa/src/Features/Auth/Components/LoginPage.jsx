@@ -197,7 +197,7 @@ try {
               </span>
             </div>
 
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading} fullWidth loading={isLoading}>
               {isLoading ? (
                 <span className="login-loading">
                   <span className="login-spinner" aria-hidden="true" />
@@ -224,9 +224,6 @@ try {
           </p>
         </div>
 
-        <div className="login-bottom">
-          © 2026 زمرة. جميع الحقوق محفوظة.
-        </div>
       </section>
     </main>
   );
