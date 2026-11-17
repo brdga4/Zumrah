@@ -61,7 +61,7 @@ export default function CourseCard({
 
         {status === "available" ? (
 
-          <Button onClick={onEnroll}>
+          <Button variant="primary" size="sm" onClick={onEnroll}>
             التسجيل في المقرر
           </Button>
 
@@ -77,11 +77,11 @@ export default function CourseCard({
 
             <div className="course-card-primary-actions">
 
-              <Button onClick={onOpenChat}>
+              <Button variant="secondary" size="sm" onClick={onOpenChat}>
                 المحادثة
               </Button>
 
-              <Button onClick={onOpenFiles}>
+              <Button variant="secondary" size="sm" onClick={onOpenFiles}>
                 الملفات
               </Button>
 

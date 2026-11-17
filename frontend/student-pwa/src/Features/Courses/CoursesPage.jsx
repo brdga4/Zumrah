@@ -5,6 +5,7 @@ import { getAvailableCourses, getEnrolledCourses, enrollInCourse, unenrollFromCo
 //---------------------------------------------------------------------------------------------------------
  import "./CoursesPage.css"; 
 import PlatformLayout from "../../Components/Platform/PlatformLayout";
+import Heading from "../../Components/Heading";
 import CourseCard from "../Courses/Components/CourseCard";
 //---------------------------------------------------------------------------------------------------------
   
@@ -150,6 +151,7 @@ export default function CoursesPage() {
       student={student}
     >
       <div className="zumrah-courses" dir="rtl">
+        <Heading level={1} className="courses-page-title">المقررات</Heading>
         {/* Enrolled Courses */}
         <section>
           <h2>المقررات المسجّلة</h2>
