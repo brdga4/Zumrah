@@ -84,20 +84,39 @@
   cursor: not-allowed;
 }
 
-/* Chat messages scrollbar */
-.chat-messages-list {
-  scrollbar-width: thin;
-  scrollbar-color: #C8C2DD transparent;
+/* Keep high-contrast scrollbars native and style only the message scroll container. */
+@media (forced-colors: none) {
+  /* Standard properties override WebKit pseudo-elements, so use them separately. */
+  @supports not selector(::-webkit-scrollbar) {
+    .chat-messages-list {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-neutral-200) transparent;
+    }
+
+    /* Firefox exposes hover colors through the scroll container. */
+    .chat-messages-list:hover {
+      scrollbar-color: color-mix(in srgb, var(--color-neutral-200) 75%, var(--color-neutral-600)) transparent;
+    }
+  }
+
+  .chat-messages-list::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .chat-messages-list::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .chat-messages-list::-webkit-scrollbar-thumb {
+    background: var(--color-neutral-200);
+    border-radius: 999px;
+  }
+
+  .chat-messages-list::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--color-neutral-200) 75%, var(--color-neutral-600));
+  }
 }
 
-.chat-messages-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.chat-messages-list::-webkit-scrollbar-thumb {
-  background: #C8C2DD;
-  border-radius: 10px;
-}
 /* Loading indicator for older chat messages */
 .chat-history-loading {
   display: flex;

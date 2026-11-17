@@ -1,6 +1,7 @@
 
 /* Message layout */
 .chat-message {
+  position: relative;
   display: flex;
   width: 100%;
   min-width: 0;
@@ -63,7 +64,6 @@
 
 /* Message options */
 .chat-message-actions {
-  position: relative;
   display: flex;
   align-items: center;
   align-self: center;
@@ -95,15 +95,23 @@
 /* Message dropdown */
 .chat-message-menu {
   position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
+  /* The 36px options button is centered on the row; keep an 8px gap below it. */
+  top: calc(50% + 18px + 8px);
+  inset-inline-start: 0;
   z-index: 30;
-  min-width: 215px;
+  min-width: min(215px, 100%);
+  max-width: 100%;
   padding: 6px;
   background: var(--color-white);
   border: 1px solid var(--color-neutral-200);
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(23, 32, 51, 0.12);
+}
+
+/* Anchor incoming menus to the left edge of the full row, keeping them inside it. */
+.chat-message.incoming .chat-message-menu {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
 }
 
 /* Destructive report option - Figma */
@@ -121,7 +129,8 @@
   font-size: 14px;
   font-weight: 600;
   text-align: right;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
   cursor: pointer;
 }
 
