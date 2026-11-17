@@ -181,7 +181,7 @@ function ModuleCard({ module, onNavigate }) {
 }
 
 function getAdminName() {
-  const savedAdmin = sessionStorage.getItem('admin');
+  const savedAdmin = localStorage.getItem('admin');
 
   if (!savedAdmin) {
     return 'المسؤول';
@@ -262,4 +262,4 @@ function ArrowIcon() {
       <path d="m12 19-7-7 7-7" />
     </svg>
   );
-}
+}
