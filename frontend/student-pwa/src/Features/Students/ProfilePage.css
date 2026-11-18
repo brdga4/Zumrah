@@ -19,10 +19,10 @@
 .profile-details-card {
   min-width: 0;
   padding: 32px;
-  background: #FFFFFF;
-  border: 1px solid #E8E7F0;
+  background: var(--color-white);
+  border: 1px solid var(--color-neutral-200);
   border-radius: 18px;
-  color: #172033;
+  color: var(--color-neutral-900);
 }
 
 
@@ -48,21 +48,21 @@
   margin-bottom: 8px;
   border-radius: 50%;
   background: #F0EAFF;
-  color: #4B35B5;
+  color: var(--color-primary-dark);
   font-size: 44px;
   font-weight: 700;
 }
 
 .profile-student-name {
   margin: 0;
-  color: #172033;
+  color: var(--color-neutral-900);
   font-size: 24px;
   font-weight: 700;
 }
 
 .profile-student-email {
   margin: 0;
-  color: #716B83;
+  color: var(--color-neutral-600);
   font-size: 13px;
   overflow-wrap: anywhere;
   direction: ltr;
@@ -73,7 +73,7 @@
   margin-top: 8px;
   padding: 8px 16px;
   background: #F0EAFF;
-  color: #4B35B5;
+  color: var(--color-primary-dark);
   border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
@@ -84,7 +84,7 @@
   width: 100%;
   height: 1px;
   margin: 20px 0 8px;
-  background: #E8E7F0;
+  background: var(--color-neutral-200);
 }
 
 /* Logout button */
@@ -92,9 +92,9 @@
   width: 100%;
   min-height: 52px;
   padding: 14px 24px;
-  background: #FFF1F3;
-  color: #C63B53;
-  border: 1px solid #E84A65;
+  background: var(--color-error-background);
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
   border-radius: 16px;
   font: inherit;
   font-weight: 600;
@@ -120,21 +120,21 @@
 
 .profile-section-title {
   margin: 0 0 6px;
-  color: #172033;
+  color: var(--color-neutral-900);
   font-size: 21px;
   font-weight: 700;
 }
 
 .profile-section-description {
   margin: 0;
-  color: #716B83;
+  color: var(--color-neutral-600);
   font-size: 14px;
   line-height: 1.8;
 }
 
 .profile-section-divider {
   height: 1px;
-  background: #E8E7F0;
+  background: var(--color-neutral-200);
   border: none;
   margin: 4px 0;
 }
@@ -148,7 +148,7 @@
 }
 
 .profile-field-label {
-  color: #172033;
+  color: var(--color-neutral-900);
   font-size: 14px;
   font-weight: 600;
 }
@@ -160,9 +160,9 @@
   width: 100%;
   min-height: 54px;
   padding: 14px 16px;
-  background: #FFFFFF;
-  color: #172033;
-  border: 1px solid #E8E7F0;
+  background: var(--color-white);
+  color: var(--color-neutral-900);
+  border: 1px solid var(--color-neutral-200);
   border-radius: 12px;
   font: inherit;
   font-size: 14px;
@@ -171,7 +171,7 @@
 .profile-field-input:focus,
 .profile-field-select:focus {
   outline: none;
-  border-color: #6847E8;
+  border-color: var(--color-primary);
 }
 
 /* Read-only fields */
@@ -182,8 +182,8 @@
   box-sizing: border-box;
   padding: 14px 16px;
   background: #F1EEF6;
-  color: #716B83;
-  border: 1px solid #E8E7F0;
+  color: var(--color-neutral-600);
+  border: 1px solid var(--color-neutral-200);
   border-radius: 12px;
   font-size: 14px;
   overflow-wrap: anywhere;
@@ -191,7 +191,7 @@
 
 .profile-readonly-note {
   margin: 0;
-  color: #716B83;
+  color: var(--color-neutral-600);
   font-size: 12px;
 }
 
@@ -208,8 +208,8 @@
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: #F5F3FF;
-  color: #172033;
+  background: var(--color-primary-subtle);
+  color: var(--color-neutral-900);
   border: 1px solid #DDD6FE;
   border-radius: 12px;
   font-size: 13px;
@@ -222,8 +222,8 @@
   width: 28px;
   height: 28px;
   flex-shrink: 0;
-  background: #6847E8;
-  color: #FFFFFF;
+  background: var(--color-primary);
+  color: var(--color-white);
   border-radius: 50%;
   font-weight: 700;
 }
@@ -242,7 +242,7 @@
 
 .profile-change-status {
   margin-inline-end: auto;
-  color: #716B83;
+  color: var(--color-neutral-600);
   font-size: 13px;
 }
 
@@ -260,26 +260,26 @@
 
 /* Primary button: Save changes */
 .profile-save-button {
-  background: #6847E8;
-  color: #FFFFFF;
-  border: 1px solid #6847E8;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: 1px solid var(--color-primary);
 }
 
 .profile-save-button:hover:not(:disabled) {
-  background: #4B35B5;
-  border-color: #4B35B5;
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
 }
 
 /* Secondary button: Same style as Files Download */
 .profile-cancel-button {
-  background: #FFFFFF;
-  color: #6847E8;
-  border: 1px solid #E8E7F0;
+  background: var(--color-white);
+  color: var(--color-primary);
+  border: 1px solid var(--color-neutral-200);
 }
 
 .profile-cancel-button:hover:not(:disabled) {
-  background: #F5F3FF;
-  border-color: #6847E8;
+  background: var(--color-primary-subtle);
+  border-color: var(--color-primary);
 }
 
 /* Disabled actions */
@@ -298,13 +298,13 @@
 }
 
 .profile-feedback--success {
-  background: #ECFDF5;
-  color: #166534;
+  background: var(--color-success-background);
+  color: var(--color-success-dark);
 }
 
 .profile-feedback--error {
-  background: #FFF1F3;
-  color: #C63B53;
+  background: var(--color-error-background);
+  color: var(--color-error);
 }
 
 

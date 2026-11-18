@@ -1,9 +1,11 @@
 
 /* Message layout */
 .chat-message {
+  position: relative;
   display: flex;
   width: 100%;
-  margin-bottom: 10px;
+  min-width: 0;
+  margin-bottom: 12px;
 }
 
 .chat-message.incoming {
@@ -17,11 +19,12 @@
 
 /* Message bubble */
 .chat-bubble {
-  max-width: 75%;
-  padding: 10px 14px;
+  min-width: 0;
+  max-width: min(85%, 42rem);
+  padding: 12px 16px;
   background-color: #F3F0FF;
   border-radius: 16px;
-  color: #172033;
+  color: var(--color-neutral-900);
   overflow-wrap: anywhere;
 }
 
@@ -30,23 +33,23 @@
   margin-bottom: 6px;
   font-size: 12px;
   font-weight: 600;
-  color: #6847E8;
+  color: var(--color-primary);
 }
 
 .chat-text {
   margin: 0;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.7;
   white-space: pre-wrap;
 }
 
 .chat-message.outgoing .chat-bubble {
-  background-color: #6847E8;
-  color: #FFFFFF;
+  background-color: var(--color-primary);
+  color: var(--color-white);
 }
 
 .chat-message.outgoing .chat-sender {
-  color: #FFFFFF;
+  color: var(--color-white);
 }
 
 .chat-time {
@@ -61,7 +64,6 @@
 
 /* Message options */
 .chat-message-actions {
-  position: relative;
   display: flex;
   align-items: center;
   align-self: center;
@@ -75,9 +77,9 @@
   width: 36px;
   height: 36px;
   padding: 0;
-  background: #FFFFFF;
-  color: #6847E8;
-  border: 1px solid #E8E7F0;
+  background: var(--color-white);
+  color: var(--color-primary);
+  border: 1px solid var(--color-neutral-200);
   border-radius: 16px;
   font: inherit;
   font-size: 22px;
@@ -86,22 +88,30 @@
 }
 
 .chat-message-options-button:hover {
-  background: #F5F3FF;
-  border-color: #6847E8;
+  background: var(--color-primary-subtle);
+  border-color: var(--color-primary);
 }
 
 /* Message dropdown */
 .chat-message-menu {
   position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
+  /* The 36px options button is centered on the row; keep an 8px gap below it. */
+  top: calc(50% + 18px + 8px);
+  inset-inline-start: 0;
   z-index: 30;
-  min-width: 215px;
+  min-width: min(215px, 100%);
+  max-width: 100%;
   padding: 6px;
-  background: #FFFFFF;
-  border: 1px solid #E8E7F0;
+  background: var(--color-white);
+  border: 1px solid var(--color-neutral-200);
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(23, 32, 51, 0.12);
+}
+
+/* Anchor incoming menus to the left edge of the full row, keeping them inside it. */
+.chat-message.incoming .chat-message-menu {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
 }
 
 /* Destructive report option - Figma */
@@ -112,19 +122,20 @@
   width: 100%;
   padding: 12px;
   background: transparent;
-  color: #C63B53;
+  color: var(--color-error);
   border: none;
   border-radius: 12px;
   font: inherit;
   font-size: 14px;
   font-weight: 600;
   text-align: right;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
   cursor: pointer;
 }
 
 .chat-message-report-option:hover:not(:disabled) {
-  background: #FFF1F3;
+  background: var(--color-error-background);
 }
 
 .chat-message-report-option:disabled {
@@ -134,6 +145,6 @@
 
 .chat-message-options-button:focus-visible,
 .chat-message-report-option:focus-visible {
-  outline: 2px solid #172033;
+  outline: 2px solid var(--color-neutral-900);
   outline-offset: 2px;
 }

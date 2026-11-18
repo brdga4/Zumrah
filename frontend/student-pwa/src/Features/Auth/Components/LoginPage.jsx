@@ -4,6 +4,7 @@ import { loginPasswordError, universityEmailError } from './authValidation';
 import './LoginPage.css';
 import { API_BASE_URL } from '../../../config';
 import { useNavigate } from 'react-router-dom';
+import { setAccessToken } from '../authSession';
 
 
 // This page is UI-only. Backend authentication will be added later.
@@ -69,7 +70,7 @@ try {
     setMessage('لم يتم استلام رمز تسجيل الدخول.');
     return;
   }
-  sessionStorage.setItem('accessToken', data.accessToken);
+  setAccessToken(data.accessToken);
   navigate('/home'); // Redirect to the home page after successful login.
 } catch (error) {
   console.error('Login failed:', error);
@@ -197,7 +198,7 @@ try {
               </span>
             </div>
 
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading} fullWidth loading={isLoading}>
               {isLoading ? (
                 <span className="login-loading">
                   <span className="login-spinner" aria-hidden="true" />
@@ -224,9 +225,6 @@ try {
           </p>
         </div>
 
-        <div className="login-bottom">
-          © 2026 زمرة. جميع الحقوق محفوظة.
-        </div>
       </section>
     </main>
   );

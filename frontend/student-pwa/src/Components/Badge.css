@@ -11,18 +11,18 @@
 
 /* Solid purple Badge */
 .badge-solid {
-  color: var(--color-white, #ffffff);
-  background: var(--color-primary, #6847e8);
+  color: var(--color-white);
+  background: var(--color-primary);
 }
 
 /* Soft purple Badge */
 .badge-soft {
-  color: var(--color-primary-dark, #4b35b5);
-  background: var(--color-primary-light, #efeafd);
+  color: var(--color-primary-dark);
+  background: var(--color-primary-light);
 }
 
 /* Green success Badge */
 .badge-success {
-  color: var(--color-success-dark, #15803d);
-  background: var(--color-success-background, #f0fdf4);
+  color: var(--color-success-dark);
+  background: var(--color-success-background);
 }
