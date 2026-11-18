@@ -1,19 +1,12 @@
 
 import { API_BASE_URL } from '../../config';
-import { getAccessToken } from '../Auth/authSession';
+import { authenticatedFetch } from '../../api/apiClient.js';
 
 // Fetch courses available to the student's major
 export async function getAvailableCourses() {
 
-  // Get the JWT stored after login
-  const token = getAccessToken();
-
   // Send a GET request to the backend
-  const response = await fetch(`${API_BASE_URL}/api/courses/available`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await authenticatedFetch(`${API_BASE_URL}/api/courses/available`);
 
   // Check if the request failed
   if (!response.ok) {
@@ -26,11 +19,7 @@ export async function getAvailableCourses() {
 
 // Fetch courses the student is enrolled in
 export async function getEnrolledCourses() {
-  const token = getAccessToken();
-
-  const response = await fetch(`${API_BASE_URL}/api/courses/enrolled`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const response = await authenticatedFetch(`${API_BASE_URL}/api/courses/enrolled`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch enrolled courses');
@@ -41,16 +30,12 @@ export async function getEnrolledCourses() {
 
 // Enroll the student in a selected course 
 export async function enrollInCourse(courseId) {
-  // Get the student's JWT from the shared session utility
-  const token = getAccessToken();
-
   // Send a POST request to the backend
-  const response = await fetch(`${API_BASE_URL}/api/enrollments`, {
+  const response = await authenticatedFetch(`${API_BASE_URL}/api/enrollments`, {
     method: 'POST',
 
-    // Send the JWT and specify the JSON content type
+    // Specify the JSON content type
     headers: {
-      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
 
@@ -74,15 +59,9 @@ export async function enrollInCourse(courseId) {
 
   // Unenroll the student from a selected course
 export async function unenrollFromCourse(courseId) {
-  // Get the student's JWT from the shared session utility
-  const token = getAccessToken();
-
   // Send a DELETE request to the backend
-  const response = await fetch(`${API_BASE_URL}/api/enrollments/${courseId}`, {
+  const response = await authenticatedFetch(`${API_BASE_URL}/api/enrollments/${courseId}`, {
     method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   });
 
   // Check if the request failed

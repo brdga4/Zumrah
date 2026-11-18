@@ -1,20 +1,12 @@
 
 import { API_BASE_URL } from '../../config';
-import { getAccessToken } from '../Auth/authSession';
+import { authenticatedFetch } from '../../api/apiClient.js';
 
 // Function to fetch the authenticated student's profile
 export async function getStudentProfile() {
 
-  // Get the JWT stored after login or OTP verification
-  const token = getAccessToken();
-
   // Send an HTTP GET request to the backend
-  const response = await fetch(`${API_BASE_URL}/api/students/me`, {
-    headers: {
-      // Send the JWT to authenticate the student
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await authenticatedFetch(`${API_BASE_URL}/api/students/me`);
 
   // Check if the server returned an error
   if (!response.ok) {
@@ -29,13 +21,10 @@ export async function getStudentProfile() {
 
 // Update the current student's name or major
 export async function updateStudentProfile(changes) {
-  const token = getAccessToken();
-
-  const response = await fetch(`${API_BASE_URL}/api/students/me`, {
+  const response = await authenticatedFetch(`${API_BASE_URL}/api/students/me`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(changes),
   });

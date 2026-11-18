@@ -1,12 +1,10 @@
 
 import { API_BASE_URL } from "../../config";
-import { getAccessToken } from "../Auth/authSession";
+import { authenticatedFetch } from "../../api/apiClient.js";
 
 // Fetch chat history for the selected room.
 // Optionally fetch older messages using a pagination cursor.
 export async function getChatHistory(chatRoomId, { before, signal } = {}) {
-  const token = getAccessToken();
-
   // Request 50 messages per page.
   const query = new URLSearchParams({ limit: "50" });
 
@@ -15,12 +13,9 @@ export async function getChatHistory(chatRoomId, { before, signal } = {}) {
     query.set("before", before);
   }
 
-  const response = await fetch(
+  const response = await authenticatedFetch(
     `${API_BASE_URL}/api/chat-rooms/${chatRoomId}/messages?${query}`,
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       signal,
     }
   );
@@ -38,18 +33,14 @@ export async function getChatHistory(chatRoomId, { before, signal } = {}) {
 // Report a specific chat message
 export async function reportMessage(messageId, reason) {
 
-  // Get the student's JWT
-  const token = getAccessToken();
-
   // Send a POST request to create a message report
-  const response = await fetch(
+  const response = await authenticatedFetch(
     `${API_BASE_URL}/api/messages/${messageId}/reports`,
     {
       method: "POST",
 
-      // Send the JWT and specify the JSON content type
+      // Specify the JSON content type
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
 

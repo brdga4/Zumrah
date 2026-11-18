@@ -1,19 +1,11 @@
 import { API_BASE_URL } from '../../config';
-import { getAccessToken } from '../Auth/authSession';
+import { authenticatedFetch } from '../../api/apiClient.js';
 
 // Fetch approved files for a specific course
 export async function getCourseFiles(courseId) {
-  // Get the student's JWT
-  const token = getAccessToken();
-
   // Request the course files from the backend
-  const response = await fetch(
-    `${API_BASE_URL}/api/courses/${courseId}/files`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+  const response = await authenticatedFetch(
+    `${API_BASE_URL}/api/courses/${courseId}/files`
   );
 
   // Check if the request failed
@@ -33,9 +25,6 @@ export async function getCourseFiles(courseId) {
  // courseId identifies the course, and file is the selected file.
  export async function uploadCourseFile(courseId, file) {
 
-   // Get the student's JWT token stored after login.
-   const token = getAccessToken();
-
    // Create a FormData object to send the file to the backend.
    const formData = new FormData();
 
@@ -44,7 +33,7 @@ export async function getCourseFiles(courseId) {
    formData.append("file", file);
 
    // Send an HTTP request and wait for the backend response.
-   const response = await fetch(
+   const response = await authenticatedFetch(
 
      // API endpoint for uploading a file to the selected course.
      `${API_BASE_URL}/api/courses/${courseId}/files`,
@@ -53,11 +42,6 @@ export async function getCourseFiles(courseId) {
      {
        // POST is used because we are uploading a new file.
        method: "POST",
-
-       // Send the JWT so the backend can authenticate the student.
-       headers: {
-         Authorization: `Bearer ${token}`,
-       },
 
        // Send the FormData containing the selected file.
        // Do not set Content-Type manually for FormData.
@@ -87,17 +71,9 @@ export async function getCourseFiles(courseId) {
  // Download an approved file using its unique fileId
  export async function downloadCourseFile(fileId) {
 
-   // Get the student's JWT from the shared session utility
-   const token = getAccessToken();
-
    // Send a GET request to download the selected file
-   const response = await fetch(
-     `${API_BASE_URL}/api/files/${fileId}/download`,
-     {
-       headers: {
-         Authorization: `Bearer ${token}`,
-       },
-     }
+   const response = await authenticatedFetch(
+     `${API_BASE_URL}/api/files/${fileId}/download`
    );
 
    // Check whether the download request failed
