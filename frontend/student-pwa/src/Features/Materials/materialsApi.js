@@ -1,9 +1,10 @@
 import { API_BASE_URL } from '../../config';
+import { getAccessToken } from '../Auth/authSession';
 
 // Fetch approved files for a specific course
 export async function getCourseFiles(courseId) {
   // Get the student's JWT
-  const token = sessionStorage.getItem('accessToken');
+  const token = getAccessToken();
 
   // Request the course files from the backend
   const response = await fetch(
@@ -33,7 +34,7 @@ export async function getCourseFiles(courseId) {
  export async function uploadCourseFile(courseId, file) {
 
    // Get the student's JWT token stored after login.
-   const token = sessionStorage.getItem("accessToken");
+   const token = getAccessToken();
 
    // Create a FormData object to send the file to the backend.
    const formData = new FormData();
@@ -86,8 +87,8 @@ export async function getCourseFiles(courseId) {
  // Download an approved file using its unique fileId
  export async function downloadCourseFile(fileId) {
 
-   // Get the student's JWT from sessionStorage
-   const token = sessionStorage.getItem("accessToken");
+   // Get the student's JWT from the shared session utility
+   const token = getAccessToken();
 
    // Send a GET request to download the selected file
    const response = await fetch(

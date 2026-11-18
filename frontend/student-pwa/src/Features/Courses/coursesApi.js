@@ -1,11 +1,12 @@
 
 import { API_BASE_URL } from '../../config';
+import { getAccessToken } from '../Auth/authSession';
 
 // Fetch courses available to the student's major
 export async function getAvailableCourses() {
 
   // Get the JWT stored after login
-  const token = sessionStorage.getItem('accessToken');
+  const token = getAccessToken();
 
   // Send a GET request to the backend
   const response = await fetch(`${API_BASE_URL}/api/courses/available`, {
@@ -25,7 +26,7 @@ export async function getAvailableCourses() {
 
 // Fetch courses the student is enrolled in
 export async function getEnrolledCourses() {
-  const token = sessionStorage.getItem('accessToken');
+  const token = getAccessToken();
 
   const response = await fetch(`${API_BASE_URL}/api/courses/enrolled`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -40,8 +41,8 @@ export async function getEnrolledCourses() {
 
 // Enroll the student in a selected course 
 export async function enrollInCourse(courseId) {
-  // Get the student's JWT from sessionStorage
-  const token = sessionStorage.getItem('accessToken');
+  // Get the student's JWT from the shared session utility
+  const token = getAccessToken();
 
   // Send a POST request to the backend
   const response = await fetch(`${API_BASE_URL}/api/enrollments`, {
@@ -73,8 +74,8 @@ export async function enrollInCourse(courseId) {
 
   // Unenroll the student from a selected course
 export async function unenrollFromCourse(courseId) {
-  // Get the student's JWT from sessionStorage
-  const token = sessionStorage.getItem('accessToken');
+  // Get the student's JWT from the shared session utility
+  const token = getAccessToken();
 
   // Send a DELETE request to the backend
   const response = await fetch(`${API_BASE_URL}/api/enrollments/${courseId}`, {

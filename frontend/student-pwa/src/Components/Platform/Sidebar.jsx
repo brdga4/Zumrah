@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BookOpen, LogOut, MessageCircle, UserRound } from "lucide-react";
 import Logo from "../Logo";
+import { clearAccessToken } from "../../Features/Auth/authSession";
 
 const items = [
   { id: "home", label: "المحادثات", href: "/home", icon: MessageCircle },
@@ -41,7 +42,7 @@ export default function Sidebar({ active }) {
   }
 
   function handleLogout() {
-    sessionStorage.removeItem("accessToken");
+    clearAccessToken();
     navigate("/login", { replace: true });
   }
 

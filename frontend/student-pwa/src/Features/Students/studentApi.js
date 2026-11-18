@@ -1,11 +1,12 @@
 
 import { API_BASE_URL } from '../../config';
+import { getAccessToken } from '../Auth/authSession';
 
 // Function to fetch the authenticated student's profile
 export async function getStudentProfile() {
 
   // Get the JWT stored after login or OTP verification
-  const token = sessionStorage.getItem('accessToken');
+  const token = getAccessToken();
 
   // Send an HTTP GET request to the backend
   const response = await fetch(`${API_BASE_URL}/api/students/me`, {
@@ -28,7 +29,7 @@ export async function getStudentProfile() {
 
 // Update the current student's name or major
 export async function updateStudentProfile(changes) {
-  const token = sessionStorage.getItem("accessToken");
+  const token = getAccessToken();
 
   const response = await fetch(`${API_BASE_URL}/api/students/me`, {
     method: "PATCH",

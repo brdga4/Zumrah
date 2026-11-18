@@ -1,10 +1,11 @@
 
 import { API_BASE_URL } from "../../config";
+import { getAccessToken } from "../Auth/authSession";
 
 // Fetch chat history for the selected room.
 // Optionally fetch older messages using a pagination cursor.
 export async function getChatHistory(chatRoomId, { before, signal } = {}) {
-  const token = sessionStorage.getItem("accessToken");
+  const token = getAccessToken();
 
   // Request 50 messages per page.
   const query = new URLSearchParams({ limit: "50" });
@@ -38,7 +39,7 @@ export async function getChatHistory(chatRoomId, { before, signal } = {}) {
 export async function reportMessage(messageId, reason) {
 
   // Get the student's JWT
-  const token = sessionStorage.getItem("accessToken");
+  const token = getAccessToken();
 
   // Send a POST request to create a message report
   const response = await fetch(
