@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/backend/">
+    <Project Path="backend/Zumrah.Api.Tests/Zumrah.Api.Tests.csproj" />
     <Project Path="backend/Zumrah.Api/Zumrah.Api.csproj" />
   </Folder>
 </Solution>
