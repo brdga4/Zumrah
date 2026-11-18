@@ -1,0 +1,501 @@
+{
+  "info": {
+    "_postman_id": "647cc3e7-7435-4d37-af13-346bf53263fb",
+    "name": "Zumrah Backend MVP QA",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "60236208",
+    "_collection_link": "https://go.postman.co/collection/60236208-647cc3e7-7435-4d37-af13-346bf53263fb?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "QA-01 | GET Colleges - 200 OK",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"QA-01 | Status is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"QA-01 | Response has a colleges array\", function () {\n    const json = pm.response.json();\n    pm.expect(json).to.have.property(\"colleges\").that.is.an(\"array\");\n});\n\npm.test(\"QA-01 | colleges array is non-empty\", function () {\n    const json = pm.response.json();\n    pm.expect(json.colleges.length).to.be.above(0);\n});\n\npm.test(\"QA-01 | Each college has collegeId, collegeName, and majors\", function () {\n    const json = pm.response.json();\n    json.colleges.forEach(function(college) {\n        pm.expect(college).to.have.property(\"collegeId\");\n        pm.expect(college).to.have.property(\"collegeName\");\n        pm.expect(college).to.have.property(\"majors\").that.is.an(\"array\");\n    });\n});\n\npm.test(\"QA-01 | QA Mentor Test College is present\", function () {\n    const json = pm.response.json();\n    const names = json.colleges.map(c => c.collegeName);\n    pm.expect(names).to.include(\"QA Mentor Test College\");\n});\n\npm.test(\"QA-01 | QA Mentor Test Major is present under QA Mentor Test College\", function () {\n    const json = pm.response.json();\n    const college = json.colleges.find(c => c.collegeName === \"QA Mentor Test College\");\n    pm.expect(college).to.not.be.undefined;\n    const majorNames = college.majors.map(m => m.majorName);\n    pm.expect(majorNames).to.include(\"QA Mentor Test Major\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/colleges",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "colleges"
+          ]
+        },
+        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+      },
+      "response": []
+    },
+    {
+      "name": "QA-02 | Student Profile - 401",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"QA-02 | Status is 401 without auth\", function () {\n    pm.response.to.have.status(401);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/students/me",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "students",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "QA-03 | Enrolled Courses - 401 Unauthorized",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"QA-03 | Status is 401 without auth\", function () {\n    pm.response.to.have.status(401);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/courses/enrolled",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            "enrolled"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "QA-04 | Student Login - Invalid Credentials - 401",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"QA-04 | Status is 401 for invalid credentials\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"QA-04 | Error code is INVALID_CREDENTIALS\", function () {\n    const json = pm.response.json();\n    pm.expect(json).to.have.property(\"code\", \"INVALID_CREDENTIALS\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"universityEmail\": \"qa.invalid@student.ksu.edu.sa\",\n  \"password\": \"qa-intentionally-wrong-password-only\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/student/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "student",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "QA-05 | Student Login - Valid Credentials - 200",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"QA-05 | Login returns 200\", function () {\n    pm.response.to.have.status(200);\n});\n\nif (pm.response.code === 200) {\n    const data = pm.response.json();\n\n    pm.test(\"QA-05 | JWT returned\", function () {\n        pm.expect(data.accessToken).to.be.a(\"string\").and.not.empty;\n        pm.expect(data.accessToken.split(\".\")).to.have.lengthOf(3);\n    });\n\n    pm.test(\"QA-05 | Correct student\", function () {\n        pm.expect(data.student).to.be.an(\"object\");\n        pm.expect(data.student.universityEmail)\n            .to.eql(\"qa.student@zumrah.test\");\n        pm.expect(data.student.majorChatRoomId)\n            .to.be.a(\"string\").and.not.empty;\n    });\n\n    if (\n        typeof data.accessToken === \"string\" &&\n        data.accessToken.split(\".\").length === 3\n    ) {\n        pm.variables.set(\"qaAccessToken\", data.accessToken);\n    }\n}\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"universityEmail\": \"qa.student@zumrah.test\", \"password\": \"{{vault:qa_student_password}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/student/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "student",
+            "login"
+          ]
+        },
+        "description": "Generated from cURL: curl -X POST \"{{baseUrl}}/api/auth/student/login\" -H \"Content-Type: application/json\" -d \"{\\\"universityEmail\\\": \\\"qa.student@zumrah.test\\\", \\\"password\\\": \\\"{{vault:qa_student_password}}\\\"}\""
+      },
+      "response": []
+    },
+    {
+      "name": "QA-06 | Student Profile - Authorized - 200",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"QA-06 | Status is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\nif (pm.response.code === 200) {\n    const data = pm.response.json();\n\n    pm.test(\"QA-06 | Correct student email\", function () {\n        pm.expect(data.universityEmail)\n            .to.eql(\"qa.student@zumrah.test\");\n    });\n\n    pm.test(\"QA-06 | Student ID exists\", function () {\n        pm.expect(data.studentId)\n            .to.be.a(\"string\").and.not.empty;\n    });\n\n    pm.test(\"QA-06 | Major chat room exists\", function () {\n        pm.expect(data.majorChatRoomId)\n            .to.be.a(\"string\").and.not.empty;\n    });\n}\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{qaAccessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/students/me",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "students",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "QA-07 | Available Courses - 200",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"QA-07 | Status is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\nif (pm.response.code === 200) {\n    const data = pm.response.json();\n    const courseId = pm.variables.get(\"courseId\");\n\n    pm.test(\"QA-07 | Courses array exists\", function () {\n        pm.expect(data.courses).to.be.an(\"array\");\n    });\n\n    pm.test(\"QA-07 | QA101 course exists\", function () {\n        const course = data.courses.find(\n            c => c.courseId === courseId\n        );\n\n        pm.expect(course).to.not.be.undefined;\n        pm.expect(course.courseCode).to.eql(\"QA101\");\n    });\n\n    pm.test(\"QA-07 | Course is not enrolled\", function () {\n        const course = data.courses.find(\n            c => c.courseId === courseId\n        );\n\n        pm.expect(course).to.not.be.undefined;\n        pm.expect(course.isEnrolled).to.eql(false);\n    });\n}\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{qaAccessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/courses/available",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            "available"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "QA-08 | Create Enrollment - 201",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"QA-08 | Status is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"QA-08 | Enrollment data is correct\", function () {\n    const data = pm.response.json();\n\n    pm.expect(data.enrollmentId).to.be.a(\"string\").and.not.empty;\n    pm.expect(data.courseId.toLowerCase())\n        .to.eql(pm.environment.get(\"courseId\").toLowerCase());\n    pm.expect(data.chatRoomId).to.be.a(\"string\").and.not.empty;\n    pm.expect(data.enrolledAt).to.be.a(\"string\").and.not.empty;\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{qaAccessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\n{\n  \"courseId\": \"{{courseId}}\"\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/enrollments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enrollments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "QA-09 | Duplicate Enrollment - 409",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"QA-09 | Status is 409\", function () {\n    pm.response.to.have.status(409);\n});\n\npm.test(\"QA-09 | Duplicate enrollment rejected\", function () {\n    const data = pm.response.json();\n    pm.expect(data.code).to.eql(\"ALREADY_ENROLLED\");\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{qaAccessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\n{\n  \"courseId\": \"{{courseId}}\"\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/enrollments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enrollments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "QA-10 | Enrolled Courses - 200",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"QA-10 | Status is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"QA-10 | Enrolled courses exist\", function () {\n    const data = pm.response.json();\n    pm.expect(data.courses).to.be.an(\"array\");\n});\n\npm.test(\"QA-10 | Correct course is enrolled\", function () {\n    const data = pm.response.json();\n    const courseId = pm.environment.get(\"courseId\");\n\n    const matches = data.courses.filter(course =>\n        course.courseId.toLowerCase() === courseId.toLowerCase()\n    );\n\n    pm.expect(matches.length).to.eql(1);\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{qaAccessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/courses/enrolled",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            "enrolled"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "QA-11 \\| Delete Enrollment - 204",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"QA-11 | Status is 204\", function () {\n    pm.response.to.have.status(204);\n});\n\npm.test(\"QA-11 | Response body is empty\", function () {\n    pm.expect(pm.response.text()).to.be.empty;\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{qaAccessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enrollments/{{courseId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "enrollments",
+            "{{courseId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "QA-12 | Verify Enrollment Removed - 200",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"QA-12 | Status is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"QA-12 | Course is no longer enrolled\", function () {\n    const data = pm.response.json();\n    const courseId = pm.environment.get(\"courseId\");\n\n    pm.expect(data.courses).to.be.an(\"array\");\n\n    const exists = data.courses.some(course =>\n        course.courseId.toLowerCase() === courseId.toLowerCase()\n    );\n\n    pm.expect(exists).to.be.false;\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{qaAccessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/courses/enrolled",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "courses",
+            "enrolled"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
