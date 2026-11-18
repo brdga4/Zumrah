@@ -6,19 +6,20 @@
 .card.course-card {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 24px;
+  min-width: 0;
+  gap: 12px;
+  padding: 20px;
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
 .card.course-card:hover {
-  border-color: #e3ddfe;
+  border-color: var(--color-primary-border);
   box-shadow: 0 16px 48px rgb(50 35 105 / 7%);
 }
 
 /* Highlight enrolled courses */
 .course-card-enrolled {
-  background: linear-gradient(180deg, #f6f3ff 0%, #ffffff 45%);
+  background: linear-gradient(180deg, #f6f3ff 0%, var(--color-white) 45%);
 }
 
 
@@ -29,9 +30,17 @@
 
 .course-card-top {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  min-width: 0;
   gap: 8px;
+}
+
+.course-card-top .badge {
+  flex-shrink: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .course-card-code {
@@ -39,8 +48,11 @@
 }
 
 .course-card-title {
+  min-width: 0;
   font-size: 16px;
   font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 
@@ -52,10 +64,10 @@
 .course-card-actions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   margin-top: auto;
-  padding-top: 16px;
-  border-top: 1px solid #e8e4f0;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-neutral-200);
 }
 
 .course-card-primary-actions {
@@ -66,14 +78,6 @@
 .course-card-primary-actions .zumrah-button {
   flex: 1;
   min-width: 0;
-  padding: 12px;
-  background: #ffffff;
-  color: #6847e8;
-  border: 1px solid #e3ddfe;
-}
-
-.course-card-primary-actions .zumrah-button:hover {
-  background: #f6f3ff;
 }
 
 
@@ -84,9 +88,12 @@
 
 .course-card-leave {
   align-self: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
   background: transparent;
   border: none;
-  color: #c63c52;
+  color: var(--color-error);
   font-family: inherit;
   font-size: 12px;
   cursor: pointer;
@@ -94,6 +101,11 @@
 
 .course-card-leave:hover {
   color: #a32f42;
+}
+
+.course-card-leave:focus-visible {
+  outline: 2px solid var(--color-error);
+  outline-offset: 3px;
 }
 
 
@@ -104,6 +116,6 @@
 
 @media (max-width: 640px) {
   .card.course-card {
-    padding: 20px;
+    padding: 16px;
   }
 }

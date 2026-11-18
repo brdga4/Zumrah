@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import PlatformLayout from "../../Components/Platform/PlatformLayout";
+import { clearAccessToken } from "../Auth/authSession";
 
 import {
   getStudentProfile,
@@ -248,7 +249,7 @@ export default function ProfilePage() {
 
   function handleLogout() {
     // Remove the student's authentication token
-    sessionStorage.removeItem("accessToken");
+    clearAccessToken();
 
     // Redirect to login without keeping the current page in history
     navigate("/login", { replace: true });

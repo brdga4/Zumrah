@@ -1,7 +1,7 @@
 /* Base styling for the Zumrah logo */
 .logo {
   display: inline-block;
-  color: var(--color-primary, #6847E8);
+  color: var(--color-primary);
   font-family: "Alexandria", sans-serif;
   font-weight: 700;
   letter-spacing: -0.04em;
@@ -32,9 +32,9 @@
 
 /* Logo colors */
 .logo-dark {
-  color: var(--color-primary-dark, #4B35B5);
+  color: var(--color-primary-dark);
 }
 
 .logo-inverse {
-  color: #ffffff;
+  color: var(--color-white);
 }

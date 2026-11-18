@@ -117,11 +117,7 @@ const chatRooms = [
   return (
     <PlatformLayout
       active="home"
-      title="الرئيسية"
-      student={student}
-      showSidebar={false}
-      brandHeader
-      subtitle="محادثات زمرتك ومقرراتك في مكان واحد"
+      title="المحادثات"
     >
       <div className="zumrah-home">
 

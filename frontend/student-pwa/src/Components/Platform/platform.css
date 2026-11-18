@@ -1,23 +1,21 @@
-/* ==========================================
-   1. PLATFORM LAYOUT
-   Main layout shared across student pages.
-   ========================================== */
-
+/* Shared student-page shell. Chat sizing is handled by its existing layout. */
 .platform {
   min-height: 100vh;
-  color: #211c34;
-  background: #faf9fe;
+  color: var(--color-neutral-900);
+  background: var(--color-background);
   font-family: "Alexandria", sans-serif;
+}
+
+.platform--home {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .platform * {
   box-sizing: border-box;
 }
-
-/* ==========================================
-   2. SIDEBAR
-   Navigation and student information.
-   ========================================== */
 
 .platform-sidebar {
   position: fixed;
@@ -25,145 +23,145 @@
   inset-inline-start: 0;
   z-index: 10;
   display: flex;
-  width: 280px;
-  padding: 32px 24px;
+  inline-size: 88px;
+  padding: 16px 8px;
   flex-direction: column;
-  border-inline-end: 1px solid #e8e4f0;
-  background: #ffffff;
+  align-items: center;
+  border-inline-end: 1px solid var(--color-neutral-200);
+  background: var(--color-white);
+}
+
+.platform--home > .platform-sidebar {
+  flex-shrink: 0;
 }
 
 .platform-sidebar-brand {
-  align-self: flex-start;
-  padding-inline: 16px;
+  display: inline-flex;
+  min-block-size: 44px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
   text-decoration: none;
 }
 
 .platform-sidebar-nav {
   display: flex;
-  margin-top: 48px;
+  margin-block-start: 24px;
   flex-direction: column;
-  gap: 8px;
-}
-
-.platform-sidebar-label {
-  margin-bottom: 4px;
-  padding-inline: 16px;
-  color: #aaa4b7;
-  font-size: 12px;
-}
-
-.platform-sidebar-nav .nav-link {
-  display: flex;
-  padding: 12px 16px;
   align-items: center;
-  border-radius: 12px;
-  color: #716b80;
-  font-size: 14px;
-  text-decoration: none;
+  gap: 12px;
 }
 
-.platform-sidebar-nav .nav-link:hover,
-.platform-sidebar-nav .nav-link.is-active {
-  color: #6847e8;
-  background: #f6f3ff;
+.platform-nav-item {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.platform-sidebar .nav-link {
+  display: inline-flex;
+  inline-size: 44px;
+  block-size: 44px;
+  padding: 0;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-neutral-600);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.platform-sidebar .nav-link:hover,
+.platform-sidebar .nav-link.is-active {
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+}
+
+.platform-sidebar-brand:focus-visible,
+.platform-sidebar .nav-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
 }
 
 .platform-sidebar-footer {
-  margin-top: auto;
-  padding-top: 20px;
-  border-top: 1px solid #e8e4f0;
-}
-
-.platform-sidebar-user {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  inline-size: 100%;
+  margin-block-start: auto;
+  padding-block-start: 16px;
+  justify-content: center;
+  border-top: 1px solid var(--color-neutral-200);
 }
 
-.platform-sidebar-user-text {
-  min-width: 0;
+.platform-sidebar .platform-sidebar-logout {
+  color: var(--color-error);
 }
 
-/* ==========================================
-   3. HEADER
-   Page title and student information.
-   ========================================== */
+.platform-sidebar .platform-sidebar-logout:hover {
+  color: var(--color-error);
+  background: var(--color-error-background);
+}
+
+.platform-sidebar .platform-sidebar-logout:focus-visible {
+  outline-color: var(--color-error);
+}
+
+.platform-nav-tooltip {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: calc(100% + 12px);
+  z-index: 20;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--color-white);
+  background: var(--color-neutral-900);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+  transform: translateY(-50%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Bridge the gap so a tooltip remains open when the pointer moves onto it. */
+.platform-nav-tooltip::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 100%;
+  inline-size: 12px;
+}
+
+.platform-nav-item:where(:hover, :focus-within) .platform-nav-tooltip {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.platform-sidebar--tooltips-dismissed .platform-nav-tooltip {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
 
 .platform-main {
   min-width: 0;
-  margin-inline-start: 280px;
+  margin-inline-start: 88px;
 }
 
-/* Remove sidebar spacing when hidden */
-.platform--no-sidebar .platform-main {
-  margin-inline-start: 0;
-}
-
-.platform-header {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  display: flex;
-  min-height: 76px;
-  padding: 12px 40px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  border-bottom: 1px solid #e8e4f0;
-  background: #faf9fe;
-}
-
-.platform-header-start {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 16px;
-}
-
-.platform-header .platform-header-title {
-  max-width: none;
-  margin: 0;
-  font-size: 20px;
-  line-height: 1.4;
-}
-
-.platform-back {
-  padding: 8px 12px;
-  border: 1px solid #e8e4f0;
-  border-radius: 12px;
-  color: #211c34;
-  text-decoration: none;
-}
-
-.platform-user-chip {
-  display: flex;
-  padding: 6px 12px;
-  align-items: center;
-  gap: 12px;
-  border: 1px solid #e8e4f0;
-  border-radius: 999px;
-  background: #ffffff;
-}
-
-.platform-user-chip-text {
+.platform--home > .platform-main {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
-
-.platform-user-chip-name {
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.platform-user-chip-major {
-  color: #716b80;
-  font-size: 11px;
-}
-
-/* ==========================================
-   4. PAGE CONTENT
-   Main content area.
-   ========================================== */
 
 .platform-content {
   max-width: 1440px;
@@ -171,42 +169,44 @@
   padding: 32px 40px 48px;
 }
 
-/* ==========================================
-   5. RESPONSIVE DESIGN
-   Tablet and mobile layouts.
-   ========================================== */
+/* Home layout only */
+.platform-content.platform-content--home {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.platform-content .platform-page-title {
+  max-width: none;
+  margin: 0 0 16px;
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+.platform-content .platform-page-subtitle {
+  margin: -8px 0 24px;
+}
+
+/* Home already has room/conversation headings; retain its h1 for screen readers. */
+.platform-content .platform-page-title--hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: none;
+}
 
 @media (max-width: 1024px) {
-  .platform-sidebar {
-    position: static;
-    width: 100%;
-    padding: calc(12px + env(safe-area-inset-top, 0px)) 20px 12px;
-    flex-direction: row;
-    align-items: center;
-    border-inline-end: none;
-    border-bottom: 1px solid #e8e4f0;
-  }
-
-  .platform-sidebar-nav {
-    margin-top: 0;
-    margin-inline-start: auto;
-    flex-direction: row;
-  }
-
-  .platform-sidebar-label,
-  .platform-sidebar-footer {
-    display: none;
-  }
-
-  .platform-main {
-    margin-inline-start: 0;
-  }
-
-  .platform-header {
-    position: static;
-    padding: 12px 20px;
-  }
-
   .platform-content {
     padding: 24px 20px 40px;
   }
@@ -214,36 +214,49 @@
 
 @media (max-width: 640px) {
   .platform-sidebar {
-    display: grid;
-    grid-template-areas:
-      "brand"
-      "nav";
-    gap: 12px;
-    padding: calc(16px + env(safe-area-inset-top, 0px)) 16px 12px;
-  }
-
-  .platform-sidebar-brand {
-    grid-area: brand;
-    padding: 0;
+    position: sticky;
+    inset-block-end: auto;
+    inset-inline-start: auto;
+    inline-size: 100%;
+    padding-block: calc(8px + env(safe-area-inset-top, 0px)) 8px;
+    padding-inline: max(8px, env(safe-area-inset-right, 0px)) max(8px, env(safe-area-inset-left, 0px));
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 8px;
+    border-inline-end: none;
+    border-bottom: 1px solid var(--color-neutral-200);
   }
 
   .platform-sidebar-nav {
-    grid-area: nav;
-    width: 100%;
     margin: 0;
+    flex-direction: row;
+    gap: 4px;
   }
 
-  .platform-sidebar-nav .nav-link {
-    flex: 1;
-    justify-content: center;
+  .platform-sidebar-footer {
+    inline-size: auto;
+    margin: 0;
+    padding: 0;
+    border: none;
   }
 
-  .platform-header {
-    padding: 12px 16px;
+  .platform-nav-tooltip {
+    inset-block-start: calc(100% + 12px);
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    transform: none;
   }
 
-  .platform-user-chip-text {
-    display: none;
+  .platform-nav-tooltip::before {
+    inset-block-start: auto;
+    inset-block-end: 100%;
+    inset-inline: 0;
+    inline-size: auto;
+    block-size: 12px;
+  }
+
+  .platform-main {
+    margin-inline-start: 0;
   }
 
   .platform-content {

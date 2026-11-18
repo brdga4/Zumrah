@@ -19,7 +19,7 @@ export function reviewAdminFile(fileId, status) {
 }
 
 export async function downloadAdminFile(fileId) {
-  const accessToken = sessionStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem('accessToken');
 
   const response = await fetch(
     `${API_BASE_URL}/api/admin/files/${fileId}/download`,
@@ -35,4 +35,4 @@ export async function downloadAdminFile(fileId) {
   }
 
   return response.blob();
-}
+}

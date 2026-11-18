@@ -3,8 +3,8 @@
 
 .course-files-page {
   min-height: 100vh;
-  background: #FAF9FE;
-  color: #172033;
+  background: var(--color-background);
+  color: var(--color-neutral-900);
   font-family: "Alexandria", sans-serif;
 }
 
@@ -18,23 +18,23 @@
   align-items: center;
   gap: 24px;
   padding: 24px 36px;
-  border-bottom: 1px solid #E8E7F0;
+  border-bottom: 1px solid var(--color-neutral-200);
 }
 
 .course-files-header h1 {
   margin: 0;
   font-size: 28px;
   font-weight: 700;
-  color: #172033;
+  color: var(--color-neutral-900);
 }
 
 /* Secondary button - Zumrah standard */
 .course-files-back {
   padding: 14px 24px;
-  border: 1px solid #E8E7F0;
+  border: 1px solid var(--color-neutral-200);
   border-radius: 16px;
-  background: #FFFFFF;
-  color: #6847E8;
+  background: var(--color-white);
+  color: var(--color-primary);
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
@@ -47,8 +47,8 @@
 /* Hover and keyboard focus - single purple border */
 .course-files-back:hover,
 .course-files-back:focus-visible {
-  background: #F5F3FF;
-  border-color: #6847E8;
+  background: var(--color-primary-subtle);
+  border-color: var(--color-primary);
   outline: none;
   box-shadow: none;
 }
@@ -79,20 +79,20 @@
   margin: 0;
   font-size: 28px;
   font-weight: 700;
-  color: #172033;
+  color: var(--color-neutral-900);
 }
 
 .course-files-count {
   padding: 8px 16px;
   border-radius: 999px;
   background: #EFEAFF;
-  color: #4B35B5;
+  color: var(--color-primary-dark);
   font-weight: 600;
 }
 
 .course-files-heading p {
   margin: 12px 0 0;
-  color: #716B80;
+  color: var(--color-neutral-600);
   font-size: 16px;
 }
 
@@ -101,8 +101,8 @@
   padding: 12px 20px;
   border: none;
   border-radius: 12px;
-  background: #6847E8;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-white);
   font-family: inherit;
   font: inherit;
   font-size: 14px;
@@ -112,7 +112,7 @@
 }
 /* Highlight the upload button when hovering */
 .course-files-upload:hover:not(:disabled) {
-  background: #4B35B5;
+  background: var(--color-primary-dark);
 }
 .course-files-upload:disabled {
   cursor: not-allowed;
@@ -124,9 +124,9 @@
   padding: 0;
   list-style: none;
   overflow: hidden;
-  border: 1px solid #E8E7F0;
+  border: 1px solid var(--color-neutral-200);
   border-radius: 20px;
-  background: white;
+  background: var(--color-white);
 }
 
 /* Each file row */
@@ -135,7 +135,7 @@
   align-items: center;
   gap: 20px;
   padding: 24px 36px;
-  border-bottom: 1px solid #E8E7F0;
+  border-bottom: 1px solid var(--color-neutral-200);
   transition: background 0.2s;
 }
 
@@ -158,7 +158,7 @@
   padding: 8px;
   border-radius: 16px;
   background: #EFEAFF;
-  color: #6847E8;
+  color: var(--color-primary);
   font-size: 13px;
   font-weight: 700;
 }
@@ -179,7 +179,7 @@
 }
 
 .course-file-info span {
-  color: #716B80;
+  color: var(--color-neutral-600);
   font-size: 14px;
 }
 
@@ -187,10 +187,10 @@
 .course-file-download {
   flex-shrink: 0;
   padding: 14px 24px;
-  border: 1px solid #E8E7F0;
+  border: 1px solid var(--color-neutral-200);
   border-radius: 16px;
-  background: white;
-  color: #6847E8;
+  background: var(--color-white);
+  color: var(--color-primary);
   font: inherit;
   font-weight: 600;
   cursor: pointer;
@@ -199,17 +199,17 @@
 
 /* Highlight the download button when hovering */
 .course-file-download:hover:not(:disabled) {
-  background: #F5F3FF;
-  border-color: #6847E8;
+  background: var(--color-primary-subtle);
+  border-color: var(--color-primary);
 }
 
 
 /* Empty state */
 .course-files-empty {
   padding: 64px 24px;
-  border: 1px dashed #E8E7F0;
+  border: 1px dashed var(--color-neutral-200);
   border-radius: 20px;
-  background: white;
+  background: var(--color-white);
   text-align: center;
 }
 
@@ -220,7 +220,7 @@
 
 .course-files-empty p {
   margin: 0;
-  color: #716B80;
+  color: var(--color-neutral-600);
 }
 
 /* Mobile */

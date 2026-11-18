@@ -14,8 +14,8 @@ export default function AdminLayout() {
   }
 
   function handleLogout() {
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('admin');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('admin');
 
     navigate('/login', { replace: true });
   }
@@ -141,7 +141,7 @@ export default function AdminLayout() {
 }
 
 function getStoredAdmin() {
-  const savedAdmin = sessionStorage.getItem('admin');
+  const savedAdmin = localStorage.getItem('admin');
 
   if (!savedAdmin) {
     return null;
@@ -171,4 +171,4 @@ function CloseIcon() {
       <path d="m6 6 12 12" />
     </svg>
   );
-}
+}

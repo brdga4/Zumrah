@@ -66,10 +66,10 @@ export default function AdminLoginPage() {
     return;
   }
 
-  sessionStorage.setItem('accessToken', data.accessToken);
+  localStorage.setItem('accessToken', data.accessToken);
 
   if (data.admin) {
-    sessionStorage.setItem('admin', JSON.stringify(data.admin));
+    localStorage.setItem('admin', JSON.stringify(data.admin));
   }
 
   navigate('/dashboard', { replace: true });

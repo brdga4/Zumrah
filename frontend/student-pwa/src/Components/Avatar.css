@@ -6,8 +6,8 @@
   flex-shrink: 0;
   place-items: center;
   border-radius: 999px;
-  color: var(--color-primary-dark, #4B35B5);
-  background: var(--color-primary-light, #EFEAFD);
+  color: var(--color-primary-dark);
+  background: var(--color-primary-light);
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1;
