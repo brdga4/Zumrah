@@ -47,8 +47,8 @@ function getFieldError(field, values) {
       if (!/^[^\s@]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+$/i.test(value.trim())) {
         return 'صيغة البريد الإلكتروني غير صحيحة.';
       }
-      if (!universityForEmail(value)) {
-        return 'يرجى استخدام بريد جامعي تابع لإحدى الجامعات المدعومة.';
+      if (!value.trim().toLowerCase().endsWith('@student.ksu.edu.sa')) {
+        return 'يجب أن ينتهي بريد الطالب الجامعي  بـ @student.ksu.edu.sa';
       }
       return '';
 
@@ -312,7 +312,7 @@ setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي
                 inputMode="email"
                 autoComplete="email"
                 dir="ltr"
-                placeholder="name@ksu.edu.sa"
+                placeholder="name@student.ksu.edu.sa"
                 value={values.universityEmail}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -462,9 +462,6 @@ setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي
           </p>
         </div>
 
-        <div className="login-bottom signup-bottom">
-          © 2026 زمرة. جميع الحقوق محفوظة.
-        </div>
       </section>
     </main>
   );

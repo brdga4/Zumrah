@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Button from '../../Components/Button'
 import './OtpVerification.css'
 import { useNavigate } from 'react-router-dom';
+import { setAccessToken } from './authSession';
 
 // OTP verification component
 export default function OtpVerification() {
@@ -70,13 +71,13 @@ const verificationEmail =
     
 const data = await response.json();
 
-// Save the JWT temporarily for the current browser session.
+// Require a JWT before saving the authenticated session.
 if (!data.accessToken) {
   setError('لم يتم استلام رمز تسجيل الدخول.');
   return;
 }
 
-sessionStorage.setItem('accessToken', data.accessToken);
+setAccessToken(data.accessToken);
 navigate('/home'); // Redirect to the home page after successful verification.
 setMessage('تم تأكيد البريد الإلكتروني بنجاح.');
 

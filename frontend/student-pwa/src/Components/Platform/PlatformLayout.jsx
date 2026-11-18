@@ -1,54 +1,37 @@
-// Import shared platform layout styles
 import "./platform.css";
-// 1. Import layout components
-import Header from "./Header";
+import Heading from "../Heading";
+import Text from "../Text";
 import Sidebar from "./Sidebar";
 
-// 2. Receive page information and real student data
 export default function PlatformLayout({
   active,
   title,
   subtitle,
-  backHref,
-  student,
   children,
-  showSidebar = true,
-  brandHeader = false,
 }) {
-  // 3. Extract student information from the backend response
-  const studentName = student?.name || "طالب";
-  const majorName = student?.major?.majorName || "";
+  const isHome = active === "home";
 
-  // 4. Render the shared page layout
   return (
-    <div
-      className={showSidebar ? "platform" : "platform platform--no-sidebar"}
-      dir="rtl"
-    >
-      
-      {showSidebar && (
-        <Sidebar
-          active={active}
-          studentName={studentName}
-          majorName={majorName}
-          showUserInfo={active !== "profile"  && active !== "courses" }
-        />
-      )}
+    <div className={isHome ? "platform platform--home" : "platform"} dir="rtl">
+      <Sidebar active={active} />
 
       <div className="platform-main">
-        {/* Hide the header avatar only on the profile page */}
-        <Header
-          title={title}
-          subtitle={subtitle}
-          backHref={backHref}
-          studentName={studentName}
-          majorName={majorName}
-          brand={brandHeader}
-          showUserInfo={active !== "profile"}
-        />
+        <main className={isHome ? "platform-content platform-content--home" : "platform-content"}>
+          {title && (
+            <Heading
+              level={1}
+              className={`platform-page-title${isHome ? " platform-page-title--hidden" : ""}`}
+            >
+              {title}
+            </Heading>
+          )}
 
-        {/* 5. Display the page content */}
-        <main className="platform-content">
+          {subtitle && !isHome && (
+            <Text size="small" tone="muted" className="platform-page-subtitle">
+              {subtitle}
+            </Text>
+          )}
+
           {children}
         </main>
       </div>
