@@ -80,6 +80,13 @@
   min-width: 0;
 }
 
+.course-card-pending-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 
 /* ==========================================
    4. LEAVE COURSE BUTTON
@@ -99,8 +106,13 @@
   cursor: pointer;
 }
 
-.course-card-leave:hover {
+.course-card-leave:hover:not(:disabled) {
   color: #a32f42;
+}
+
+.course-card-leave:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .course-card-leave:focus-visible {

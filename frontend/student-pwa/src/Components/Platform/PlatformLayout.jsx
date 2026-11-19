@@ -5,28 +5,30 @@ import Sidebar from "./Sidebar";
 
 export default function PlatformLayout({
   active,
+  layout = "page",
   title,
   subtitle,
   children,
 }) {
-  const isHome = active === "home";
+  // Keep Chat's full-height layout independent of the active navigation item.
+  const isChat = layout === "chat";
 
   return (
-    <div className={isHome ? "platform platform--home" : "platform"} dir="rtl">
+    <div className={isChat ? "platform platform--chat" : "platform"} dir="rtl">
       <Sidebar active={active} />
 
       <div className="platform-main">
-        <main className={isHome ? "platform-content platform-content--home" : "platform-content"}>
+        <main className={isChat ? "platform-content platform-content--chat" : "platform-content"}>
           {title && (
             <Heading
               level={1}
-              className={`platform-page-title${isHome ? " platform-page-title--hidden" : ""}`}
+              className={`platform-page-title${isChat ? " platform-page-title--hidden" : ""}`}
             >
               {title}
             </Heading>
           )}
 
-          {subtitle && !isHome && (
+          {subtitle && !isChat && (
             <Text size="small" tone="muted" className="platform-page-subtitle">
               {subtitle}
             </Text>
