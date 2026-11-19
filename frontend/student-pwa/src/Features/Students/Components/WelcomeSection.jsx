@@ -7,7 +7,7 @@ import "./WelcomeSection.css";
 
 // 2. Receive student data from HomePage
 export default function WelcomeSection({ student }) {
-  const firstName = student?.name?.split(" ")[0] || "طالب";
+  const firstName = student?.name?.split(" ")[0];
 
   // 3. Render the welcome section
   return (
@@ -22,11 +22,11 @@ export default function WelcomeSection({ student }) {
         )}
 
         <Heading level={2} className="welcome-title">
-          مرحبًا، <span className="welcome-name">{firstName}</span>
+         يا هلا <span className="welcome-name">{firstName} 👋 </span>
         </Heading>
 
         <Text tone="muted" className="welcome-meta">
-          مساحتك الجامعية للتعلم والتواصل ومشاركة المعرفة مع زملائك.
+         زمرة هي مساحتك الجامعية للتعلمم والتواصل مع زملائك
         </Text>
       </div>
     </section>

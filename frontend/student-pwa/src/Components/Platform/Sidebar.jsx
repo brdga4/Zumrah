@@ -4,9 +4,10 @@ import { BookOpen, LogOut, MessageCircle, UserRound } from "lucide-react";
 import Logo from "../Logo";
 import { clearAccessToken } from "../../Features/Auth/authSession";
 
+// Put the Courses homepage first and keep Chat as a separate navigation item.
 const items = [
-  { id: "home", label: "المحادثات", href: "/home", icon: MessageCircle },
-  { id: "courses", label: "المقررات", href: "/courses", icon: BookOpen },
+  { id: "home", label: "الرئيسية", href: "/home", icon: BookOpen },
+  { id: "chat", label: "المحادثات", href: "/chat", icon: MessageCircle },
   { id: "profile", label: "الملف الشخصي", href: "/profile", icon: UserRound },
 ];
 
@@ -50,10 +51,11 @@ export default function Sidebar({ active }) {
     <aside
       className={`platform-sidebar${tooltipsDismissed ? " platform-sidebar--tooltips-dismissed" : ""}`}
     >
+      {/* The logo returns to the Courses homepage from any platform page. */}
       <Link
         to="/home"
         className="platform-sidebar-brand"
-        aria-label="زمرة - المحادثات"
+        aria-label="زمرة - الرئيسية"
         onClick={(event) => handleNavigation(event, "home")}
       >
         <Logo size="extra-small" />

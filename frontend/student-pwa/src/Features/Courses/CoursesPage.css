@@ -38,7 +38,33 @@
   align-items: stretch;
 }
 
-/* 4. Empty-state text in enrolled courses. */
+/* Shared feedback stays outside the card grid and leaves existing cards visible. */
+.courses-list-status {
+  margin-block-end: 16px;
+}
+
+.courses-list-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block-end: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: 12px;
+  background: var(--color-error-background);
+  color: var(--color-error);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.courses-list-error p {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 4. Empty-state text for either course list. */
 .zumrah-courses > section > .courses-grid  > p {
   grid-column: 1 / -1;
   margin: 0;

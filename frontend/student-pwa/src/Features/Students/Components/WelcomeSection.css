@@ -1,11 +1,12 @@
 /* 1. Welcome section container */
+/* Reuse the current palette while preserving the original decorative gradient. */
 .welcome-section {
   display: flex;
   padding: 32px;
   gap: 20px;
-  border: 1px solid #e8e4f0;
+  border: 1px solid var(--color-neutral-200);
   border-radius: 20px;
-  background: linear-gradient(270deg, #f6f3ff 0%, #ffffff 70%);
+  background: linear-gradient(270deg, #f6f3ff 0%, var(--color-white) 70%);
 }
 
 /* 2. Purple accent bar */
@@ -13,7 +14,7 @@
   width: 4px;
   flex-shrink: 0;
   border-radius: 999px;
-  background: #6847e8;
+  background: var(--color-primary);
 }
 
 /* 3. Welcome content */
@@ -34,7 +35,7 @@
 .welcome-section .welcome-title {
   max-width: none;
   margin: 0;
-  color: #172033;
+  color: var(--color-neutral-900);
   font-size: clamp(24px, 4vw, 36px);
   font-weight: 700;
   line-height: 1.5;
@@ -42,7 +43,7 @@
 
 /* 6. Highlight student name */
 .welcome-name {
-  color: #6847e8;
+  color: var(--color-primary);
 }
 
 /* 7. Welcome description */

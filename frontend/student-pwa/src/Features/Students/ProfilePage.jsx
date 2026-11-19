@@ -379,10 +379,6 @@ export default function ProfilePage() {
                   >
                     {student.universityEmail}
                   </div>
-
-                  <p className="profile-readonly-note">
-                    للقراءة فقط
-                  </p>
                 </div>
 
                 {/* College and major fields */}

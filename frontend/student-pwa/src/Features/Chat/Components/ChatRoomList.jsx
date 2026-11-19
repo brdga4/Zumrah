@@ -74,8 +74,8 @@ export default function ChatRoomList({ rooms, activeRoom, onOpenRoom }) {
           </Text>
         )}
       </div>
-      {/* Discover courses */}
-      <Link to="/courses" className="chat-room-discover">
+      {/* Open the Courses homepage directly instead of its compatibility redirect. */}
+      <Link to="/home" className="chat-room-discover">
         استكشف المقررات
       </Link>
     </div>

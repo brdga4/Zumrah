@@ -114,9 +114,11 @@ const chatRooms = [
     ];
   
 
+  // Chat keeps its full-height workspace independently of the new Courses homepage.
   return (
     <PlatformLayout
-      active="home"
+      active="chat"
+      layout="chat"
       title="المحادثات"
     >
       <div className="zumrah-home">
