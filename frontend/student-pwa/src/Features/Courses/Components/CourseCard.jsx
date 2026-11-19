@@ -7,12 +7,13 @@ import Card from "../../../Components/Card";
 import Badge from "../../../Components/Badge";
 import Heading from "../../../Components/Heading";
 import Button from "../../../Components/Button";
+import LoadingIndicator from "../../../Components/LoadingIndicator";
 import "./CourseCard.css";
 
 // ==========================================
 // 2. RECEIVE PROPS FROM HOMEPAGE
 // Receive course data, enrollment status, and action functions.
-// HomePage passes these props to CourseCard.
+// CoursesPage passes these props to CourseCard.
 // ==========================================
 
 export default function CourseCard({
@@ -22,6 +23,8 @@ export default function CourseCard({
   onLeave,
   onOpenChat,
   onOpenFiles,
+  enrolling = false,
+  disabled = false,
 }) {
 
   return (
@@ -30,7 +33,7 @@ export default function CourseCard({
       {/* ==========================================
           3. DISPLAY COURSE INFORMATION
           Show the course code, name, and enrollment status.
-          Course data comes from the backend through HomePage.
+          Course data comes from the backend through CoursesPage.
           ========================================== */}
 
       <div className="course-card-top">
@@ -61,8 +64,21 @@ export default function CourseCard({
 
         {status === "available" ? (
 
-          <Button variant="primary" size="sm" onClick={onEnroll}>
-            التسجيل في المقرر
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={onEnroll}
+            loading={enrolling}
+            disabled={disabled}
+          >
+            {enrolling ? (
+              <span className="course-card-pending-content">
+                <LoadingIndicator inline decorative />
+                جارٍ التسجيل...
+              </span>
+            ) : (
+              "التسجيل في المقرر"
+            )}
           </Button>
 
         ) : (
@@ -71,8 +87,8 @@ export default function CourseCard({
 
             {/* ==========================================
                 5. HANDLE COURSE ACTIONS
-                Call the functions received from HomePage.
-                HomePage handles the API requests and navigation.
+                Call the functions received from CoursesPage.
+                CoursesPage handles the API requests and navigation.
                 ========================================== */}
 
             <div className="course-card-primary-actions">
@@ -91,6 +107,8 @@ export default function CourseCard({
               type="button"
               className="course-card-leave"
               onClick={onLeave}
+              disabled={disabled}
+              aria-haspopup="dialog"
             >
               مغادرة المقرر
             </button>

@@ -2,6 +2,7 @@
 // Routes: Groups all the routes together.
 // Route: Maps a URL path to a specific component.
 // Navigate: Redirects the user to another route.
+// Fragment lets you group multiple elements without adding extra nodes to the DOM
 import { Fragment, useEffect, useSyncExternalStore } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 

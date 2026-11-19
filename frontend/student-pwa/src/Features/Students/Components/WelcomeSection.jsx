@@ -7,7 +7,7 @@ import "./WelcomeSection.css";
 
 // 2. Receive student data from HomePage
 export default function WelcomeSection({ student }) {
-  const firstName = student?.name?.split(" ")[0] || "طالب";
+  const firstName = student?.name?.split(" ")[0];
 
   // 3. Render the welcome section
   return (
