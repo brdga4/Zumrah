@@ -16,7 +16,8 @@ import {
 import LoginPage from './Features/Auth/Components/LoginPage';
 import SignupPage from './Features/Auth/SignupPage';
 import OtpVerification from './Features/Auth/OtpVerification';
-import HomePage from './Features/Students/HomePage';
+// Reuse the existing Chat page without moving or renaming its files.
+import ChatPage from './Features/Students/HomePage';
 import ProfilePage from "./Features/Students/ProfilePage";
 import CoursesPage from './Features/Courses/CoursesPage';
 import CourseFilesPage from "./Features/Materials/CourseFilesPage";
@@ -73,25 +74,37 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        {/* Start at Home; its existing guard redirects unauthenticated students. */}
+        <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/verify-email" element={<OtpVerification />} />
-        // Protect the home page route to ensure only authenticated users can access it.
+        {/* Use the existing Courses page as the protected student homepage. */}
         <Route
           path="/home"
           element={
             <ProtectedRoute>
-              <HomePage />
+              <CoursesPage />
             </ProtectedRoute>
           }
         />
 
+        {/* Keep the working Chat experience available on its own protected route. */}
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <ChatPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Preserve old Courses links without adding a redirect entry to history. */}
         <Route
           path="/courses"
           element={
             <ProtectedRoute>
-              <CoursesPage />
+              <Navigate to="/home" replace />
             </ProtectedRoute>
           }
         />

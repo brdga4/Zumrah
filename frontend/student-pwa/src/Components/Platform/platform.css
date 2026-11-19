@@ -6,7 +6,8 @@
   font-family: "Alexandria", sans-serif;
 }
 
-.platform--home {
+/* Limit viewport-filling rules to Chat so the Courses homepage scrolls normally. */
+.platform--chat {
   height: 100%;
   min-height: 0;
   display: flex;
@@ -31,7 +32,7 @@
   background: var(--color-white);
 }
 
-.platform--home > .platform-sidebar {
+.platform--chat > .platform-sidebar {
   flex-shrink: 0;
 }
 
@@ -155,7 +156,7 @@
   margin-inline-start: 88px;
 }
 
-.platform--home > .platform-main {
+.platform--chat > .platform-main {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -169,8 +170,8 @@
   padding: 32px 40px 48px;
 }
 
-/* Home layout only */
-.platform-content.platform-content--home {
+/* Chat layout only */
+.platform-content.platform-content--chat {
   max-width: none;
   margin: 0;
   padding: 0;
@@ -193,7 +194,7 @@
   margin: -8px 0 24px;
 }
 
-/* Home already has room/conversation headings; retain its h1 for screen readers. */
+/* Chat already has room/conversation headings; retain its h1 for screen readers. */
 .platform-content .platform-page-title--hidden {
   position: absolute;
   width: 1px;

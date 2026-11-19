@@ -7,6 +7,7 @@ import { getAvailableCourses, getEnrolledCourses, enrollInCourse, unenrollFromCo
 import PlatformLayout from "../../Components/Platform/PlatformLayout";
 import Heading from "../../Components/Heading";
 import CourseCard from "../Courses/Components/CourseCard";
+import WelcomeSection from "../Students/Components/WelcomeSection";
 //---------------------------------------------------------------------------------------------------------
   
 export default function CoursesPage() {
@@ -18,7 +19,7 @@ export default function CoursesPage() {
   const [availableCourses, setAvailableCourses] = useState([]);
 // Store enrolled courses received from the backend
   const [enrolledCourses, setEnrolledCourses] = useState([]);
-// Navigate to Home and open the course chat when the student clicks "Open Chat"
+// Navigate to the separate Chat page when a course action is selected.
   const navigate = useNavigate();
   //---------------------------------------------------------------------------------------------------------
   
@@ -144,14 +145,17 @@ export default function CoursesPage() {
   }
 
   //---------------------------------------------------------------------------------------------------------
+  // Identify Courses as Home while keeping the normal scrolling page layout.
   return (
 
     <PlatformLayout
-      active="courses"
+      active="home"
       student={student}
     >
       <div className="zumrah-courses" dir="rtl">
         <Heading level={1} className="courses-page-title">المقررات</Heading>
+        {/* Reuse the profile already loaded here instead of making another request. */}
+        <WelcomeSection student={student} />
         {/* Enrolled Courses */}
         <section>
           <h2>المقررات المسجّلة</h2>
@@ -166,7 +170,8 @@ export default function CoursesPage() {
                   status="enrolled"
                   onLeave={() => handleLeave(course.courseId)}
 
-                  onOpenChat={() => navigate("/home", {
+                  onOpenChat={() => navigate("/chat", {
+                    // Preserve the selected course room for desktop and mobile Chat.
                     state: { roomId: course.chatRoomId },
                   })}
 
