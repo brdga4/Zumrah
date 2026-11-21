@@ -28,31 +28,6 @@
   color: var(--color-neutral-900);
 }
 
-/* Secondary button - Zumrah standard */
-.course-files-back {
-  padding: 14px 24px;
-  border: 1px solid var(--color-neutral-200);
-  border-radius: 16px;
-  background: var(--color-white);
-  color: var(--color-primary);
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  outline: none;
-  box-shadow: none;
-  transition: background 0.2s, border-color 0.2s;
-}
-
-/* Hover and keyboard focus - single purple border */
-.course-files-back:hover,
-.course-files-back:focus-visible {
-  background: var(--color-primary-subtle);
-  border-color: var(--color-primary);
-  outline: none;
-  box-shadow: none;
-}
-
 /* Main content */
 .course-files-content {
   padding: 36px;
@@ -98,24 +73,6 @@
 
 .course-files-upload {
   flex-shrink: 0;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 12px;
-  background: var(--color-primary);
-  color: var(--color-white);
-  font-family: inherit;
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-/* Highlight the upload button when hovering */
-.course-files-upload:hover:not(:disabled) {
-  background: var(--color-primary-dark);
-}
-.course-files-upload:disabled {
-  cursor: not-allowed;
 }
 
 /* Files list */
@@ -183,26 +140,12 @@
   font-size: 14px;
 }
 
-/* Download button */
 .course-file-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   flex-shrink: 0;
-  padding: 14px 24px;
-  border: 1px solid var(--color-neutral-200);
-  border-radius: 16px;
-  background: var(--color-white);
-  color: var(--color-primary);
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
-
-/* Highlight the download button when hovering */
-.course-file-download:hover:not(:disabled) {
-  background: var(--color-primary-subtle);
-  border-color: var(--color-primary);
-}
-
 
 /* Empty state */
 .course-files-empty {
@@ -261,8 +204,4 @@
     font-size: 14px;
   }
 
-  .course-file-download {
-    padding: 12px;
-    font-size: 13px;
-  }
 }
