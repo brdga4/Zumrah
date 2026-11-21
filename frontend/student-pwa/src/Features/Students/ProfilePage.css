@@ -1,305 +1,87 @@
+/* Let the mobile navigation and page headings take their natural height. */
+.platform:has(.profile-loading) {
+  min-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
 
-/* ==========================================
-   1. PROFILE PAGE LAYOUT
-   ========================================== */
-
-/* Two-column layout: summary on the right, form on the left */
-.profile-layout {
+.platform-main:has(.profile-loading) {
+  flex: 1;
   display: grid;
-  grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.6fr);
-  align-items: start;
-  gap: 24px;
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
 }
 
-/* Shared profile card styling */
-.profile-summary-card,
-.profile-details-card {
-  min-width: 0;
-  padding: 32px;
-  background: var(--color-white);
-  border: 1px solid var(--color-neutral-200);
-  border-radius: 18px;
-  color: var(--color-neutral-900);
+.platform-content:has(> .profile-loading) {
+  inline-size: 100%;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
 }
 
-
-/* ==========================================
-   2. STUDENT SUMMARY CARD
-   ========================================== */
-
-.profile-summary-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 12px;
+.profile-loading {
+  display: grid;
+  place-items: center;
 }
 
-/* The only large student avatar on the profile page */
-.profile-avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 112px;
-  height: 112px;
-  margin-bottom: 8px;
-  border-radius: 50%;
-  background: #F0EAFF;
-  color: var(--color-primary-dark);
-  font-size: 44px;
-  font-weight: 700;
-}
-
-.profile-student-name {
-  margin: 0;
-  color: var(--color-neutral-900);
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.profile-student-email {
-  margin: 0;
-  color: var(--color-neutral-600);
-  font-size: 13px;
-  overflow-wrap: anywhere;
-  direction: ltr;
-}
-
-/* Student major badge */
-.profile-major-badge {
-  margin-top: 8px;
-  padding: 8px 16px;
-  background: #F0EAFF;
-  color: var(--color-primary-dark);
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-/* Divider above logout button */
-.profile-summary-divider {
-  width: 100%;
-  height: 1px;
-  margin: 20px 0 8px;
-  background: var(--color-neutral-200);
-}
-
-/* Logout button */
-.profile-logout-button {
-  width: 100%;
-  min-height: 52px;
-  padding: 14px 24px;
-  background: var(--color-error-background);
-  color: var(--color-error);
-  border: 1px solid var(--color-error);
-  border-radius: 16px;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-}
-
-.profile-logout-button:hover {
-  background: #FFE4E9;
-}
-
-
-/* ==========================================
-   3. PROFILE EDIT FORM
-   ========================================== */
-
-.profile-details-card {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  text-align: right;
-}
-
-.profile-section-title {
-  margin: 0 0 6px;
-  color: var(--color-neutral-900);
-  font-size: 21px;
-  font-weight: 700;
-}
-
-.profile-section-description {
-  margin: 0;
-  color: var(--color-neutral-600);
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-.profile-section-divider {
-  height: 1px;
-  background: var(--color-neutral-200);
-  border: none;
-  margin: 4px 0;
-}
-
-/* Form fields */
-.profile-field {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-width: 0;
-}
-
-.profile-field-label {
-  color: var(--color-neutral-900);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-/* Editable input and select */
-.profile-field-input,
-.profile-field-select {
+.profile-card {
   box-sizing: border-box;
-  width: 100%;
-  min-height: 54px;
-  padding: 14px 16px;
-  background: var(--color-white);
-  color: var(--color-neutral-900);
-  border: 1px solid var(--color-neutral-200);
-  border-radius: 12px;
-  font: inherit;
+  max-inline-size: 800px;
+  margin-inline: auto;
+  padding: clamp(20px, 3vw, 32px);
+}
+
+.profile-form,
+.profile-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+.profile-form {
+  gap: 24px;
+}
+
+.profile-section + .profile-section,
+.profile-actions {
+  border-block-start: 1px solid var(--color-neutral-200);
+  padding-block-start: 20px;
+}
+
+.profile-section > h2 {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.profile-email {
   font-size: 14px;
-}
-
-.profile-field-input:focus,
-.profile-field-select:focus {
-  outline: none;
-  border-color: var(--color-primary);
-}
-
-/* Read-only fields */
-.profile-field-readonly {
-  display: flex;
-  align-items: center;
-  min-height: 54px;
-  box-sizing: border-box;
-  padding: 14px 16px;
-  background: #F1EEF6;
+  line-height: 1.7;
   color: var(--color-neutral-600);
-  border: 1px solid var(--color-neutral-200);
-  border-radius: 12px;
-  font-size: 14px;
-  overflow-wrap: anywhere;
 }
 
-.profile-readonly-note {
+.profile-email,
+.profile-email dd {
   margin: 0;
-  color: var(--color-neutral-600);
+}
+
+.profile-email dt {
   font-size: 12px;
+  font-weight: 600;
+  color: var(--color-neutral-900);
 }
 
-/* College and major side by side */
+.profile-email dd {
+  overflow-wrap: anywhere;
+}
+
 .profile-academic-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 
-/* Warning about changing major */
-.profile-major-warning {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  background: var(--color-primary-subtle);
-  color: var(--color-neutral-900);
-  border: 1px solid #DDD6FE;
-  border-radius: 12px;
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-.profile-warning-icon {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  background: var(--color-primary);
-  color: var(--color-white);
-  border-radius: 50%;
-  font-weight: 700;
-}
-
-
-/* ==========================================
-   4. SAVE AND CANCEL ACTIONS
-   ========================================== */
-
-.profile-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.profile-change-status {
-  margin-inline-end: auto;
-  color: var(--color-neutral-600);
-  font-size: 13px;
-}
-
-/* Shared button properties */
-.profile-save-button,
-.profile-cancel-button {
-  min-height: 52px;
-  padding: 14px 24px;
-  border-radius: 16px;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-}
-
-/* Primary button: Save changes */
-.profile-save-button {
-  background: var(--color-primary);
-  color: var(--color-white);
-  border: 1px solid var(--color-primary);
-}
-
-.profile-save-button:hover:not(:disabled) {
-  background: var(--color-primary-dark);
-  border-color: var(--color-primary-dark);
-}
-
-/* Secondary button: Same style as Files Download */
-.profile-cancel-button {
-  background: var(--color-white);
-  color: var(--color-primary);
-  border: 1px solid var(--color-neutral-200);
-}
-
-.profile-cancel-button:hover:not(:disabled) {
-  background: var(--color-primary-subtle);
-  border-color: var(--color-primary);
-}
-
-/* Disabled actions */
-.profile-actions button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Form feedback */
 .profile-feedback {
-  margin: 0;
   padding: 12px 16px;
   border-radius: 12px;
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.profile-feedback--success {
-  background: var(--color-success-background);
-  color: var(--color-success-dark);
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .profile-feedback--error {
@@ -307,38 +89,31 @@
   color: var(--color-error);
 }
 
+.profile-feedback--success {
+  background: var(--color-success-background);
+  color: var(--color-success-dark);
+}
 
-/* ==========================================
-   5. MOBILE RESPONSIVE DESIGN
-   ========================================== */
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-@media (max-width: 850px) {
-  .profile-layout {
-    grid-template-columns: 1fr;
+@media (max-width: 640px) {
+  .profile-section > h2 {
+    font-size: 18px;
   }
 }
 
 @media (max-width: 480px) {
-  .profile-summary-card,
-  .profile-details-card {
-    padding: 20px;
-  }
-
   .profile-academic-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .profile-actions {
-    align-items: stretch;
-  }
-
-  .profile-change-status {
-    width: 100%;
-  }
-
-  .profile-save-button,
-  .profile-cancel-button {
-    flex: 1;
-    padding: 12px;
+  .profile-actions > button {
+    flex: 1 1 auto;
   }
 }
