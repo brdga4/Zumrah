@@ -1,0 +1,60 @@
+.zumrah-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.zumrah-field > label {
+  color: var(--color-neutral-900);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.zumrah-field > :is(input, select) {
+  box-sizing: border-box;
+  height: 49px;
+  width: 100%;
+  min-width: 0;
+  padding: 0 14px;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: 11px;
+  color: var(--color-neutral-900);
+  background: var(--color-white);
+  outline: none;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.zumrah-field > input::placeholder {
+  color: #9B9DAA;
+}
+
+.zumrah-field > :is(input, select):focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 9.02%, transparent);
+}
+
+.zumrah-field > :is(input, select):disabled {
+  background: #F7F7FB;
+  color: #999AA8;
+  cursor: not-allowed;
+}
+
+.zumrah-field > :is(input, select)[aria-invalid="true"] {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 2px #C52C4518;
+}
+
+.zumrah-field-error {
+  display: block;
+  color: var(--color-error);
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 1px;
+}
+
+.zumrah-field-error:empty {
+  display: none;
+}

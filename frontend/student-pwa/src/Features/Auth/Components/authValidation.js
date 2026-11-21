@@ -8,20 +8,20 @@ export function universityEmailError(email) {
   const value = email.trim().toLowerCase();
 
   if (!value) {
-    return 'الرجاء إدخال البريد الجامعي.';
+    return 'الرجاء إدخال البريد الجامعي';
   }
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!emailPattern.test(value)) {
-    return 'الرجاء إدخال بريد إلكتروني صحيح.';
+    return 'الرجاء إدخال بريد إلكتروني صحيح';
   }
 
   // Temporary rule for Saudi university emails.
   const domain = value.split('@')[1];
 
   if (!domain.endsWith('.edu.sa')) {
-    return 'الرجاء استخدام بريد جامعي سعودي.';
+    return 'الرجاء استخدام بريد جامعي سعودي';
   }
 
   return '';
@@ -30,7 +30,7 @@ export function universityEmailError(email) {
 // Validate the login password.
 export function loginPasswordError(password) {
   if (!password) {
-    return 'الرجاء إدخال كلمة المرور.';
+    return 'الرجاء إدخال كلمة المرور';
   }
 
   return '';

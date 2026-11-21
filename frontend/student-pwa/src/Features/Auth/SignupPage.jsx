@@ -1,6 +1,8 @@
 import { API_BASE_URL } from '../../config';
 import { useState, useEffect } from 'react';
 import Button from '../../Components/Button';
+import InputField from '../../Components/InputField';
+import SelectField from '../../Components/SelectField';
 import './SignupPage.css';
 import { useNavigate } from 'react-router-dom';
 // Demo university data. Replace with backend data later.
@@ -34,18 +36,18 @@ function getFieldError(field, values) {
 
   switch (field) {
     case 'fullName':
-      if (!value.trim()) return 'يرجى إدخال الاسم.';
+      if (!value.trim()) return 'يرجى إدخال الاسم';
       if (value.trim().length < 2) {
-        return 'يرجى إدخال اسم لا يقل عن حرفين.';
+        return 'يرجى إدخال اسم لا يقل عن حرفين';
       }
       return '';
 
     case 'universityEmail':
       if (!value.trim()) {
-        return 'يرجى إدخال البريد الإلكتروني الجامعي.';
+        return 'يرجى إدخال البريد الإلكتروني الجامعي';
       }
       if (!/^[^\s@]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+$/i.test(value.trim())) {
-        return 'صيغة البريد الإلكتروني غير صحيحة.';
+        return 'صيغة البريد الإلكتروني غير صحيحة';
       }
       if (!value.trim().toLowerCase().endsWith('@student.ksu.edu.sa')) {
         return 'يجب أن ينتهي بريد الطالب الجامعي  بـ @student.ksu.edu.sa';
@@ -53,28 +55,28 @@ function getFieldError(field, values) {
       return '';
 
     case 'password':
-      if (!value) return 'يرجى إدخال كلمة المرور.';
+      if (!value) return 'يرجى إدخال كلمة المرور';
       if (
         value.length < 8 ||
         !/[a-zA-Z\u0621-\u064A]/.test(value) ||
         !/[0-9]/.test(value)
       ) {
-        return 'كلمة المرور يجب أن تكون 8 أحرف على الأقل وتحتوي على حرف ورقم.';
+        return 'كلمة المرور يجب أن تكون 8 أحرف على الأقل وتحتوي على حرف ورقم';
       }
       return '';
 
     case 'confirmPassword':
-      if (!value) return 'يرجى تأكيد كلمة المرور.';
+      if (!value) return 'يرجى تأكيد كلمة المرور';
       if (value !== values.password) {
-        return 'كلمتا المرور غير متطابقتين.';
+        return 'كلمتا المرور غير متطابقتين';
       }
       return '';
 
     case 'college':
-      return value ? '' : 'يرجى اختيار الكلية.';
+      return value ? '' : 'يرجى اختيار الكلية';
 
     case 'major':
-      return value ? '' : 'يرجى اختيار التخصص.';
+      return value ? '' : 'يرجى اختيار التخصص';
 
     default:
       return '';
@@ -214,11 +216,11 @@ try {
   });
 
   if (!response.ok) {
-    setMessage('تعذر إنشاء الحساب. تأكد من البيانات وحاول مجددًا.');
+    setMessage('تعذر إنشاء الحساب تأكد من البيانات وحاول مجددًا');
     return;
   }
   if (!response.ok) {
-  setMessage('تعذر إنشاء الحساب. تأكد من البيانات وحاول مجددًا.');
+  setMessage('تعذر إنشاء الحساب تأكد من البيانات وحاول مجددًا');
   return;
 }
 
@@ -229,11 +231,11 @@ sessionStorage.setItem(
 );
   navigate('/verify-email');
 
-setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي.');
-  setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي.');
+setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي');
+  setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي');
 } catch (error) {
   console.error('Registration failed:', error);
-  setMessage('تعذر الاتصال بالخادم. حاول مجددًا.');
+  setMessage('تعذر الاتصال بالخادم حاول مجددًا');
 }
 
   }
@@ -248,17 +250,17 @@ setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي
 
         <div className="hero">
           <span className="eyebrow">
-            مساحتك الجامعية، في مكان واحد
+            مساحتك الجامعية في مكان واحد
           </span>
 
           <p>
-            تواصل مع طلاب جامعتك، اكتشف مقرراتك،
-            وشارك المعرفة مع مجتمع يفهم رحلتك.
+            تواصل مع طلاب جامعتك واكتشف مقرراتك
+            وشارك المعرفة مع مجتمع يفهم رحلتك
           </p>
         </div>
 
         <div className="welcome-foot">
-          زمرة — مجتمع جامعي يصنعه الطلاب، للطلاب.
+          مجتمع جامعي يصنعه الطلاب للطلاب
         </div>
       </section>
 
@@ -268,178 +270,110 @@ setMessage('تم إرسال رمز التحقق إلى بريدك الجامعي
         aria-label="إنشاء حساب"
       >
         <div className="login-card signup-card">
-          <span className="pill">✦ انضم إلى مجتمع زمرة</span>
-
           <h1>إنشاء حساب في زمرة</h1>
 
           <p className="subtitle">
             أدخل بياناتك الجامعية لإنشاء حسابك
-            والانضمام إلى مجتمع زمرة.
+            والانضمام إلى مجتمع زمرة
           </p>
 
           <form onSubmit={handleSubmit} noValidate>
-            {/* Full name */}
-            <div className="signup-field">
-              <label htmlFor="fullName">الاسم</label>
+            <InputField
+              id="fullName"
+              name="fullName"
+              label="الاسم"
+              autoComplete="name"
+              placeholder="الاسم الكامل"
+              value={values.fullName}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={errors.fullName}
+            />
 
-              <input
-                id="fullName"
-                name="fullName"
-                type="text"
-                autoComplete="name"
-                placeholder="الاسم الكامل"
-                value={values.fullName}
+            <InputField
+              id="universityEmail"
+              name="universityEmail"
+              label="الإيميل الجامعي"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              dir="ltr"
+              placeholder="name@student.ksu.edu.sa"
+              value={values.universityEmail}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={errors.universityEmail}
+            />
+
+            <div className="signup-fields-two">
+              <InputField
+                id="password"
+                name="password"
+                label="كلمة المرور"
+                type="password"
+                autoComplete="new-password"
+                placeholder="أدخل كلمة المرور"
+                value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                aria-invalid={Boolean(errors.fullName)}
+                error={errors.password}
               />
 
-              <span className="field-error" role="alert">
-                {errors.fullName}
-              </span>
-            </div>
-
-            {/* University email */}
-            <div className="signup-field">
-              <label htmlFor="universityEmail">
-                الإيميل الجامعي
-              </label>
-
-              <input
-                id="universityEmail"
-                name="universityEmail"
-                type="email"
-                inputMode="email"
-                autoComplete="email"
-                dir="ltr"
-                placeholder="name@student.ksu.edu.sa"
-                value={values.universityEmail}
+              <InputField
+                id="confirmPassword"
+                name="confirmPassword"
+                label="تأكيد كلمة المرور"
+                type="password"
+                autoComplete="new-password"
+                placeholder="أعد إدخال كلمة المرور"
+                value={values.confirmPassword}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                aria-invalid={Boolean(errors.universityEmail)}
+                error={errors.confirmPassword}
+              />
+            </div>
+
+            {university && (
+              <div className="signup-university" aria-live="polite">
+                <span>الجامعة</span>
+                <strong>{university}</strong>
+              </div>
+            )}
+
+            <div className="signup-fields-two">
+              <SelectField
+                id="college"
+                name="college"
+                label="الكلية"
+                placeholder="اختر الكلية"
+                placeholderDisabled={false}
+                options={colleges.map((college) => ({
+                  value: college.collegeId,
+                  label: college.collegeName,
+                }))}
+                value={values.college}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                disabled={!university}
+                error={errors.college}
               />
 
-              <span className="field-error" role="alert">
-                {errors.universityEmail}
-              </span>
-            </div>
-
-            {/* Password fields */}
-            <div className="signup-fields-two">
-              <div className="signup-field">
-                <label htmlFor="password">كلمة المرور</label>
-
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  placeholder="أدخل كلمة المرور"
-                  value={values.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  aria-invalid={Boolean(errors.password)}
-                />
-
-                <span className="field-error" role="alert">
-                  {errors.password}
-                </span>
-              </div>
-
-              <div className="signup-field">
-                <label htmlFor="confirmPassword">
-                  تأكيد كلمة المرور
-                </label>
-
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  autoComplete="new-password"
-                  placeholder="أعد إدخال كلمة المرور"
-                  value={values.confirmPassword}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  aria-invalid={Boolean(errors.confirmPassword)}
-                />
-
-                <span className="field-error" role="alert">
-                  {errors.confirmPassword}
-                </span>
-              </div>
-            </div>
-
-            {/* Automatically detected university */}
-            <div className="signup-university" aria-live="polite">
-              <span>الجامعة</span>
-
-              <strong>
-                {!values.universityEmail.trim()
-                  ? 'أدخل بريدك الجامعي لعرض الجامعة'
-                  : university ||
-                    'لم يتم التعرف على الجامعة من هذا البريد'}
-              </strong>
-            </div>
-
-            {/* College and major */}
-            <div className="signup-fields-two">
-              <div className="signup-field">
-                <label htmlFor="college">الكلية</label>
-
-                <select
-                  id="college"
-                  name="college"
-                  value={values.college}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  disabled={!university}
-                  aria-invalid={Boolean(errors.college)}
-                >
-                  <option value="">اختر الكلية</option>
-
-                  
-                {colleges.map((college) => (
-                  <option key={college.collegeId} value={college.collegeId}>
-                    {college.collegeName}
-                  </option>
-                ))}
-
-                </select>
-
-                <span className="field-error" role="alert">
-                  {errors.college}
-                </span>
-              </div>
-
-              <div className="signup-field">
-                <label htmlFor="major">التخصص</label>
-
-                <select
-                  id="major"
-                  name="major"
-                  value={values.major}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  disabled={!values.college}
-                  aria-invalid={Boolean(errors.major)}
-                >
-                  <option value="">
-                    {values.college
-                      ? 'اختر التخصص'
-                      : 'اختر الكلية أولًا'}
-                  </option>
-
-                  {majors.map((major) => (
-                  <option key={major.majorId} value={major.majorId}>
-                    {major.majorName}
-                  </option>
-                    ))}
-                </select>
-
-                <span className="field-error" role="alert">
-                  {errors.major}
-                </span>
-              </div>
+              <SelectField
+                id="major"
+                name="major"
+                label="التخصص"
+                placeholder={values.college ? 'اختر التخصص' : 'اختر الكلية أولًا'}
+                placeholderDisabled={false}
+                options={majors.map((major) => ({
+                  value: major.majorId,
+                  label: major.majorName,
+                }))}
+                value={values.major}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                disabled={!values.college}
+                error={errors.major}
+              />
             </div>
 
             {/* Reuse the shared Zumrah button */}
