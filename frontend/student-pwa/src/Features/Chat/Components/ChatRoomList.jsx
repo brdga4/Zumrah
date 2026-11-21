@@ -69,9 +69,7 @@ export default function ChatRoomList({ rooms, activeRoom, onOpenRoom }) {
             />
           ))
         ) : (
-          <Text tone="muted" size="small">
-            سجل في مقرر للانضمام إلى محادثته.
-          </Text>
+          <Text tone="muted" size="small"></Text>
         )}
       </div>
       {/* Open the Courses homepage directly instead of its compatibility redirect. */}

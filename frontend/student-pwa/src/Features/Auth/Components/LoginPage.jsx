@@ -62,19 +62,19 @@ try {
     }
   );
   if (!response.ok) {
-    setMessage('فشل تسجيل الدخول. تحقق من بياناتك وحاول مرة أخرى.');
+    setMessage('فشل تسجيل الدخول تحقق من بياناتك وحاول مرة أخرى');
     return;
   }
   const data = await response.json();
   if (!data.accessToken) {
-    setMessage('لم يتم استلام رمز تسجيل الدخول.');
+    setMessage('لم يتم استلام رمز تسجيل الدخول');
     return;
   }
   setAccessToken(data.accessToken);
   navigate('/home'); // Redirect to the home page after successful login.
 } catch (error) {
   console.error('Login failed:', error);
-  setMessage('تعذر الاتصال بالخادم. حاول مجددًا.');
+  setMessage('تعذر الاتصال بالخادم حاول مجددًا');
 } finally {
   // Stop loading when the request finishes.
   setIsLoading(false);
@@ -91,28 +91,26 @@ try {
 
         <div className="hero">
           <span className="eyebrow">
-            مساحتك الجامعية، في مكان واحد
+            مساحتك الجامعية في مكان واحد
           </span>
           <p>
-            تواصل مع طلاب جامعتك، اكتشف مقرراتك،
-            وشارك المعرفة مع مجتمع يفهم رحلتك.
+            تواصل مع طلاب جامعتك واكتشف مقرراتك
+            وشارك المعرفة مع مجتمع يفهم رحلتك
           </p>
         </div>
 
         <div className="welcome-foot">
-          زمرة — مجتمع جامعي يصنعه الطلاب، للطلاب.
+          زمرة مجتمع جامعي يصنعه الطلاب للطلاب
         </div>
       </section>
 
       <section className="login-panel" aria-label="تسجيل الدخول">
         <div className="login-card">
-          <span className="pill">✦ مرحبًا بعودتك</span>
-
           <h1>تسجيل الدخول</h1>
 
           <p className="subtitle">
             سجّل الدخول باستخدام بريدك الجامعي وكلمة المرور
-            للوصول إلى حسابك في زمرة.
+            للوصول إلى حسابك في زمرة
           </p>
 
           <form onSubmit={handleSubmit} noValidate>
@@ -202,7 +200,7 @@ try {
               {isLoading ? (
                 <span className="login-loading">
                   <span className="login-spinner" aria-hidden="true" />
-                  جاري تسجيل الدخول...
+                  جاري تسجيل الدخول
                 </span>
               ) : (
                 "تسجيل الدخول"

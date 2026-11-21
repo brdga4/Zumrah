@@ -103,26 +103,17 @@ body:has(.otp-page) {
   max-width: 420px;
 }
 
-.otp-pill {
-  display: inline-flex;
-  padding: 9px 13px;
-  border: 1px solid var(--color-primary-border);
-  border-radius: 100px;
-  background: #F2EEFF;
-  color: var(--color-primary-dark);
-  font-size: 12px;
-  font-weight: 600;
-}
-
 .otp-card h1 {
-  margin: 25px 0 11px;
-  font-size: 32px;
+  margin: 0 0 11px;
+  font-size: clamp(26px, 2.3vw, 35px);
   line-height: 1.5;
+  letter-spacing: -0.7px;
+  font-weight: 700;
   color: var(--color-neutral-900);
 }
 
 .otp-subtitle {
-  margin-bottom: 30px;
+  margin: 0 0 30px;
   color: var(--color-neutral-600);
   font-size: 14px;
   line-height: 2;
@@ -151,79 +142,24 @@ body:has(.otp-page) {
   text-align: right;
 }
 
-.otp-label {
-  display: block;
-  margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: 600;
+.otp-card .zumrah-field {
+  margin-bottom: 20px;
 }
 
-.otp-input {
-  width: 100%;
-  min-height: 58px;
-  padding: 14px 16px;
-  border: 1px solid var(--color-neutral-200);
-  border-radius: 12px;
-  background: var(--color-white);
-  color: var(--color-neutral-900);
-  font-family: inherit;
-  font-size: 14px;
+.otp-card .zumrah-field input {
   text-align: center;
 }
 
-.otp-input:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-.otp-input[aria-invalid="true"] {
-  border-color: var(--color-error);
-}
-
-.otp-error {
-  min-height: 22px;
-  margin: 8px 0;
-  color: var(--color-error);
-  font-size: 12px;
-}
-
-.otp-card .zumrah-button {
-  width: 100%;
-}
-
 .otp-message {
-  min-height: 24px;
-  margin-top: 12px;
+  margin: 12px 0 0;
   color: var(--color-primary-dark);
   font-size: 12px;
   line-height: 1.9;
   text-align: center;
 }
 
-.otp-resend {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 18px;
-  font-size: 12px;
-  color: var(--color-neutral-600);
-}
-
-.otp-resend button {
-  padding: 5px;
-  border: none;
-  background: transparent;
-  color: var(--color-primary);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.otp-resend button:hover {
-  color: var(--color-primary-dark);
-  text-decoration: underline;
+.otp-message:empty {
+  display: none;
 }
 
 @media (max-width: 800px) {
@@ -252,7 +188,4 @@ body:has(.otp-page) {
     padding: 45px 22px 30px;
   }
 
-  .otp-card h1 {
-    font-size: 27px;
-  }
 }

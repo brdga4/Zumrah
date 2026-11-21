@@ -2,6 +2,7 @@
 import { API_BASE_URL } from '../../config';
 import { useState } from 'react'
 import Button from '../../Components/Button'
+import InputField from '../../Components/InputField'
 import './OtpVerification.css'
 import { useNavigate } from 'react-router-dom';
 import { setAccessToken } from './authSession';
@@ -40,7 +41,7 @@ const verificationEmail =
     event.preventDefault();
 
     if (!otp) {
-      setError('الرجاء إدخال رمز التحقق.');
+      setError('الرجاء إدخال رمز التحقق');
       return;
     }
 
@@ -63,7 +64,7 @@ const verificationEmail =
       );
 
       if (!response.ok) {
-        setError('تعذر تأكيد البريد. تحقق من الرمز وحاول مجددًا.');
+        setError('تعذر تأكيد البريد تحقق من الرمز وحاول مجددًا');
         return;
       }
 
@@ -73,28 +74,22 @@ const data = await response.json();
 
 // Require a JWT before saving the authenticated session.
 if (!data.accessToken) {
-  setError('لم يتم استلام رمز تسجيل الدخول.');
+  setError('لم يتم استلام رمز تسجيل الدخول');
   return;
 }
 
 setAccessToken(data.accessToken);
 navigate('/home'); // Redirect to the home page after successful verification.
-setMessage('تم تأكيد البريد الإلكتروني بنجاح.');
+setMessage('تم تأكيد البريد الإلكتروني بنجاح');
 
 
 
     } catch (error) {
       console.error('OTP verification failed:', error);
-      setError('تعذر الاتصال بالخادم. حاول مجددًا.');
+      setError('تعذر الاتصال بالخادم حاول مجددًا');
     }
   }
 
-
-  // Handle resend code
-  function handleResend() {
-    setError('')
-    setMessage('ستتوفر إعادة إرسال الرمز بعد ربط الباك إند.')
-  }
 
   // JSX: User interface
   return (
@@ -105,15 +100,15 @@ setMessage('تم تأكيد البريد الإلكتروني بنجاح.');
         <div className="otp-brand">زُمْرَة</div>
 
         <div className="otp-hero">
-          <span>مساحتك الجامعية، في مكان واحد</span>
+          <span>مساحتك الجامعية في مكان واحد</span>
           <p>
-            تواصل مع طلاب جامعتك، اكتشف مقرراتك،
-            وشارك المعرفة مع مجتمع يفهم رحلتك.
+            تواصل مع طلاب جامعتك واكتشف مقرراتك
+            وشارك المعرفة مع مجتمع يفهم رحلتك
           </p>
         </div>
 
         <p className="otp-footer">
-          زمرة — مجتمع جامعي يصنعه الطلاب، للطلاب.
+          زمرة مجتمع جامعي يصنعه الطلاب للطلاب
         </p>
       </section>
 
@@ -121,14 +116,10 @@ setMessage('تم تأكيد البريد الإلكتروني بنجاح.');
       <section className="otp-panel">
         <div className="otp-card">
 
-          <span className="otp-pill">
-            ✦ تأكيد البريد الجامعي
-          </span>
-
           <h1>التحقق من البريد الجامعي</h1>
 
           <p className="otp-subtitle">
-            أدخل رمز التحقق المرسل إلى بريدك الجامعي.
+            أدخل رمز التحقق المرسل إلى بريدك الجامعي
           </p>
 
           {/* Display email from props */}
@@ -140,14 +131,9 @@ setMessage('تم تأكيد البريد الإلكتروني بنجاح.');
           {/* OTP form */}
           <form onSubmit={handleSubmit} noValidate>
 
-            <label htmlFor="otp-code" className="otp-label">
-              رمز التحقق
-            </label>
-
-            {/* Controlled input */}
-            <input
+            <InputField
               id="otp-code"
-              className="otp-input"
+              label="رمز التحقق"
               type="text"
               inputMode="numeric"
               autoComplete="one-time-code"
@@ -155,17 +141,11 @@ setMessage('تم تأكيد البريد الإلكتروني بنجاح.');
               dir="ltr"
               value={otp}
               onChange={handleChange}
-              aria-invalid={Boolean(error)}
-              aria-describedby="otp-error"
+              error={error}
             />
 
-            {/* Validation error */}
-            <p id="otp-error" className="otp-error" role="alert">
-              {error}
-            </p>
-
             {/* Reusable Button component */}
-            <Button type="submit">
+            <Button type="submit" variant="primary" fullWidth>
               تأكيد البريد الإلكتروني
             </Button>
 
@@ -174,14 +154,6 @@ setMessage('تم تأكيد البريد الإلكتروني بنجاح.');
               {message}
             </p>
           </form>
-
-          {/* Resend verification code */}
-          <div className="otp-resend">
-            <span>لم يصلك الرمز؟</span>
-            <button type="button" onClick={handleResend}>
-              إعادة إرسال الرمز
-            </button>
-          </div>
 
         </div>
       </section>

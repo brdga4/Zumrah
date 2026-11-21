@@ -1,34 +1,17 @@
-import "./SelectField.css";
+import FormField from "./FormField";
+
 export default function SelectField({
-  id,
-  label,
   options = [],
-  value,
-  onChange,
-  placeholder = "اختر من القائمة"
+  placeholder = "اختر من القائمة",
+  placeholderDisabled = true,
+  ...props
 }) {
   return (
-    <div className="zumrah-field">
-      <label htmlFor={id} className="zumrah-label">
-        {label}
-      </label>
-
-      <select
-        id={id}
-        className="zumrah-select"
-        value={value}
-        onChange={onChange}
-      >
-        <option value="" disabled>
-          {placeholder}
-        </option>
-
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <FormField {...props} as="select">
+      <option value="" disabled={placeholderDisabled}>{placeholder}</option>
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>{option.label}</option>
+      ))}
+    </FormField>
   );
 }

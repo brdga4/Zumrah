@@ -71,13 +71,30 @@ function ProtectedRoute({ children }) {
   return <Fragment key={token}>{children}</Fragment>;
 }
 
+// A reopened tab can land on the login URL while the student still has a session.
+function GuestRoute({ children }) {
+  // Read the current unexpired token and react to session changes across tabs.
+  const token = useSyncExternalStore(subscribeToAuthChanges, getAccessToken);
+
+  // Send returning students to Home so they can continue their session.
+  return token ? <Navigate to="/home" replace /> : children;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         {/* Start at Home; its existing guard redirects unauthenticated students. */}
         <Route path="/" element={<Navigate to="/home" replace />} />
-        <Route path="/login" element={<LoginPage />} />
+        {/* Check for a saved session before mounting the login form. */}
+        <Route
+          path="/login"
+          element={
+            <GuestRoute>
+              <LoginPage />
+            </GuestRoute>
+          }
+        />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/verify-email" element={<OtpVerification />} />
         {/* Use the existing Courses page as the protected student homepage. */}
