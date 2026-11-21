@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { getChatHistory } from "../chatApi";
+import LoadingIndicator from "../../../Components/LoadingIndicator";
 
 import "./ChatMessages.css";
 
@@ -197,8 +198,8 @@ useEffect(() => {
     list.scrollTop = list.scrollHeight;
   }, [messages, loading]);
   //--------------------------------------------------------------------------------------------------------------------------------
-  if (!roomId) return <p>اختر غرفة للمحادثة</p>;
-  if (loading) return <p>جارٍ تحميل الرسائل...</p>;
+  if (!roomId) return null;
+  if (loading) return <LoadingIndicator label="جارٍ تحميل الرسائل" />;
   //--------------------------------------------------------------------------------------------------------------------------------
 
   async function handleSendMessage() {
@@ -231,9 +232,7 @@ useEffect(() => {
         }}
       >
         {isLoadingOlder && (
-          <div className="chat-history-loading" role="status">
-            جاري تحميل الرسائل السابقة...
-          </div>
+          <LoadingIndicator label="جارٍ تحميل الرسائل السابقة" />
         )}
         {messages.map((message) => (
           <ChatMessageBubble

@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import Button from "../../../Components/Button";
 import ChatRoomList from "./ChatRoomList";
 import "./ChatWorkspace.css";
 
@@ -28,7 +29,7 @@ export default function ChatWorkspace({
 
   return (
     <div
-      className={`chat-workspace ${isMobileChatOpen ? "mobile-chat-open" : ""}`}
+      className={`chat-workspace ${activeRoom?.id && isMobileChatOpen ? "mobile-chat-open" : ""}`}
       dir="rtl"
     >
       {/* Chat rooms sidebar */}
@@ -41,55 +42,58 @@ export default function ChatWorkspace({
       </aside>
 
       {/* Main conversation area */}
-      <section className="chat-workspace-main">
+      {Boolean(activeRoom?.id) && (
+        <section className="chat-workspace-main">
 
-        {/* Active room header */}
-        <header className="chat-workspace-header">
+          {/* Active room header */}
+          <header className="chat-workspace-header">
 
-          {/* Back to rooms - visible only on mobile */}
-          <button
-            type="button"
-            className="chat-workspace-back-button"
-            onClick={() => setIsMobileChatOpen(false)}
-          >
-            → رجوع
-          </button>
-
-          <h2>{activeRoom?.name || "المحادثات"}</h2>
-
-          {/* Files button - only for course chats */}
-          {activeRoom?.kind === "course" && (
-            <button
-              type="button"
-              className="chat-workspace-files-button"
-              onClick={() =>
-                navigate(`/courses/${activeRoom.courseId}/files`)
-              }
+            {/* Back to rooms - visible only on mobile */}
+            <Button
+              variant="secondary"
+              size="sm"
+              className="chat-workspace-back-button"
+              onClick={() => setIsMobileChatOpen(false)}
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
+              <span aria-hidden="true">→</span> رجوع
+            </Button>
+
+            <h2>{activeRoom?.name || "المحادثات"}</h2>
+
+            {/* Files button - only for course chats */}
+            {activeRoom?.kind === "course" && (
+              <button
+                type="button"
+                className="chat-workspace-files-button"
+                onClick={() =>
+                  navigate(`/courses/${activeRoom.courseId}/files`)
+                }
               >
-                <path d="M20 20H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2Z" />
-              </svg>
-              <span>الملفات</span>
-            </button>
-          )}
-        </header>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 20H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2Z" />
+                </svg>
+                <span>الملفات</span>
+              </button>
+            )}
+          </header>
 
-        {/* Messages and composer */}
-        <div className="chat-workspace-content">
-          {children}
-        </div>
+          {/* Messages and composer */}
+          <div className="chat-workspace-content">
+            {children}
+          </div>
 
-      </section>
+        </section>
+      )}
     </div>
   );
 }
