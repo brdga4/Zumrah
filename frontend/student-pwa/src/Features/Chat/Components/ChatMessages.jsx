@@ -23,7 +23,15 @@ export default function ChatMessages({ roomId, studentId }) {
 
 
   const [loadedRoomId, setLoadedRoomId] = useState(null);
+  // Returning to a room starts a fresh history request, even if it was loaded before.
+  if (loadedRoomId !== null && loadedRoomId !== roomId) {
+    setLoadedRoomId(null);
+  }
   const loading = Boolean(roomId) && loadedRoomId !== roomId;
+
+  // Track removed IDs for this room visit so delayed messages cannot bring them back.
+  const removedMessageIdsRef = useRef(new Set());
+  const initialLiveMessagesRef = useRef(null);
 
   // Reference to the SignalR connection
   const connectionRef = useRef(null);
@@ -40,24 +48,47 @@ const olderRequestRef = useRef(null);
   useEffect(() => {
     if (!roomId) return;
 
-    let active = true;
-    
+    const controller = new AbortController();
+    const removedIds = new Set();
+    removedMessageIdsRef.current = removedIds;
+    const liveMessages = [];
+    initialLiveMessagesRef.current = liveMessages;
 
-    getChatHistory(roomId)
-      .then((data) => {
-        setMessages(data.messages ?? []);
-        setNextBefore(data.nextBefore ?? null);
-      })
-      .catch((error) => {
-        console.error("Failed to load chat history:", error);
-      })
-      .finally(() => {
-        if (active) setLoadedRoomId(roomId);
-      });
+    async function loadInitialHistory() {
+      let history = [];
+      let before = null;
+
+      try {
+        const data = await getChatHistory(roomId, { signal: controller.signal });
+        history = data.messages ?? [];
+        before = data.nextBefore ?? null;
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.error("Failed to load chat history:", error);
+        }
+      }
+
+      // A request from a previous room visit must never update the current conversation.
+      if (controller.signal.aborted) return;
+
+      // History may have been read before a removal. Keep live arrivals without duplicates.
+      const messagesById = new Map();
+      for (const message of [...history, ...liveMessages]) {
+        const id = String(message.messageId).toLowerCase();
+        if (!removedIds.has(id) && !messagesById.has(id)) {
+          messagesById.set(id, message);
+        }
+      }
+      initialLiveMessagesRef.current = null;
+      setMessages([...messagesById.values()]);
+      setNextBefore(before);
+      setLoadedRoomId(roomId);
+    }
+
+    loadInitialHistory();
 
     return () => {
-      active = false;
-
+      controller.abort();
       // Cancel older history requests when switching rooms.
       olderRequestRef.current?.abort();
 
@@ -74,6 +105,7 @@ const olderRequestRef = useRef(null);
     setIsLoadingOlder(true);
 
     const controller = new AbortController();
+    const removedIds = removedMessageIdsRef.current;
     olderRequestRef.current = controller;
     try {
       // Fetch the previous page using the pagination cursor.
@@ -95,15 +127,16 @@ const olderRequestRef = useRef(null);
         };
       }
 
-      // Add older messages without duplicating existing ones.
+      // Older pages can also contain messages removed while the request was pending.
       setMessages((previous) => {
         const existingIds = new Set(
-          previous.map((message) => message.messageId)
+          previous.map((message) => String(message.messageId).toLowerCase())
         );
 
-        const olderMessages = (data.messages ?? []).filter(
-          (message) => !existingIds.has(message.messageId)
-        );
+        const olderMessages = (data.messages ?? []).filter((message) => {
+          const id = String(message.messageId).toLowerCase();
+          return !removedIds.has(id) && !existingIds.has(id);
+        });
 
         return [...olderMessages, ...previous];
       });
@@ -129,14 +162,41 @@ useEffect(() => {
   if (!roomId) return;
 
   const connection = createChatConnection();
+  const activeRoomId = String(roomId).toLowerCase();
+  const removedIds = removedMessageIdsRef.current;
   let cancelled = false;
+
+  // Apply admin removals to the open conversation as soon as the hub delivers them.
+  function handleMessageRemoved({ messageId, chatRoomId }) {
+    if (cancelled || !messageId || String(chatRoomId).toLowerCase() !== activeRoomId) return;
+
+    const id = String(messageId).toLowerCase();
+    if (removedIds.has(id)) return;
+
+    removedIds.add(id);
+    setMessages((previous) => {
+      const remaining = previous.filter((message) => String(message.messageId).toLowerCase() !== id);
+      return remaining.length === previous.length ? previous : remaining;
+    });
+  }
+
+  connection.on("MessageRemoved", handleMessageRemoved);
 
   // Receive new messages from the backend
   connection.on("ReceiveMessage", (message) => {
-    if (String(message.chatRoomId) !== String(roomId)) return;
+    if (cancelled || String(message.chatRoomId).toLowerCase() !== activeRoomId) return;
+
+    const id = String(message.messageId).toLowerCase();
+    if (removedIds.has(id)) return;
+
+    // Buffer arrivals until the initial history is ready to merge them.
+    if (initialLiveMessagesRef.current) {
+      initialLiveMessagesRef.current.push(message);
+      return;
+    }
 
     setMessages((previous) => {
-      if (previous.some((m) => m.messageId === message.messageId)) {
+      if (previous.some((m) => String(m.messageId).toLowerCase() === id)) {
         return previous;
       }
       return [...previous, message];
@@ -172,6 +232,7 @@ useEffect(() => {
   // Disconnect when leaving the room
   return () => {
     cancelled = true;
+    connection.off("MessageRemoved", handleMessageRemoved);
     connection.stop();
   };
 }, [roomId]);
