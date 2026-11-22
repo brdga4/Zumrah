@@ -26,7 +26,7 @@ export default function WelcomeSection({ student }) {
         </Heading>
 
         <Text tone="muted" className="welcome-meta">
-         زمرة هي مساحتك الجامعية للتعلمم والتواصل مع زملائك
+         زمرة هي مساحتك الجامعية للتعلم والتواصل مع زملائك
         </Text>
       </div>
     </section>
