@@ -236,7 +236,9 @@ export default function CollegeManagementPage() {
                 <button
                   className="college-item__majors-link"
                   type="button"
-                  onClick={() => navigate('/academics/majors')}
+                  onClick={() =>
+  navigate(`/academics/majors?collegeId=${college.collegeId}`)
+}
                 >
                   إدارة التخصصات
                   <ArrowIcon />
