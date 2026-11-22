@@ -26,3 +26,17 @@ export function assignCourseToMajor(majorId, courseId) {
     },
   });
 }
+
+
+export function updateCourse(courseId, courseCode, courseName) {
+  return apiRequest(`/api/admin/courses/${courseId}`, {
+    method: 'PATCH',
+    body: {
+      courseCode,
+      courseName,
+    },
+  });
+}
+
+
+
