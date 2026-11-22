@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { getColleges } from '../api/collegesApi';
 import { createMajor, updateMajor } from '../api/majorsApi';
 import './MajorManagementPage.css';
 
 export default function MajorManagementPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [colleges, setColleges] = useState([]);
-  const [collegeFilter, setCollegeFilter] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -15,6 +17,8 @@ export default function MajorManagementPage() {
   const [majorName, setMajorName] = useState('');
   const [formError, setFormError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+
+  const activeCollegeId = searchParams.get('collegeId') || '';
 
   async function loadColleges() {
     try {
@@ -67,11 +71,19 @@ export default function MajorManagementPage() {
     };
   }, []);
 
-  function openCreateModal(collegeId = '') {
-    const defaultCollegeId = collegeId || colleges[0]?.collegeId || '';
+  function handleCollegeChange(event) {
+    const nextCollegeId = event.target.value;
+
+    setSearchParams(nextCollegeId ? { collegeId: nextCollegeId } : {});
+  }
+
+  function openCreateModal() {
+    if (!activeCollegeId) {
+      return;
+    }
 
     setEditingMajor(null);
-    setSelectedCollegeId(defaultCollegeId);
+    setSelectedCollegeId(activeCollegeId);
     setMajorName('');
     setFormError('');
     setIsModalOpen(true);
@@ -92,6 +104,7 @@ export default function MajorManagementPage() {
 
     setIsModalOpen(false);
     setEditingMajor(null);
+    setSelectedCollegeId('');
     setMajorName('');
     setFormError('');
   }
@@ -103,11 +116,6 @@ export default function MajorManagementPage() {
 
     if (!trimmedMajorName) {
       setFormError('اكتب اسم التخصص أولًا.');
-      return;
-    }
-
-    if (!editingMajor && !selectedCollegeId) {
-      setFormError('اختر الكلية التي يتبع لها التخصص.');
       return;
     }
 
@@ -125,6 +133,7 @@ export default function MajorManagementPage() {
 
       setIsModalOpen(false);
       setEditingMajor(null);
+      setSelectedCollegeId('');
       setMajorName('');
       setFormError('');
     } catch (requestError) {
@@ -142,14 +151,12 @@ export default function MajorManagementPage() {
     }
   }
 
-  const visibleColleges =
-    collegeFilter === 'all'
-      ? colleges
-      : colleges.filter((college) => college.collegeId === collegeFilter);
+  const activeCollege = colleges.find(
+    (college) => college.collegeId === activeCollegeId,
+  );
 
-  const majorCount = colleges.reduce(
-    (total, college) => total + college.majors.length,
-    0,
+  const selectedCollege = colleges.find(
+    (college) => college.collegeId === selectedCollegeId,
   );
 
   return (
@@ -159,38 +166,42 @@ export default function MajorManagementPage() {
           <div className="major-page__title-row">
             <h1>التخصصات حسب الكلية</h1>
 
-            <span className="major-page__count">
-              {majorCount} {majorCount === 1 ? 'تخصص' : 'تخصصات'}
-            </span>
+            {activeCollege && (
+              <span className="major-page__count">
+                {activeCollege.majors.length}{' '}
+                {activeCollege.majors.length === 1 ? 'تخصص' : 'تخصصات'}
+              </span>
+            )}
           </div>
 
           <p>
-            يختار الطالب تخصصه من تخصصات كليته عند إنشاء الحساب أو تعديل ملفه
-            الشخصي.
+            اختر كلية لعرض تخصصاتها وإضافة تخصص جديد أو تعديل تخصص موجود.
           </p>
         </div>
 
         <button
           className="major-page__add-button"
           type="button"
-          onClick={() => openCreateModal()}
-          disabled={isLoading || colleges.length === 0}
+          onClick={openCreateModal}
+          disabled={isLoading || colleges.length === 0 || !activeCollegeId}
         >
           <PlusIcon />
           إضافة تخصص
         </button>
       </header>
 
-      {!isLoading && colleges.length > 0 && (
+      {!isLoading && !error && colleges.length > 0 && (
         <div className="major-page__toolbar">
-          <label htmlFor="college-filter">عرض تخصصات</label>
+          <label htmlFor="college-filter">اختر الكلية</label>
 
           <select
             id="college-filter"
-            value={collegeFilter}
-            onChange={(event) => setCollegeFilter(event.target.value)}
+            value={activeCollegeId}
+            onChange={handleCollegeChange}
           >
-            <option value="all">جميع الكليات</option>
+            <option value="" disabled>
+              اختر كلية لعرض تخصصاتها
+            </option>
 
             {colleges.map((college) => (
               <option key={college.collegeId} value={college.collegeId}>
@@ -223,63 +234,69 @@ export default function MajorManagementPage() {
         </div>
       )}
 
-      {!isLoading && !error && visibleColleges.length > 0 && (
+      {!isLoading && !error && colleges.length > 0 && !activeCollege && (
+        <div className="major-page__empty">
+          <CollegeIcon />
+          <h2>اختر كلية</h2>
+          <p>اختر كلية من القائمة بالأعلى لعرض تخصصاتها وإدارتها.</p>
+        </div>
+      )}
+
+      {!isLoading && !error && activeCollege && (
         <div className="major-groups">
-          {visibleColleges.map((college) => (
-            <article className="major-group" key={college.collegeId}>
-              <header className="major-group__header">
-                <div className="major-group__heading">
-                  <span className="major-group__icon">
-                    <CollegeIcon />
-                  </span>
+          <article className="major-group" key={activeCollege.collegeId}>
+            <header className="major-group__header">
+              <div className="major-group__heading">
+                <span className="major-group__icon">
+                  <CollegeIcon />
+                </span>
 
-                  <div>
-                    <h2>{college.collegeName}</h2>
+                <div>
+                  <h2>{activeCollege.collegeName}</h2>
 
-                    <p>
-                      {college.majors.length}{' '}
-                      {college.majors.length === 1 ? 'تخصص' : 'تخصصات'}
-                    </p>
-                  </div>
+                  <p>
+                    {activeCollege.majors.length}{' '}
+                    {activeCollege.majors.length === 1 ? 'تخصص' : 'تخصصات'}
+                  </p>
                 </div>
+              </div>
 
-                <button
-                  className="major-group__add-button"
-                  type="button"
-                  onClick={() => openCreateModal(college.collegeId)}
-                >
-                  <PlusIcon />
-                  إضافة تخصص
-                </button>
-              </header>
+              <button
+                className="major-group__add-button"
+                type="button"
+                onClick={openCreateModal}
+              >
+                <PlusIcon />
+                إضافة تخصص
+              </button>
+            </header>
 
-              {college.majors.length === 0 ? (
-                <div className="major-group__empty">
-                  لا توجد تخصصات في هذه الكلية بعد.
-                </div>
-              ) : (
-                <ul className="major-list">
-                  {college.majors.map((major) => (
-                    <li className="major-row" key={major.majorId}>
-                      <span className="major-row__name">
-                        <MajorIcon />
-                        {major.majorName}
-                      </span>
+            {activeCollege.majors.length === 0 ? (
+              <div className="major-group__empty">
+                لا توجد تخصصات في هذه الكلية بعد.
+              </div>
+            ) : (
+              <ul className="major-list">
+                {activeCollege.majors.map((major) => (
+                  <li className="major-row" key={major.majorId}>
+                    <span className="major-row__name">
+                      <MajorIcon />
+                      {major.majorName}
+                    </span>
 
-                      <button
-                        className="major-row__edit-button"
-                        type="button"
-                        onClick={() => openEditModal(major, college)}
-                      >
-                        <EditIcon />
-                        تعديل
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </article>
-          ))}
+                    <button
+                      className="major-row__edit-button"
+                      type="button"
+                      onClick={() => openEditModal(major, activeCollege)}
+                    >
+                      <EditIcon />
+                      تعديل
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
         </div>
       )}
 
@@ -297,7 +314,9 @@ export default function MajorManagementPage() {
                 <p>
                   {editingMajor
                     ? 'عدّل اسم التخصص ثم احفظ التغييرات.'
-                    : 'اختر الكلية ثم أضف اسم التخصص الجديد.'}
+                    : `سيُضاف التخصص إلى كلية ${
+                        selectedCollege?.collegeName || ''
+                      }.`}
                 </p>
               </div>
 
@@ -305,25 +324,6 @@ export default function MajorManagementPage() {
                 ×
               </button>
             </header>
-
-            {!editingMajor && (
-              <label className="major-modal__field">
-                <span>الكلية</span>
-
-                <select
-                  value={selectedCollegeId}
-                  onChange={(event) =>
-                    setSelectedCollegeId(event.target.value)
-                  }
-                >
-                  {colleges.map((college) => (
-                    <option key={college.collegeId} value={college.collegeId}>
-                      {college.collegeName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
 
             <label className="major-modal__field">
               <span>اسم التخصص</span>
