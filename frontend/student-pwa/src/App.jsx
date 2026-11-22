@@ -22,6 +22,7 @@ import ChatPage from './Features/Students/HomePage';
 import ProfilePage from "./Features/Students/ProfilePage";
 import CoursesPage from './Features/Courses/CoursesPage';
 import CourseFilesPage from "./Features/Materials/CourseFilesPage";
+import LandingPage from './Features/Landing/LandingPage';
 
 // Redirect unauthenticated users to login.(home page is protected)
 function ProtectedRoute({ children }) {
@@ -84,8 +85,15 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Start at Home; its existing guard redirects unauthenticated students. */}
-        <Route path="/" element={<Navigate to="/home" replace />} />
+        {/* The public landing page is for guests; signed-in students go to Home. */}
+        <Route
+          path="/"
+          element={
+            <GuestRoute>
+              <LandingPage />
+            </GuestRoute>
+          }
+        />
         {/* Check for a saved session before mounting the login form. */}
         <Route
           path="/login"
@@ -145,7 +153,7 @@ export default function App() {
           }
         />
 
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
