@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import { createCourse, getCourses } from '../api/coursesApi';
+import {
+  createCourse,
+  getCourses,
+  updateCourse,
+} from '../api/coursesApi';
 import './CourseManagementPage.css';
 
 export default function CourseManagementPage() {
@@ -9,6 +13,7 @@ export default function CourseManagementPage() {
   const [error, setError] = useState('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCourse, setEditingCourse] = useState(null);
   const [courseCode, setCourseCode] = useState('');
   const [courseName, setCourseName] = useState('');
   const [formError, setFormError] = useState('');
@@ -65,9 +70,18 @@ export default function CourseManagementPage() {
     };
   }, []);
 
-  function openModal() {
+  function openCreateModal() {
+    setEditingCourse(null);
     setCourseCode('');
     setCourseName('');
+    setFormError('');
+    setIsModalOpen(true);
+  }
+
+  function openEditModal(course) {
+    setEditingCourse(course);
+    setCourseCode(course.courseCode);
+    setCourseName(course.courseName);
     setFormError('');
     setIsModalOpen(true);
   }
@@ -78,6 +92,7 @@ export default function CourseManagementPage() {
     }
 
     setIsModalOpen(false);
+    setEditingCourse(null);
     setFormError('');
   }
 
@@ -96,20 +111,40 @@ export default function CourseManagementPage() {
       setIsSaving(true);
       setFormError('');
 
-      await createCourse(trimmedCode, trimmedName);
+      if (editingCourse) {
+        await updateCourse(
+          editingCourse.courseId,
+          trimmedCode,
+          trimmedName,
+        );
+      } else {
+        await createCourse(trimmedCode, trimmedName);
+      }
+
       await reloadCourses();
 
       setIsModalOpen(false);
+      setEditingCourse(null);
       setCourseCode('');
       setCourseName('');
       setFormError('');
     } catch (requestError) {
-      console.error('Failed to create course:', requestError);
+      console.error('Failed to save course:', requestError);
 
-      let message = requestError.message || 'تعذر إضافة المقرر. حاول مرة أخرى.';
+      let message = editingCourse
+        ? 'تعذر تعديل المقرر. حاول مرة أخرى.'
+        : 'تعذر إضافة المقرر. حاول مرة أخرى.';
 
       if (requestError.status === 401) {
         message = 'انتهت جلسة الدخول. سجّل الدخول مرة أخرى.';
+      }
+
+      if (requestError.status === 409) {
+        message = 'رمز المقرر مستخدم بالفعل لمقرر آخر.';
+      }
+
+      if (requestError.message) {
+        message = requestError.message;
       }
 
       setFormError(message);
@@ -151,7 +186,7 @@ export default function CourseManagementPage() {
         <button
           className="course-page__add-button"
           type="button"
-          onClick={openModal}
+          onClick={openCreateModal}
           disabled={isLoading}
         >
           <PlusIcon />
@@ -200,7 +235,7 @@ export default function CourseManagementPage() {
           <h2>لا توجد مقررات بعد</h2>
           <p>أضف أول مقرر إلى الكتالوج، ثم أسنده إلى التخصصات المناسبة.</p>
 
-          <button type="button" onClick={openModal}>
+          <button type="button" onClick={openCreateModal}>
             <PlusIcon />
             إضافة مقرر
           </button>
@@ -216,6 +251,7 @@ export default function CourseManagementPage() {
                   <tr>
                     <th>رمز المقرر</th>
                     <th>اسم المقرر</th>
+                    <th>إجراء</th>
                   </tr>
                 </thead>
 
@@ -229,6 +265,16 @@ export default function CourseManagementPage() {
                       </td>
 
                       <td>{course.courseName}</td>
+
+                      <td>
+                        <button
+                          className="course-table__edit-button"
+                          type="button"
+                          onClick={() => openEditModal(course)}
+                        >
+                          تعديل
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -260,8 +306,13 @@ export default function CourseManagementPage() {
           >
             <header className="course-modal__header">
               <div>
-                <h2>إضافة مقرر</h2>
-                <p>بعد الإضافة، تستطيع لاحقًا إسناد المقرر إلى تخصص مناسب.</p>
+                <h2>{editingCourse ? 'تعديل المقرر' : 'إضافة مقرر'}</h2>
+
+                <p>
+                  {editingCourse
+                    ? 'عدّل رمز المقرر أو اسمه، ثم احفظ التغييرات.'
+                    : 'بعد الإضافة، تستطيع لاحقًا إسناد المقرر إلى تخصص مناسب.'}
+                </p>
               </div>
 
               <button type="button" onClick={closeModal} aria-label="إغلاق">
@@ -309,7 +360,11 @@ export default function CourseManagementPage() {
                 type="submit"
                 disabled={isSaving}
               >
-                {isSaving ? 'جارٍ الحفظ...' : 'إضافة المقرر'}
+                {isSaving
+                  ? 'جارٍ الحفظ...'
+                  : editingCourse
+                    ? 'حفظ التعديلات'
+                    : 'إضافة المقرر'}
               </button>
             </footer>
           </form>

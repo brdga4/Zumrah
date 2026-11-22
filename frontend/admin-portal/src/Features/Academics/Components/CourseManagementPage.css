@@ -346,3 +346,18 @@
     width: 100%;
   }
 }
+
+.course-table__edit-button {
+  padding: 9px 15px;
+  border: 1px solid #dcd3ff;
+  border-radius: 10px;
+  color: #6847e8;
+  background: #f7f4ff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.course-table__edit-button:hover {
+  background: #eee8ff;
+}
