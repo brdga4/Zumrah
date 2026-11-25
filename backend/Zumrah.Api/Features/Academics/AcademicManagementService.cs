@@ -486,4 +486,54 @@ public class AcademicManagementService
     }
 
 
+    public async Task<(
+    bool MajorNotFound,
+    bool CourseNotFound,
+    bool AssignmentNotFound)> UnassignCourseFromMajorAsync(
+        Guid majorId,
+        Guid courseId)
+    {
+        bool majorExists = await _db.Majors
+            .AnyAsync(m => m.MajorId == majorId);
+
+        if (!majorExists)
+        {
+            return (true, false, false);
+        }
+
+        bool courseExists = await _db.Courses
+            .AnyAsync(c => c.CourseId == courseId);
+
+        if (!courseExists)
+        {
+            return (false, true, false);
+        }
+
+        var assignment = await _db.MajorCourses
+            .FirstOrDefaultAsync(mc =>
+                mc.MajorId == majorId &&
+                mc.CourseId == courseId);
+
+        if (assignment is null)
+        {
+            return (false, false, true);
+        }
+
+        _db.MajorCourses.Remove(assignment);
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            _db.Entry(assignment).State = EntityState.Detached;
+
+            return (false, false, true);
+        }
+
+        return (false, false, false);
+    }
+
+
 }

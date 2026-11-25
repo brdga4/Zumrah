@@ -36,6 +36,8 @@ public static class AdminAcademicEndpoints
         app.MapPost("/api/admin/majors/{majorId}/courses", AssignCourseToMajor)
             .RequireAuthorization("Admin");
 
+        app.MapDelete("/api/admin/majors/{majorId}/courses/{courseId}", UnassignCourseFromMajor)
+            .RequireAuthorization("Admin");
 
 
         return app;
@@ -484,6 +486,73 @@ public static class AdminAcademicEndpoints
         return Results.Json(
             result.Assignment,
             statusCode: StatusCodes.Status201Created);
+    }
+
+    private static async Task<IResult> UnassignCourseFromMajor(
+    string majorId,
+    string courseId,
+    HttpContext httpContext,
+    AcademicManagementService service)
+    {
+        if (!Guid.TryParse(majorId, out Guid parsedMajorId) ||
+            parsedMajorId == Guid.Empty)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_MAJOR_ID",
+                message = "Invalid major ID."
+            });
+        }
+
+        if (!Guid.TryParse(courseId, out Guid parsedCourseId) ||
+            parsedCourseId == Guid.Empty)
+        {
+            return Results.BadRequest(new
+            {
+                code = "INVALID_COURSE_ID",
+                message = "Invalid course ID."
+            });
+        }
+
+        if (!Guid.TryParse(
+            httpContext.User.FindFirst("sub")?.Value,
+            out Guid adminId) || adminId == Guid.Empty)
+        {
+            return Results.Unauthorized();
+        }
+
+        var result = await service.UnassignCourseFromMajorAsync(
+            parsedMajorId,
+            parsedCourseId);
+
+        if (result.MajorNotFound)
+        {
+            return Results.NotFound(new
+            {
+                code = "MAJOR_NOT_FOUND",
+                message = "Major not found."
+            });
+        }
+
+        if (result.CourseNotFound)
+        {
+            return Results.NotFound(new
+            {
+                code = "COURSE_NOT_FOUND",
+                message = "Course not found."
+            });
+        }
+
+        if (result.AssignmentNotFound)
+        {
+            return Results.NotFound(new
+            {
+                code = "COURSE_NOT_ASSIGNED",
+                message = "Course is not assigned to this major."
+            });
+        }
+
+        return Results.NoContent();
     }
 
 
