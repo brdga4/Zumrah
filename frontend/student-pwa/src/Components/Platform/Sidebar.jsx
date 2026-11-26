@@ -1,27 +1,37 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { BookOpen, LogOut, MessageCircle, UserRound } from "lucide-react";
-import Logo from "../Logo";
-import { clearAccessToken } from "../../Features/Auth/authSession";
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { BookOpen, LogOut, MessageCircle, UserRound } from 'lucide-react';
+import Logo from '../Logo';
+import { clearAccessToken } from '../../Features/Auth/authSession';
 
-// Put the Courses homepage first and keep Chat as a separate navigation item.
-const items = [
-  { id: "home", label: "الرئيسية", href: "/home", icon: BookOpen },
-  { id: "chat", label: "المحادثات", href: "/chat", icon: MessageCircle },
-  { id: "profile", label: "الملف الشخصي", href: "/profile", icon: UserRound },
+const studentItems = [
+  { id: 'home', label: 'الرئيسية', href: '/home', icon: BookOpen },
+  { id: 'chat', label: 'المحادثات', href: '/chat', icon: MessageCircle },
+  { id: 'profile', label: 'الملف الشخصي', href: '/profile', icon: UserRound },
 ];
 
-export default function Sidebar({ active }) {
+export default function Sidebar({
+  active,
+  items = studentItems,
+  brandHref = '/home',
+  brandId = 'home',
+  onLogout,
+}) {
   const navigate = useNavigate();
   const [tooltipsDismissed, setTooltipsDismissed] = useState(false);
 
   useEffect(() => {
     function handleEscape(event) {
-      if (event.key === "Escape") setTooltipsDismissed(true);
+      if (event.key === 'Escape') {
+        setTooltipsDismissed(true);
+      }
     }
 
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
   }, []);
 
   function showTooltips() {
@@ -29,7 +39,6 @@ export default function Sidebar({ active }) {
   }
 
   function handleNavigation(event, id) {
-    // Keep the current Chat location key and selected room on repeated clicks.
     if (
       active === id &&
       event.button === 0 &&
@@ -43,20 +52,26 @@ export default function Sidebar({ active }) {
   }
 
   function handleLogout() {
+    if (onLogout) {
+      onLogout();
+      return;
+    }
+
     clearAccessToken();
-    navigate("/login", { replace: true });
+    navigate('/login', { replace: true });
   }
 
   return (
     <aside
-      className={`platform-sidebar${tooltipsDismissed ? " platform-sidebar--tooltips-dismissed" : ""}`}
+      className={`platform-sidebar${
+        tooltipsDismissed ? ' platform-sidebar--tooltips-dismissed' : ''
+      }`}
     >
-      {/* The logo returns to the Courses homepage from any platform page. */}
       <Link
-        to="/home"
+        to={brandHref}
         className="platform-sidebar-brand"
         aria-label="زمرة - الرئيسية"
-        onClick={(event) => handleNavigation(event, "home")}
+        onClick={(event) => handleNavigation(event, brandId)}
       >
         <Logo size="extra-small" />
       </Link>
@@ -71,15 +86,22 @@ export default function Sidebar({ active }) {
           >
             <Link
               to={href}
-              className={`nav-link${active === id ? " is-active" : ""}`}
+              className={`nav-link${active === id ? ' is-active' : ''}`}
               aria-label={label}
-              aria-current={active === id ? "page" : undefined}
-              aria-describedby={tooltipsDismissed ? undefined : `sidebar-tooltip-${id}`}
+              aria-current={active === id ? 'page' : undefined}
+              aria-describedby={
+                tooltipsDismissed ? undefined : `sidebar-tooltip-${id}`
+              }
               onClick={(event) => handleNavigation(event, id)}
             >
               <Icon size={22} aria-hidden="true" focusable="false" />
             </Link>
-            <span id={`sidebar-tooltip-${id}`} role="tooltip" className="platform-nav-tooltip">
+
+            <span
+              id={`sidebar-tooltip-${id}`}
+              role="tooltip"
+              className="platform-nav-tooltip"
+            >
               {label}
             </span>
           </div>
@@ -87,17 +109,28 @@ export default function Sidebar({ active }) {
       </nav>
 
       <div className="platform-sidebar-footer">
-        <div className="platform-nav-item" onMouseEnter={showTooltips} onFocus={showTooltips}>
+        <div
+          className="platform-nav-item"
+          onMouseEnter={showTooltips}
+          onFocus={showTooltips}
+        >
           <button
             type="button"
             className="nav-link platform-sidebar-logout"
             aria-label="تسجيل الخروج"
-            aria-describedby={tooltipsDismissed ? undefined : "sidebar-tooltip-logout"}
+            aria-describedby={
+              tooltipsDismissed ? undefined : 'sidebar-tooltip-logout'
+            }
             onClick={handleLogout}
           >
             <LogOut size={22} aria-hidden="true" focusable="false" />
           </button>
-          <span id="sidebar-tooltip-logout" role="tooltip" className="platform-nav-tooltip">
+
+          <span
+            id="sidebar-tooltip-logout"
+            role="tooltip"
+            className="platform-nav-tooltip"
+          >
             تسجيل الخروج
           </span>
         </div>

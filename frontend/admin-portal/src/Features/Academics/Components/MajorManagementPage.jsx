@@ -1,5 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import Badge from '@student/Components/Badge';
+import Button from '@student/Components/Button';
+import Card from '@student/Components/Card';
+import Dialog from '@student/Components/Dialog';
+import Heading from '@student/Components/Heading';
+import InputField from '@student/Components/InputField';
+import LoadingIndicator from '@student/Components/LoadingIndicator';
+import SelectField from '@student/Components/SelectField';
+import Text from '@student/Components/Text';
 import { getColleges } from '../api/collegesApi';
 import { createMajor, updateMajor } from '../api/majorsApi';
 import './MajorManagementPage.css';
@@ -17,6 +26,7 @@ export default function MajorManagementPage() {
   const [majorName, setMajorName] = useState('');
   const [formError, setFormError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const majorNameRef = useRef(null);
 
   const activeCollegeId = searchParams.get('collegeId') || '';
 
@@ -164,22 +174,22 @@ export default function MajorManagementPage() {
       <header className="major-page__header">
         <div>
           <div className="major-page__title-row">
-            <h1>التخصصات حسب الكلية</h1>
+            <Heading level={1}>التخصصات حسب الكلية</Heading>
 
             {activeCollege && (
-              <span className="major-page__count">
+              <Badge variant="soft" className="major-page__count">
                 {activeCollege.majors.length}{' '}
                 {activeCollege.majors.length === 1 ? 'تخصص' : 'تخصصات'}
-              </span>
+              </Badge>
             )}
           </div>
 
-          <p>
+          <Text tone="muted">
             اختر كلية لعرض تخصصاتها وإضافة تخصص جديد أو تعديل تخصص موجود.
-          </p>
+          </Text>
         </div>
 
-        <button
+        <Button
           className="major-page__add-button"
           type="button"
           onClick={openCreateModal}
@@ -187,64 +197,60 @@ export default function MajorManagementPage() {
         >
           <PlusIcon />
           إضافة تخصص
-        </button>
+        </Button>
       </header>
 
       {!isLoading && !error && colleges.length > 0 && (
         <div className="major-page__toolbar">
-          <label htmlFor="college-filter">اختر الكلية</label>
-
-          <select
+          <SelectField
             id="college-filter"
+            label="اختر الكلية"
+            options={colleges.map((college) => ({
+              value: college.collegeId,
+              label: college.collegeName,
+            }))}
+            placeholder="اختر كلية لعرض تخصصاتها"
             value={activeCollegeId}
             onChange={handleCollegeChange}
-          >
-            <option value="" disabled>
-              اختر كلية لعرض تخصصاتها
-            </option>
-
-            {colleges.map((college) => (
-              <option key={college.collegeId} value={college.collegeId}>
-                {college.collegeName}
-              </option>
-            ))}
-          </select>
+          />
         </div>
       )}
 
       {isLoading && (
-        <p className="major-page__message">جارٍ تحميل التخصصات...</p>
+        <Card className="major-page__message">
+          <LoadingIndicator label="جارٍ تحميل التخصصات..." />
+        </Card>
       )}
 
       {!isLoading && error && (
-        <div className="major-page__error">
-          <p>{error}</p>
+        <Card className="major-page__error">
+          <Text>{error}</Text>
 
-          <button type="button" onClick={reloadColleges}>
+          <Button variant="secondary" size="sm" onClick={reloadColleges}>
             إعادة المحاولة
-          </button>
-        </div>
+          </Button>
+        </Card>
       )}
 
       {!isLoading && !error && colleges.length === 0 && (
-        <div className="major-page__empty">
+        <Card className="major-page__empty">
           <CollegeIcon />
-          <h2>أضف كلية أولًا</h2>
-          <p>تُضاف التخصصات داخل الكليات، لذلك أضف كلية قبل إنشاء تخصص.</p>
-        </div>
+          <Heading level={2}>أضف كلية أولًا</Heading>
+          <Text tone="muted">تُضاف التخصصات داخل الكليات، لذلك أضف كلية قبل إنشاء تخصص.</Text>
+        </Card>
       )}
 
       {!isLoading && !error && colleges.length > 0 && !activeCollege && (
-        <div className="major-page__empty">
+        <Card className="major-page__empty">
           <CollegeIcon />
-          <h2>اختر كلية</h2>
-          <p>اختر كلية من القائمة بالأعلى لعرض تخصصاتها وإدارتها.</p>
-        </div>
+          <Heading level={2}>اختر كلية</Heading>
+          <Text tone="muted">اختر كلية من القائمة بالأعلى لعرض تخصصاتها وإدارتها.</Text>
+        </Card>
       )}
 
       {!isLoading && !error && activeCollege && (
         <div className="major-groups">
-          <article className="major-group" key={activeCollege.collegeId}>
+          <Card className="major-group" key={activeCollege.collegeId} role="article">
             <header className="major-group__header">
               <div className="major-group__heading">
                 <span className="major-group__icon">
@@ -252,29 +258,31 @@ export default function MajorManagementPage() {
                 </span>
 
                 <div>
-                  <h2>{activeCollege.collegeName}</h2>
+                  <Heading level={2}>{activeCollege.collegeName}</Heading>
 
-                  <p>
+                  <Text tone="muted">
                     {activeCollege.majors.length}{' '}
                     {activeCollege.majors.length === 1 ? 'تخصص' : 'تخصصات'}
-                  </p>
+                  </Text>
                 </div>
               </div>
 
-              <button
+              <Button
                 className="major-group__add-button"
                 type="button"
+                variant="secondary"
+                size="sm"
                 onClick={openCreateModal}
               >
                 <PlusIcon />
                 إضافة تخصص
-              </button>
+              </Button>
             </header>
 
             {activeCollege.majors.length === 0 ? (
-              <div className="major-group__empty">
+              <Text tone="muted" className="major-group__empty">
                 لا توجد تخصصات في هذه الكلية بعد.
-              </div>
+              </Text>
             ) : (
               <ul className="major-list">
                 {activeCollege.majors.map((major) => (
@@ -284,85 +292,64 @@ export default function MajorManagementPage() {
                       {major.majorName}
                     </span>
 
-                    <button
+                    <Button
                       className="major-row__edit-button"
                       type="button"
+                      variant="secondary"
+                      size="sm"
                       onClick={() => openEditModal(major, activeCollege)}
                     >
                       <EditIcon />
                       تعديل
-                    </button>
+                    </Button>
                   </li>
                 ))}
               </ul>
             )}
-          </article>
+          </Card>
         </div>
       )}
 
-      {isModalOpen && (
-        <div className="major-modal-backdrop" onMouseDown={closeModal}>
-          <form
-            className="major-modal"
-            onSubmit={handleSubmit}
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <header className="major-modal__header">
-              <div>
-                <h2>{editingMajor ? 'تعديل التخصص' : 'إضافة تخصص'}</h2>
-
-                <p>
-                  {editingMajor
-                    ? 'عدّل اسم التخصص ثم احفظ التغييرات.'
-                    : `سيُضاف التخصص إلى كلية ${
-                        selectedCollege?.collegeName || ''
-                      }.`}
-                </p>
-              </div>
-
-              <button type="button" onClick={closeModal} aria-label="إغلاق">
-                ×
-              </button>
-            </header>
-
-            <label className="major-modal__field">
-              <span>اسم التخصص</span>
-
-              <input
-                value={majorName}
-                onChange={(event) => setMajorName(event.target.value)}
-                placeholder="مثال: هندسة البرمجيات"
-                maxLength="200"
-                autoFocus
-              />
-            </label>
-
-            {formError && <p className="major-modal__error">{formError}</p>}
-
-            <footer className="major-modal__footer">
-              <button
-                className="major-modal__cancel"
-                type="button"
-                onClick={closeModal}
-              >
-                إلغاء
-              </button>
-
-              <button
-                className="major-modal__save"
-                type="submit"
-                disabled={isSaving}
-              >
-                {isSaving
-                  ? 'جارٍ الحفظ...'
-                  : editingMajor
-                    ? 'حفظ التغييرات'
-                    : 'إضافة التخصص'}
-              </button>
-            </footer>
-          </form>
-        </div>
-      )}
+      <Dialog
+        open={isModalOpen}
+        onClose={closeModal}
+        title={editingMajor ? 'تعديل التخصص' : 'إضافة تخصص'}
+        description={
+          editingMajor
+            ? 'عدّل اسم التخصص ثم احفظ التغييرات.'
+            : `سيُضاف التخصص إلى كلية ${selectedCollege?.collegeName || ''}.`
+        }
+        busy={isSaving}
+        initialFocusRef={majorNameRef}
+        footer={
+          <>
+            <Button variant="secondary" size="md" onClick={closeModal} disabled={isSaving}>
+              إلغاء
+            </Button>
+            <Button type="submit" form="major-dialog-form" size="md" loading={isSaving}>
+              {isSaving
+                ? 'جارٍ الحفظ...'
+                : editingMajor
+                  ? 'حفظ التغييرات'
+                  : 'إضافة التخصص'}
+            </Button>
+          </>
+        }
+      >
+        <form id="major-dialog-form" onSubmit={handleSubmit}>
+          <InputField
+            ref={majorNameRef}
+            id="major-name"
+            label="اسم التخصص"
+            value={majorName}
+            error={formError}
+            onChange={(event) => setMajorName(event.target.value)}
+            placeholder="مثال: هندسة البرمجيات"
+            maxLength="200"
+            disabled={isSaving}
+          />
+        </form>
+      </Dialog>
     </section>
   );
 }

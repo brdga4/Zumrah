@@ -23,11 +23,7 @@
 }
 
 .college-page__count {
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: #f0ecff;
-  color: #6847e8;
-  font-weight: 700;
+  white-space: nowrap;
 }
 
 .college-page__description {
@@ -65,9 +61,6 @@
   display: flex;
   padding: 32px;
   flex-direction: column;
-  border: 1px solid #e8e4f0;
-  border-radius: 24px;
-  background: #ffffff;
 }
 
 .college-item__head {
@@ -122,12 +115,7 @@
 }
 
 .college-major {
-  padding: 9px 16px;
-  border-radius: 999px;
-  background: #f3f0f8;
-  color: #5f596d;
   font-size: 15px;
-  font-weight: 700;
 }
 
 .college-item__no-majors {
@@ -155,19 +143,6 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 0;
-  background: transparent;
-  color: #6847e8;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.college-item__edit-button {
-  padding: 12px 20px;
-  border: 1px solid #e8e4f0;
-  border-radius: 16px;
-  background: #ffffff;
 }
 
 .college-item__edit-button svg,
@@ -183,9 +158,6 @@
 
 .college-state {
   padding: 56px 24px;
-  border: 1px solid #e8e4f0;
-  border-radius: 24px;
-  background: #ffffff;
   text-align: center;
 }
 
@@ -194,139 +166,20 @@
   margin: 0;
 }
 
-.college-state p {
+.college-state .text {
   color: #716b80;
 }
 
-.college-state button {
+.college-state .zumrah-button {
   margin-top: 20px;
-  padding: 12px 20px;
-  border: 0;
-  border-radius: 12px;
-  color: #ffffff;
-  background: #6847e8;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
 }
 
 .college-state--error {
   border-color: #f3c3ca;
 }
 
-.college-state--error p {
+.college-state--error .college-state__error {
   color: #c63c52;
-}
-
-.college-dialog-backdrop {
-  position: fixed;
-  z-index: 30;
-  inset: 0;
-  display: grid;
-  padding: 24px;
-  place-items: center;
-  background: rgb(33 28 52 / 45%);
-}
-
-.college-dialog {
-  width: min(100%, 520px);
-  padding: 28px;
-  border-radius: 24px;
-  background: #ffffff;
-  box-shadow: 0 20px 50px rgb(33 28 52 / 25%);
-}
-
-.college-dialog__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.college-dialog__header h2 {
-  margin: 0;
-  color: #211c34;
-}
-
-.college-dialog__header p {
-  margin: 8px 0 0;
-  color: #716b80;
-}
-
-.college-dialog__close {
-  width: 36px;
-  height: 36px;
-  border: 0;
-  border-radius: 50%;
-  color: #716b80;
-  background: #f3f0f8;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.college-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  color: #211c34;
-  font-weight: 700;
-}
-
-.college-field input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 14px 16px;
-  border: 1px solid #e8e4f0;
-  border-radius: 12px;
-  color: #211c34;
-  background: #ffffff;
-  font: inherit;
-}
-
-.college-field input:focus {
-  outline: 2px solid #d9d0ff;
-  border-color: #6847e8;
-}
-
-.college-form-error {
-  margin: 12px 0 0;
-  color: #c63c52;
-}
-
-.college-dialog__actions {
-  display: flex;
-  justify-content: flex-start;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.college-dialog__cancel,
-.college-dialog__submit {
-  padding: 12px 20px;
-  border-radius: 12px;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.college-dialog__cancel {
-  border: 1px solid #e8e4f0;
-  color: #716b80;
-  background: #ffffff;
-}
-
-.college-dialog__submit {
-  border: 0;
-  color: #ffffff;
-  background: #6847e8;
-}
-
-.college-dialog__submit:disabled,
-.college-dialog__cancel:disabled,
-.college-dialog__close:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
 }
 
 .college-toast {

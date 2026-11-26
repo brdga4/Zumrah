@@ -2,7 +2,6 @@
   min-height: 100%;
   padding: 3rem;
   color: #1c1738;
-  background: #faf9ff;
 }
 
 .assignment-page__header {
@@ -10,17 +9,8 @@
   text-align: right;
 }
 
-.assignment-page__eyebrow,
-.assignment-count,
-.assignment-course-code,
-.assignment-status {
-  display: inline-flex;
-  width: fit-content;
-  padding: 0.4rem 0.85rem;
-  border-radius: 999px;
-  color: #6546ee;
-  background: #eeeaff;
-  font-weight: 700;
+.assignment-page__eyebrow {
+  margin-bottom: 0.65rem;
 }
 
 .assignment-page__header h1 {
@@ -29,9 +19,9 @@
 }
 
 .assignment-page__description,
-.assignment-picker p,
-.assignment-panel__header p,
-.assignment-panel__empty p {
+.assignment-picker .text,
+.assignment-panel__header .text,
+.assignment-panel__empty .text {
   margin: 0;
   color: #756f8f;
   font-size: 1.05rem;
@@ -39,11 +29,7 @@
 }
 
 .assignment-picker,
-.assignment-panel,
-.assignment-empty {
-  border: 1px solid #e5e1f1;
-  border-radius: 1.5rem;
-  background: #ffffff;
+.assignment-panel {
 }
 
 .assignment-picker {
@@ -56,48 +42,15 @@
 }
 
 .assignment-picker h2,
-.assignment-panel h2,
-.assignment-empty h2 {
+.assignment-panel h2 {
   margin: 0 0 0.5rem;
   font-size: 1.45rem;
 }
 
-.assignment-field,
-.assignment-search {
+.assignment-picker .zumrah-field {
   display: flex;
   min-width: min(100%, 22rem);
   flex-direction: column;
-  gap: 0.55rem;
-  color: #30294e;
-  font-weight: 700;
-}
-
-.assignment-field select,
-.assignment-search input {
-  min-height: 3.25rem;
-  padding: 0 1rem;
-  border: 1px solid #dcd7ea;
-  border-radius: 0.85rem;
-  outline: none;
-  color: #1c1738;
-  background: #ffffff;
-  font: inherit;
-}
-
-.assignment-field select:focus,
-.assignment-search input:focus {
-  border-color: #6746f4;
-  box-shadow: 0 0 0 3px #ebe6ff;
-}
-
-.assignment-empty {
-  padding: 3.5rem 1.5rem;
-  text-align: center;
-}
-
-.assignment-empty p {
-  max-width: 35rem;
-  margin-inline: auto;
 }
 
 .assignment-grid {
@@ -128,7 +81,7 @@
   margin-bottom: 0.35rem;
 }
 
-.assignment-search {
+.assignment-panel .zumrah-field {
   min-width: 0;
 }
 
@@ -163,7 +116,6 @@
 .assignment-course-code {
   flex-shrink: 0;
   direction: ltr;
-  font-size: 0.9rem;
 }
 
 .assignment-course-name {
@@ -174,31 +126,10 @@
 
 .assignment-status {
   flex-shrink: 0;
-  color: #267248;
-  background: #e8f7ed;
-  font-size: 0.85rem;
 }
 
 .assignment-button {
   min-width: 5.5rem;
-  padding: 0.65rem 1rem;
-  border: 1px solid #ded8ee;
-  border-radius: 0.75rem;
-  color: #6546ee;
-  background: #ffffff;
-  cursor: pointer;
-  font: inherit;
-  font-weight: 700;
-}
-
-.assignment-button:hover:not(:disabled) {
-  border-color: #6546ee;
-  background: #f4f1ff;
-}
-
-.assignment-button:disabled {
-  cursor: wait;
-  opacity: 0.6;
 }
 
 .assignment-panel__empty,
@@ -255,7 +186,7 @@
     flex-direction: column;
   }
 
-  .assignment-field {
+  .assignment-picker .zumrah-field {
     min-width: 0;
   }
 }

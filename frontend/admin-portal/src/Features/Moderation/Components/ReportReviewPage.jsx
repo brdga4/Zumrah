@@ -1,4 +1,12 @@
 import { useEffect, useState } from 'react';
+import Badge from '@student/Components/Badge';
+import Button from '@student/Components/Button';
+import Card from '@student/Components/Card';
+import ConfirmDialog from '@student/Components/ConfirmDialog';
+import Heading from '@student/Components/Heading';
+import LoadingIndicator from '@student/Components/LoadingIndicator';
+import Text from '@student/Components/Text';
+import { useToast } from '@student/Components/ToastContext';
 import {
   getAdminReportById,
   getAdminReports,
@@ -18,6 +26,7 @@ function formatDate(dateValue) {
 }
 
 export default function ReportReviewPage() {
+  const { notify } = useToast();
   const [reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -121,6 +130,13 @@ export default function ReportReviewPage() {
       setSelectedReport(null);
       setPendingAction('');
       await loadReports();
+      notify({
+        type: 'info',
+        message:
+          pendingAction === 'MESSAGE_REMOVED'
+            ? 'تم حذف الرسالة وإغلاق البلاغ.'
+            : 'تم تجاهل البلاغ.',
+      });
     } catch (requestError) {
       setActionError('تعذر حفظ قرار المراجعة. حاول مجددًا.');
       console.error('Failed to review report:', requestError);
@@ -137,58 +153,56 @@ export default function ReportReviewPage() {
         <div>
           <div className="report-review-page__title-row">
             <span className="report-review-page__count">
-              {reports.length} بلاغ
+              <Badge variant="soft">{reports.length} بلاغ</Badge>
             </span>
-            <h1>بلاغات الرسائل</h1>
+            <Heading level={1}>بلاغات الرسائل</Heading>
           </div>
 
-          <p>
+          <Text tone="muted">
             راجع الرسائل التي أبلغ عنها الطلاب للحفاظ على مجتمع آمن وموثوق.
-          </p>
+          </Text>
         </div>
       </section>
 
       {isLoading && (
-        <p className="report-review-page__state">
-          جارٍ تحميل البلاغات...
-        </p>
+        <Card className="report-review-page__state">
+          <LoadingIndicator label="جارٍ تحميل البلاغات..." />
+        </Card>
       )}
 
       {error && (
-        <div className="report-review-page__error">
-          {error}
-        </div>
+        <Text className="report-review-page__error" role="alert">{error}</Text>
       )}
 
       {isEmpty && (
-        <section className="report-review-page__empty">
+        <Card className="report-review-page__empty">
           <div className="report-review-page__empty-icon">✓</div>
-          <h2>لا توجد بلاغات بانتظار المراجعة</h2>
-          <p>
+          <Heading level={2}>لا توجد بلاغات بانتظار المراجعة</Heading>
+          <Text tone="muted">
             راجعت جميع البلاغات. ستظهر البلاغات الجديدة هنا فور إرسالها.
-          </p>
-        </section>
+          </Text>
+        </Card>
       )}
 
       {!isLoading && !error && reports.length > 0 && (
         <section className="report-list">
           {reports.map((report) => (
-            <article className="report-card" key={report.reportId}>
+            <Card className="report-card" key={report.reportId} role="article">
               <div className="report-card__top">
-                <span className="report-card__status">
+                <Badge variant="soft" className="report-card__status">
                   بانتظار المراجعة
-                </span>
+                </Badge>
 
                 <div className="report-card__icon" aria-hidden="true">
                   !
                 </div>
               </div>
 
-              <h2>بلاغ عن رسالة</h2>
+              <Heading level={2}>بلاغ عن رسالة</Heading>
 
-              <p className="report-card__message">
+              <Text tone="muted" className="report-card__message">
                 {report.message?.content || 'لا يوجد نص للرسالة.'}
-              </p>
+              </Text>
 
               <dl className="report-card__details">
                 <div>
@@ -204,15 +218,16 @@ export default function ReportReviewPage() {
                 </div>
               </dl>
 
-              <button
+              <Button
                 className="report-card__review-button"
-                type="button"
+                variant="secondary"
+                size="sm"
                 onClick={() => openReport(report.reportId)}
               >
                 مراجعة البلاغ
                 <span aria-hidden="true">←</span>
-              </button>
-            </article>
+              </Button>
+            </Card>
           ))}
         </section>
       )}
@@ -234,33 +249,31 @@ export default function ReportReviewPage() {
             </button>
 
             {isDetailsLoading && (
-              <p className="report-review-page__state">
-                جارٍ تحميل تفاصيل البلاغ...
-              </p>
+              <LoadingIndicator label="جارٍ تحميل تفاصيل البلاغ..." />
             )}
 
             {selectedReport && (
               <>
-                <span className="report-panel__eyebrow">
+                <Badge variant="soft" className="report-panel__eyebrow">
                   بلاغ رسالة
-                </span>
+                </Badge>
 
-                <h2>مراجعة البلاغ</h2>
+                <Heading level={2}>مراجعة البلاغ</Heading>
 
                 <section className="report-panel__section">
-                  <h3>نص الرسالة</h3>
-                  <p className="report-panel__message">
+                  <Heading level={3}>نص الرسالة</Heading>
+                  <Text tone="muted" className="report-panel__message">
                     {selectedReport.message?.content || 'لا يوجد نص للرسالة.'}
-                  </p>
+                  </Text>
                 </section>
 
                 <section className="report-panel__section">
-                  <h3>سبب البلاغ</h3>
-                  <p>{selectedReport.reason}</p>
+                  <Heading level={3}>سبب البلاغ</Heading>
+                  <Text tone="muted">{selectedReport.reason}</Text>
                 </section>
 
                 <section className="report-panel__section">
-                  <h3>معلومات البلاغ</h3>
+                  <Heading level={3}>معلومات البلاغ</Heading>
 
                   <dl className="report-panel__details">
                     <div>
@@ -285,29 +298,31 @@ export default function ReportReviewPage() {
                 </section>
 
                 {actionError && (
-                  <div className="report-review-page__error">
+                  <Text className="report-review-page__error" role="alert">
                     {actionError}
-                  </div>
+                  </Text>
                 )}
 
                 <div className="report-panel__actions">
-                  <button
+                  <Button
                     className="report-panel__dismiss-button"
-                    type="button"
+                    variant="secondary"
+                    size="md"
                     onClick={() => askForReview('DISMISSED')}
                     disabled={isReviewing}
                   >
                     تجاهل البلاغ
-                  </button>
+                  </Button>
 
-                  <button
+                  <Button
                     className="report-panel__remove-button"
-                    type="button"
+                    variant="danger"
+                    size="md"
                     onClick={() => askForReview('MESSAGE_REMOVED')}
                     disabled={isReviewing}
                   >
                     حذف الرسالة
-                  </button>
+                  </Button>
                 </div>
               </>
             )}
@@ -315,47 +330,22 @@ export default function ReportReviewPage() {
         </div>
       )}
 
-      {pendingAction && (
-        <div className="report-confirmation-backdrop">
-          <section
-            className="report-confirmation"
-            role="dialog"
-            aria-modal="true"
-          >
-            <h2>
-              {pendingAction === 'MESSAGE_REMOVED'
-                ? 'تأكيد حذف الرسالة'
-                : 'تأكيد تجاهل البلاغ'}
-            </h2>
-
-            <p>
-              {pendingAction === 'MESSAGE_REMOVED'
-                ? 'سيُحذف نص الرسالة من المحادثة، ولا يمكن التراجع عن هذا القرار.'
-                : 'سيُغلق البلاغ دون حذف الرسالة من المحادثة.'}
-            </p>
-
-            <div className="report-confirmation__actions">
-              <button
-                className="report-confirmation__cancel-button"
-                type="button"
-                onClick={cancelReview}
-                disabled={isReviewing}
-              >
-                إلغاء
-              </button>
-
-              <button
-                className="report-confirmation__confirm-button"
-                type="button"
-                onClick={confirmReview}
-                disabled={isReviewing}
-              >
-                {isReviewing ? 'جارٍ الحفظ...' : 'تأكيد القرار'}
-              </button>
-            </div>
-          </section>
-        </div>
-      )}
+      <ConfirmDialog
+        open={Boolean(pendingAction && selectedReport)}
+        onClose={cancelReview}
+        onConfirm={confirmReview}
+        title={pendingAction === 'MESSAGE_REMOVED' ? 'تأكيد حذف الرسالة' : 'تأكيد تجاهل البلاغ'}
+        message={
+          pendingAction === 'MESSAGE_REMOVED'
+            ? 'سيُحذف نص الرسالة من المحادثة، ولا يمكن التراجع عن هذا القرار.'
+            : 'سيُغلق البلاغ دون حذف الرسالة من المحادثة.'
+        }
+        confirmLabel="تأكيد القرار"
+        cancelLabel="إلغاء"
+        loadingLabel="جارٍ الحفظ..."
+        destructive={pendingAction === 'MESSAGE_REMOVED'}
+        loading={isReviewing}
+      />
     </main>
   );
 }

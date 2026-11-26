@@ -1,6 +1,8 @@
 
 import { useRef, useState } from 'react';
-import Button from '../../../Components/Button';
+import Button from '@student/Components/Button';
+import InputField from '@student/Components/InputField';
+import LoadingIndicator from '@student/Components/LoadingIndicator';
 import {
   adminIdentifierError,
   loginPasswordError,
@@ -130,22 +132,18 @@ export default function AdminLoginPage() {
           </p>
 
           <form onSubmit={handleSubmit} noValidate>
-            <div className="signup-field">
-              <label htmlFor="adminIdentifier">
-                اسم المستخدم أو البريد الإلكتروني
-              </label>
-
-              <input
+            <div className="admin-login-fields">
+              <InputField
                 ref={identifierRef}
                 id="adminIdentifier"
                 name="identifier"
+                label="اسم المستخدم أو البريد الإلكتروني"
                 type="text"
                 autoComplete="username"
                 dir="auto"
                 placeholder="أدخل اسم المستخدم أو البريد الإلكتروني"
                 value={identifier}
-                aria-invalid={Boolean(errors.identifier)}
-                aria-describedby="adminIdentifierError"
+                error={errors.identifier}
                 onChange={(event) => {
                   const nextIdentifier = event.target.value;
                   setIdentifier(nextIdentifier);
@@ -162,30 +160,16 @@ export default function AdminLoginPage() {
                 onBlur={validateIdentifier}
               />
 
-              <span
-                id="adminIdentifierError"
-                className="field-error"
-                aria-live="polite"
-              >
-                {errors.identifier}
-              </span>
-            </div>
-
-            <div className="signup-field">
-              <label htmlFor="adminPassword">
-                كلمة المرور
-              </label>
-
-              <input
+              <InputField
                 ref={passwordRef}
                 id="adminPassword"
                 name="password"
+                label="كلمة المرور"
                 type="password"
                 autoComplete="current-password"
                 placeholder="أدخل كلمة المرور"
                 value={password}
-                aria-invalid={Boolean(errors.password)}
-                aria-describedby="adminPasswordError"
+                error={errors.password}
                 onChange={(event) => {
                   const nextPassword = event.target.value;
                   setPassword(nextPassword);
@@ -201,18 +185,13 @@ export default function AdminLoginPage() {
                 }}
                 onBlur={validatePassword}
               />
-
-              <span
-                id="adminPasswordError"
-                className="field-error"
-                aria-live="polite"
-              >
-                {errors.password}
-              </span>
             </div>
 
-            <Button type="submit">
-              {isLoading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
+            <Button type="submit" fullWidth loading={isLoading}>
+              <span className="admin-login-submit-content">
+                {isLoading && <LoadingIndicator inline decorative />}
+                {isLoading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
+              </span>
             </Button>
 
             <div

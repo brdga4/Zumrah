@@ -1,4 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+import Avatar from '@student/Components/Avatar';
+import Badge from '@student/Components/Badge';
+import Button from '@student/Components/Button';
+import Card from '@student/Components/Card';
+import Heading from '@student/Components/Heading';
+import Text from '@student/Components/Text';
+import WelcomeSection from '@student/Features/Students/Components/WelcomeSection';
 import './AdminDashboard.css';
 
 const academicModules = [
@@ -56,19 +63,17 @@ const moderationModules = [
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const adminName = getAdminName();
-  const firstName = adminName.split(' ')[0];
-  const adminInitial = adminName.charAt(0);
 
   return (
     <section className="dashboard-page" dir="rtl">
       <header className="dashboard-page__heading">
         <div>
-          <h1>لوحة التحكم</h1>
-          <p>نظرة عامة على وحدات إدارة زمرة</p>
+          <Heading level={1}>لوحة التحكم</Heading>
+          <Text tone="muted">نظرة عامة على وحدات إدارة زمرة</Text>
         </div>
 
         <div className="dashboard-page__admin">
-          <span>{adminInitial}</span>
+          <Avatar name={adminName} />
 
           <div>
             <strong>{adminName}</strong>
@@ -77,24 +82,12 @@ export default function AdminDashboard() {
         </div>
       </header>
 
-      <section className="dashboard-welcome">
-        <span className="dashboard-welcome__accent" />
-
-        <div>
-          <span className="dashboard-welcome__eyebrow">
-            لوحة الإدارة · زُمرة
-          </span>
-
-          <h2>
-            مرحبًا، <span>{firstName}</span>
-          </h2>
-
-          <p>
-            من هنا تدير البنية الأكاديمية للمنصة، وتراجع ما يشاركه الطلاب قبل
-            نشره.
-          </p>
-        </div>
-      </section>
+      <WelcomeSection
+        student={{
+          name: adminName,
+          college: { collegeName: 'لوحة الإدارة · زمرة' },
+        }}
+      />
 
       <DashboardSection
         title="الإدارة الأكاديمية"
@@ -133,8 +126,8 @@ function DashboardSection({ title, description, children }) {
   return (
     <section className="dashboard-section">
       <header className="dashboard-section__header">
-        <h2>{title}</h2>
-        <p>{description}</p>
+        <Heading level={2}>{title}</Heading>
+        <Text tone="muted">{description}</Text>
       </header>
 
       {children}
@@ -152,8 +145,9 @@ function ModuleCard({ module, onNavigate }) {
   }
 
   return (
-    <article
+    <Card
       className={`module-card ${!isAvailable ? 'module-card--disabled' : ''}`}
+      role="article"
     >
       <div className="module-card__top">
         <span className="module-card__icon">
@@ -161,22 +155,24 @@ function ModuleCard({ module, onNavigate }) {
         </span>
 
         {module.step && (
-          <span className="module-card__step">الخطوة {module.step}</span>
+          <Badge variant="soft" className="module-card__step">
+            الخطوة {module.step}
+          </Badge>
         )}
       </div>
 
-      <h3>{module.title}</h3>
-      <p>{module.description}</p>
+      <Heading level={3}>{module.title}</Heading>
+      <Text tone="muted">{module.description}</Text>
 
       {isAvailable ? (
-        <button type="button" onClick={handleClick}>
+        <Button variant="secondary" size="sm" onClick={handleClick}>
           {module.action}
           <ArrowIcon />
-        </button>
+        </Button>
       ) : (
-        <span className="module-card__coming-soon">قريبًا</span>
+        <Badge variant="soft" className="module-card__coming-soon">قريبًا</Badge>
       )}
-    </article>
+    </Card>
   );
 }
 
