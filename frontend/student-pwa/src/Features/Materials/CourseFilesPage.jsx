@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import Button from "../../Components/Button";
 import LoadingIndicator from "../../Components/LoadingIndicator";
+import { useToast } from "../../Components/ToastContext";
 import { getEnrolledCourses } from "../Courses/coursesApi";
 import { getCourseFiles, downloadCourseFile } from "./materialsApi";
 import UploadFileDialog from "./Components/UploadFileDialog";
@@ -19,10 +20,10 @@ function getFileDate(uploadedAt) {
 export default function CourseFilesPage() {
   const { courseId } = useParams();
   const navigate = useNavigate();
+  const { notify, dismiss } = useToast();
   const [filesResult, setFilesResult] = useState(null);
   const [courseResult, setCourseResult] = useState(null);
   const [uploadCourseId, setUploadCourseId] = useState(null);
-  const [uploadedCourseId, setUploadedCourseId] = useState(null);
   const [downloading, setDownloading] = useState(() => new Set());
   const downloadingRef = useRef(new Set());
 
@@ -127,9 +128,6 @@ export default function CourseFilesPage() {
           </Button>
         </div>
 
-        {uploadedCourseId === courseId && (
-          <p role="status">تم رفع الملف وهو بانتظار موافقة الإدارة</p>
-        )}
         {loading && <LoadingIndicator label="جارٍ تحميل الملفات" />}
         {error && <p role="alert">{error}</p>}
 
@@ -174,7 +172,15 @@ export default function CourseFilesPage() {
           onClose={() => setUploadCourseId(null)}
           onUploaded={() => {
             setUploadCourseId((current) => current === courseId ? null : current);
-            setUploadedCourseId(courseId);
+
+            // Restart the toast timer if a previous upload confirmation is still visible.
+            const toastId = "course-file-upload-success";
+            dismiss(toastId);
+            notify({
+              id: toastId,
+              type: "success",
+              message: "تم رفع الملف وهو بانتظار موافقة الإدارة",
+            });
           }}
         />
       )}

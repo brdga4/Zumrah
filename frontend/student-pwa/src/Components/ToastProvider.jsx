@@ -69,8 +69,8 @@ export default function ToastProvider({ children }) {
   }, []);
 
   const notify = useCallback(({ type = "info", message, id } = {}) => {
-      // Temporarily disable success notifications.
-  if (type === "success") return;
+    // Keep success toasts disabled except for file upload confirmation.
+    if (type === "success" && id !== "course-file-upload-success") return;
     if (typeof message !== "string" || !message.trim()) return;
 
     const instanceId = ++nextId.current;
