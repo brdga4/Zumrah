@@ -191,6 +191,7 @@ export default function MajorManagementPage() {
 
         <Button
           className="major-page__add-button"
+          type="button"
           onClick={openCreateModal}
           disabled={isLoading || colleges.length === 0 || !activeCollegeId}
         >
@@ -268,6 +269,7 @@ export default function MajorManagementPage() {
 
               <Button
                 className="major-group__add-button"
+                type="button"
                 variant="secondary"
                 size="sm"
                 onClick={openCreateModal}
@@ -292,6 +294,7 @@ export default function MajorManagementPage() {
 
                     <Button
                       className="major-row__edit-button"
+                      type="button"
                       variant="secondary"
                       size="sm"
                       onClick={() => openEditModal(major, activeCollege)}
