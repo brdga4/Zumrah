@@ -1,6 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../../Components/Button';
+import Badge from '@student/Components/Badge';
+import Button from '@student/Components/Button';
+import Card from '@student/Components/Card';
+import Dialog from '@student/Components/Dialog';
+import Heading from '@student/Components/Heading';
+import InputField from '@student/Components/InputField';
+import LoadingIndicator from '@student/Components/LoadingIndicator';
+import Text from '@student/Components/Text';
 import {
   createCollege,
   getColleges,
@@ -21,6 +28,7 @@ export default function CollegeManagementPage() {
   const [formError, setFormError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const collegeNameRef = useRef(null);
 
   async function loadColleges() {
     try {
@@ -152,16 +160,16 @@ export default function CollegeManagementPage() {
       <div className="college-page__header">
         <div>
           <div className="college-page__title-row">
-            <h1>الكليات وتخصصاتها</h1>
+            <Heading level={1}>الكليات وتخصصاتها</Heading>
 
-            <span className="college-page__count">
+            <Badge variant="soft" className="college-page__count">
               {colleges.length} كليات
-            </span>
+            </Badge>
           </div>
 
-          <p className="college-page__description">
+          <Text tone="muted" className="college-page__description">
             الكليات المتاحة في زُمرة، مع التخصصات التابعة لكل كلية.
-          </p>
+          </Text>
         </div>
 
         <Button onClick={openCreateDialog}>
@@ -171,160 +179,134 @@ export default function CollegeManagementPage() {
       </div>
 
       {isLoading ? (
-        <div className="college-state">
-          <p>جارٍ تحميل الكليات...</p>
-        </div>
+        <Card className="college-state">
+          <LoadingIndicator label="جارٍ تحميل الكليات..." />
+        </Card>
       ) : error ? (
-        <div className="college-state college-state--error">
-          <p>{error}</p>
+        <Card className="college-state college-state--error">
+          <Text className="college-state__error">{error}</Text>
 
-          <button type="button" onClick={reloadColleges}>
+          <Button variant="secondary" size="sm" onClick={reloadColleges}>
             حاول مجددًا
-          </button>
-        </div>
+          </Button>
+        </Card>
       ) : colleges.length === 0 ? (
-        <div className="college-state">
-          <h2>لا توجد كليات بعد</h2>
-          <p>أضف أول كلية لتتمكن بعدها من إضافة تخصصاتها.</p>
+        <Card className="college-state">
+          <Heading level={2}>لا توجد كليات بعد</Heading>
+          <Text tone="muted">أضف أول كلية لتتمكن بعدها من إضافة تخصصاتها.</Text>
 
-          <button type="button" onClick={openCreateDialog}>
-            + إضافة كلية
-          </button>
-        </div>
+          <Button size="sm" onClick={openCreateDialog}>إضافة كلية</Button>
+        </Card>
       ) : (
         <div className="college-items">
           {colleges.map((college) => (
-            <article className="college-item" key={college.collegeId}>
+            <Card className="college-item" key={college.collegeId} role="article">
               <div className="college-item__head">
                 <span className="college-item__icon">
                   <CollegeIcon />
                 </span>
 
                 <div className="college-item__heading">
-                  <h2>{college.collegeName}</h2>
+                  <Heading level={2}>{college.collegeName}</Heading>
 
-                  <p className="college-item__majors-count">
+                  <Text tone="muted" className="college-item__majors-count">
                     {formatMajorCount(college.majors.length)}
-                  </p>
+                  </Text>
                 </div>
               </div>
 
               <div className="college-item__majors">
                 {college.majors.length > 0 ? (
                   college.majors.map((major) => (
-                    <span className="college-major" key={major.majorId}>
+                    <Badge
+                      variant="soft"
+                      className="college-major"
+                      key={major.majorId}
+                    >
                       {major.majorName}
-                    </span>
+                    </Badge>
                   ))
                 ) : (
-                  <p className="college-item__no-majors">
+                  <Text tone="muted" className="college-item__no-majors">
                     لا توجد تخصصات في هذه الكلية بعد.
-                  </p>
+                  </Text>
                 )}
               </div>
 
               <div className="college-item__footer">
-                <button
+                <Button
                   className="college-item__edit-button"
-                  type="button"
+                  variant="secondary"
+                  size="sm"
                   onClick={() => openEditDialog(college)}
                 >
                   <EditIcon />
                   تعديل
-                </button>
+                </Button>
 
-                <button
+                <Button
                   className="college-item__majors-link"
-                  type="button"
-                  onClick={() => navigate('/academics/majors')}
+                  variant="secondary"
+                  size="sm"
+                  onClick={() =>
+                    navigate(`/academics/majors?collegeId=${college.collegeId}`)
+                  }
                 >
                   إدارة التخصصات
                   <ArrowIcon />
-                </button>
+                </Button>
               </div>
-            </article>
+            </Card>
           ))}
         </div>
       )}
 
-      {isDialogOpen && (
-        <div className="college-dialog-backdrop" role="presentation">
-          <div
-            className="college-dialog"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="college-dialog-title"
-          >
-            <div className="college-dialog__header">
-              <div>
-                <h2 id="college-dialog-title">
-                  {editingCollege ? 'تعديل الكلية' : 'إضافة كلية'}
-                </h2>
-
-                <p>
-                  {editingCollege
-                    ? 'عدّل اسم الكلية ثم احفظ التغييرات.'
-                    : 'بعد الإضافة يمكنك ربط التخصصات بهذه الكلية.'}
-                </p>
-              </div>
-
-              <button
-                className="college-dialog__close"
-                type="button"
-                onClick={closeDialog}
-                disabled={isSaving}
-                aria-label="إغلاق"
-              >
-                ×
-              </button>
-            </div>
-
-            <form onSubmit={handleCollegeSubmit}>
-              <label className="college-field">
-                <span>اسم الكلية</span>
-
-                <input
-                  type="text"
-                  value={collegeName}
-                  onChange={(event) => setCollegeName(event.target.value)}
-                  placeholder="مثال: كلية الطب"
-                  maxLength="200"
-                  autoFocus
-                />
-              </label>
-
-              {formError && (
-                <p className="college-form-error" role="alert">
-                  {formError}
-                </p>
-              )}
-
-              <div className="college-dialog__actions">
-                <button
-                  className="college-dialog__cancel"
-                  type="button"
-                  onClick={closeDialog}
-                  disabled={isSaving}
-                >
-                  إلغاء
-                </button>
-
-                <button
-                  className="college-dialog__submit"
-                  type="submit"
-                  disabled={isSaving}
-                >
-                  {isSaving
-                    ? 'جارٍ الحفظ...'
-                    : editingCollege
-                      ? 'حفظ التغييرات'
-                      : 'إضافة الكلية'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <Dialog
+        open={isDialogOpen}
+        onClose={closeDialog}
+        title={editingCollege ? 'تعديل الكلية' : 'إضافة كلية'}
+        description={
+          editingCollege
+            ? 'عدّل اسم الكلية ثم احفظ التغييرات.'
+            : 'بعد الإضافة يمكنك ربط التخصصات بهذه الكلية.'
+        }
+        busy={isSaving}
+        initialFocusRef={collegeNameRef}
+        footer={
+          <>
+            <Button variant="secondary" size="md" onClick={closeDialog} disabled={isSaving}>
+              إلغاء
+            </Button>
+            <Button
+              type="submit"
+              form="college-dialog-form"
+              size="md"
+              loading={isSaving}
+            >
+              {isSaving
+                ? 'جارٍ الحفظ...'
+                : editingCollege
+                  ? 'حفظ التغييرات'
+                  : 'إضافة الكلية'}
+            </Button>
+          </>
+        }
+      >
+        <form id="college-dialog-form" onSubmit={handleCollegeSubmit}>
+          <InputField
+            ref={collegeNameRef}
+            id="college-name"
+            label="اسم الكلية"
+            type="text"
+            value={collegeName}
+            error={formError}
+            onChange={(event) => setCollegeName(event.target.value)}
+            placeholder="مثال: كلية الطب"
+            maxLength="200"
+            disabled={isSaving}
+          />
+        </form>
+      </Dialog>
 
       {successMessage && (
         <p className="college-toast" role="status">

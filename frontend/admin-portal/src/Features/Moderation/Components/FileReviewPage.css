@@ -2,7 +2,6 @@
   min-height: 100%;
   padding: 48px;
   color: #201b3c;
-  background: #fbfaff;
 }
 
 .file-review-page__section {
@@ -33,20 +32,10 @@
 }
 
 .file-review-page__count {
-  display: inline-flex;
-  padding: 8px 13px;
-  color: #8a5b00;
-  font-size: 14px;
-  font-weight: 700;
-  background: #fff3ce;
-  border-radius: 999px;
 }
 
 .file-review-list-card {
   overflow: hidden;
-  background: #ffffff;
-  border: 1px solid #e8e3f3;
-  border-radius: 22px;
 }
 
 .file-review-list {
@@ -112,68 +101,8 @@
 }
 
 .file-review-row__status {
-  display: inline-flex;
-  padding: 7px 11px;
   flex-shrink: 0;
-  color: #8a5b00;
-  font-size: 13px;
-  font-weight: 700;
   white-space: nowrap;
-  background: #fff3ce;
-  border-radius: 999px;
-}
-
-.file-review-button {
-  min-height: 40px;
-  padding: 0 15px;
-  font: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  border-radius: 11px;
-  transition:
-    color 160ms ease,
-    background 160ms ease,
-    border-color 160ms ease;
-}
-
-.file-review-button:disabled {
-  cursor: wait;
-  opacity: 0.6;
-}
-
-.file-review-button--secondary {
-  color: #6542ec;
-  background: #ffffff;
-  border: 1px solid #ded7eb;
-}
-
-.file-review-button--secondary:hover:not(:disabled) {
-  background: #f4f0ff;
-  border-color: #6542ec;
-}
-
-.file-review-button--approve {
-  color: #ffffff;
-  background: #6542ec;
-  border: 1px solid #6542ec;
-}
-
-.file-review-button--approve:hover:not(:disabled) {
-  background: #5533d8;
-  border-color: #5533d8;
-}
-
-.file-review-button--reject {
-  color: #d92d20;
-  background: #fff5f4;
-  border: 1px solid #fecdca;
-}
-
-.file-review-button--reject:hover:not(:disabled) {
-  color: #ffffff;
-  background: #d92d20;
-  border-color: #d92d20;
 }
 
 .file-review-page__status,
@@ -185,8 +114,6 @@
 
 .file-review-page__status {
   color: #777087;
-  background: #ffffff;
-  border: 1px solid #e8e3f3;
 }
 
 .file-review-page__error {
@@ -204,9 +131,6 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: #ffffff;
-  border: 1px solid #e8e3f3;
-  border-radius: 22px;
 }
 
 .file-review-empty__icon {
@@ -228,7 +152,7 @@
   font-weight: 800;
 }
 
-.file-review-empty p {
+.file-review-empty .text {
   max-width: 500px;
   margin: 10px 0 0;
   color: #777087;
@@ -395,59 +319,6 @@
   border-radius: 12px;
 }
 
-.file-review-confirmation-overlay {
-  position: fixed;
-  z-index: 40;
-  display: grid;
-  padding: 20px;
-  inset: 0;
-  place-items: center;
-  background: rgb(32 27 60 / 42%);
-}
-
-.file-review-confirmation {
-  width: min(100%, 460px);
-  padding: 28px;
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgb(32 27 60 / 25%);
-}
-
-.file-review-confirmation h2 {
-  margin: 0;
-  font-size: 21px;
-  font-weight: 800;
-}
-
-.file-review-confirmation p {
-  margin: 12px 0 24px;
-  color: #777087;
-  line-height: 1.8;
-}
-
-.file-review-confirmation__actions {
-  display: flex;
-  justify-content: flex-start;
-  gap: 12px;
-}
-
-.file-review-toast {
-  position: fixed;
-  z-index: 50;
-  bottom: 28px;
-  left: 50%;
-  max-width: calc(100% - 40px);
-  padding: 14px 18px;
-  color: #ffffff;
-  font: inherit;
-  cursor: pointer;
-  background: #201b3c;
-  border: 0;
-  border-radius: 12px;
-  box-shadow: 0 12px 30px rgb(32 27 60 / 20%);
-  transform: translateX(-50%);
-}
-
 @media (max-width: 720px) {
   .file-review-page {
     padding: 24px;
@@ -493,10 +364,6 @@
 
   .file-review-panel__footer {
     padding: 15px 20px;
-  }
-
-  .file-review-confirmation {
-    padding: 22px;
   }
 
   .review-file-details div {

@@ -1,4 +1,12 @@
 import { useEffect, useState } from 'react';
+import Badge from '@student/Components/Badge';
+import Button from '@student/Components/Button';
+import Card from '@student/Components/Card';
+import FormField from '@student/Components/FormField';
+import Heading from '@student/Components/Heading';
+import InputField from '@student/Components/InputField';
+import LoadingIndicator from '@student/Components/LoadingIndicator';
+import Text from '@student/Components/Text';
 import { getColleges } from '../api/collegesApi';
 import {
   assignCourseToMajor,
@@ -172,7 +180,9 @@ export default function CourseAssignmentPage() {
   if (isLoading) {
     return (
       <section className="assignment-page" dir="rtl">
-        <p className="assignment-page__state">جارٍ تحميل البيانات...</p>
+        <Card className="assignment-page__state">
+          <LoadingIndicator label="جارٍ تحميل البيانات..." />
+        </Card>
       </section>
     );
   }
@@ -180,9 +190,11 @@ export default function CourseAssignmentPage() {
   if (error) {
     return (
       <section className="assignment-page" dir="rtl">
-        <p className="assignment-page__state" role="alert">
+        <Card className="assignment-page__state">
+          <Text className="assignment-error" role="alert">
           {error}
-        </p>
+          </Text>
+        </Card>
       </section>
     );
   }
@@ -190,26 +202,25 @@ export default function CourseAssignmentPage() {
   return (
     <section className="assignment-page" dir="rtl">
       <header className="assignment-page__header">
-        <p className="assignment-page__eyebrow">الإدارة الأكاديمية</p>
-        <h1>إسناد المقررات</h1>
-        <p className="assignment-page__description">
+        <Badge variant="soft" className="assignment-page__eyebrow">الإدارة الأكاديمية</Badge>
+        <Heading level={1}>إسناد المقررات</Heading>
+        <Text tone="muted" className="assignment-page__description">
           اربط المقررات بالتخصصات لتظهر للطلاب عند التسجيل.
-        </p>
+        </Text>
       </header>
 
-      <section className="assignment-picker" aria-labelledby="major-picker-title">
+      <Card className="assignment-picker" aria-labelledby="major-picker-title">
         <div>
-          <h2 id="major-picker-title">اختر التخصص</h2>
-          <p>
+          <Heading level={2} id="major-picker-title">اختر التخصص</Heading>
+          <Text tone="muted">
             اختر تخصصًا لعرض مقرراته المسندة وإسناد مقررات جديدة إليه.
-          </p>
+          </Text>
         </div>
 
-        <label className="assignment-field" htmlFor="major">
-          <span>التخصص</span>
-
-          <select
+        <FormField
+          as="select"
             id="major"
+          label="التخصص"
             value={selectedMajorId}
             onChange={handleMajorChange}
             disabled={pendingCourseId !== null}
@@ -227,51 +238,41 @@ export default function CourseAssignmentPage() {
                   ))}
                 </optgroup>
               ))}
-          </select>
-        </label>
-      </section>
+        </FormField>
+      </Card>
 
-      {!selectedMajorId ? (
-        <section className="assignment-empty">
-          <h2>اختر تخصصًا للبدء</h2>
-          <p>
-            اختر تخصصًا من القائمة أعلاه لعرض مقرراته وإسناد مقررات جديدة إليه.
-          </p>
-        </section>
-      ) : (
+      {selectedMajorId && (
         <div className="assignment-grid">
-          <section className="assignment-panel">
+          <Card className="assignment-panel">
             <header className="assignment-panel__header">
               <div>
-                <h2>مقررات {selectedMajor?.majorName}</h2>
-                <p>{selectedCollege?.collegeName}</p>
+                <Heading level={2}>مقررات {selectedMajor?.majorName}</Heading>
+                <Text tone="muted">{selectedCollege?.collegeName}</Text>
               </div>
 
               {!isMajorCoursesLoading && (
-                <span className="assignment-count">
+                <Badge variant="soft" className="assignment-count">
                   {majorCourses.length} مقرر
-                </span>
+                </Badge>
               )}
             </header>
 
             {isMajorCoursesLoading && (
-              <p className="assignment-panel__state">
-                جارٍ تحميل المقررات المسندة...
-              </p>
+              <LoadingIndicator label="جارٍ تحميل المقررات المسندة..." />
             )}
 
             {majorCoursesError && (
-              <p className="assignment-error" role="alert">
+              <Text className="assignment-error" role="alert">
                 {majorCoursesError}
-              </p>
+              </Text>
             )}
 
             {!isMajorCoursesLoading &&
               !majorCoursesError &&
               majorCourses.length === 0 && (
                 <div className="assignment-panel__empty">
-                  <h3>لا توجد مقررات مسندة بعد</h3>
-                  <p>اختر مقررًا من القائمة الأخرى ثم اضغط إسناد.</p>
+                  <Heading level={3}>لا توجد مقررات مسندة بعد</Heading>
+                  <Text tone="muted">اختر مقررًا من القائمة الأخرى ثم اضغط إسناد.</Text>
                 </div>
               )}
 
@@ -281,69 +282,66 @@ export default function CourseAssignmentPage() {
                 <ul className="assignment-list">
                   {majorCourses.map((course) => (
                     <li key={course.courseId} className="assignment-row">
-                      <span className="assignment-course-code" dir="ltr">
+                      <Badge variant="soft" className="assignment-course-code" dir="ltr">
                         {course.courseCode}
-                      </span>
+                      </Badge>
 
                       <span className="assignment-course-name">
                         {course.courseName}
                       </span>
 
-                      <span className="assignment-status">مُسند</span>
+                      <Badge variant="success" className="assignment-status">مُسند</Badge>
                     </li>
                   ))}
                 </ul>
               )}
-          </section>
+          </Card>
 
-          <section className="assignment-panel">
+          <Card className="assignment-panel">
             <header className="assignment-panel__header">
               <div>
-                <h2>إسناد مقرر</h2>
-                <p>المقررات غير المسندة لهذا التخصص.</p>
+                <Heading level={2}>إسناد مقرر</Heading>
+                <Text tone="muted">المقررات غير المسندة لهذا التخصص.</Text>
               </div>
             </header>
 
-            <label className="assignment-search" htmlFor="course-search">
-              <span>البحث عن مقرر لإسناده</span>
-
-              <input
-                id="course-search"
-                type="search"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="ابحث برمز المقرر أو اسمه"
-                disabled={isMajorCoursesLoading || pendingCourseId !== null}
-              />
-            </label>
+            <InputField
+              id="course-search"
+              label="البحث عن مقرر لإسناده"
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="ابحث برمز المقرر أو اسمه"
+              disabled={isMajorCoursesLoading || pendingCourseId !== null}
+            />
 
             {assignmentError && (
-              <p className="assignment-error" role="alert">
+              <Text className="assignment-error" role="alert">
                 {assignmentError}
-              </p>
+              </Text>
             )}
 
             {successMessage && (
-              <p className="assignment-success">{successMessage}</p>
+              <Text className="assignment-success">{successMessage}</Text>
             )}
 
             {isMajorCoursesLoading && (
-              <p className="assignment-panel__state">جارٍ تحميل المقررات...</p>
+              <LoadingIndicator label="جارٍ تحميل المقررات..." />
             )}
 
             {!isMajorCoursesLoading && filteredAvailableCourses.length === 0 && (
               <div className="assignment-panel__empty">
-                <h3>
+                  <Heading level={3}>
                   {normalizedQuery
                     ? 'لا توجد مقررات مطابقة'
                     : 'جميع المقررات مسندة'}
-                </h3>
+                  </Heading>
 
-                <p>
+                  <Text tone="muted">
                   {normalizedQuery
                     ? 'جرّب البحث بكلمة أو رمز مقرر مختلف.'
                     : 'أُسندت جميع المقررات المتاحة لهذا التخصص.'}
-                </p>
+                  </Text>
               </div>
             )}
 
@@ -351,29 +349,31 @@ export default function CourseAssignmentPage() {
               <ul className="assignment-list">
                 {filteredAvailableCourses.map((course) => (
                   <li key={course.courseId} className="assignment-row">
-                    <span className="assignment-course-code" dir="ltr">
+                    <Badge variant="soft" className="assignment-course-code" dir="ltr">
                       {course.courseCode}
-                    </span>
+                    </Badge>
 
                     <span className="assignment-course-name">
                       {course.courseName}
                     </span>
 
-                    <button
+                    <Button
                       className="assignment-button"
-                      type="button"
+                      variant="secondary"
+                      size="sm"
                       onClick={() => handleAssign(course)}
                       disabled={pendingCourseId !== null}
+                      loading={pendingCourseId === course.courseId}
                     >
                       {pendingCourseId === course.courseId
                         ? 'جارٍ الإسناد...'
                         : 'إسناد'}
-                    </button>
+                    </Button>
                   </li>
                 ))}
               </ul>
             )}
-          </section>
+          </Card>
         </div>
       )}
     </section>

@@ -1,11 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import Badge from '@student/Components/Badge';
+import Button from '@student/Components/Button';
+import Card from '@student/Components/Card';
+import Dialog from '@student/Components/Dialog';
+import Heading from '@student/Components/Heading';
+import InputField from '@student/Components/InputField';
+import LoadingIndicator from '@student/Components/LoadingIndicator';
+import SelectField from '@student/Components/SelectField';
+import Text from '@student/Components/Text';
 import { getColleges } from '../api/collegesApi';
 import { createMajor, updateMajor } from '../api/majorsApi';
 import './MajorManagementPage.css';
 
 export default function MajorManagementPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [colleges, setColleges] = useState([]);
-  const [collegeFilter, setCollegeFilter] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -15,6 +26,9 @@ export default function MajorManagementPage() {
   const [majorName, setMajorName] = useState('');
   const [formError, setFormError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const majorNameRef = useRef(null);
+
+  const activeCollegeId = searchParams.get('collegeId') || '';
 
   async function loadColleges() {
     try {
@@ -67,11 +81,19 @@ export default function MajorManagementPage() {
     };
   }, []);
 
-  function openCreateModal(collegeId = '') {
-    const defaultCollegeId = collegeId || colleges[0]?.collegeId || '';
+  function handleCollegeChange(event) {
+    const nextCollegeId = event.target.value;
+
+    setSearchParams(nextCollegeId ? { collegeId: nextCollegeId } : {});
+  }
+
+  function openCreateModal() {
+    if (!activeCollegeId) {
+      return;
+    }
 
     setEditingMajor(null);
-    setSelectedCollegeId(defaultCollegeId);
+    setSelectedCollegeId(activeCollegeId);
     setMajorName('');
     setFormError('');
     setIsModalOpen(true);
@@ -92,6 +114,7 @@ export default function MajorManagementPage() {
 
     setIsModalOpen(false);
     setEditingMajor(null);
+    setSelectedCollegeId('');
     setMajorName('');
     setFormError('');
   }
@@ -103,11 +126,6 @@ export default function MajorManagementPage() {
 
     if (!trimmedMajorName) {
       setFormError('اكتب اسم التخصص أولًا.');
-      return;
-    }
-
-    if (!editingMajor && !selectedCollegeId) {
-      setFormError('اختر الكلية التي يتبع لها التخصص.');
       return;
     }
 
@@ -125,6 +143,7 @@ export default function MajorManagementPage() {
 
       setIsModalOpen(false);
       setEditingMajor(null);
+      setSelectedCollegeId('');
       setMajorName('');
       setFormError('');
     } catch (requestError) {
@@ -142,14 +161,12 @@ export default function MajorManagementPage() {
     }
   }
 
-  const visibleColleges =
-    collegeFilter === 'all'
-      ? colleges
-      : colleges.filter((college) => college.collegeId === collegeFilter);
+  const activeCollege = colleges.find(
+    (college) => college.collegeId === activeCollegeId,
+  );
 
-  const majorCount = colleges.reduce(
-    (total, college) => total + college.majors.length,
-    0,
+  const selectedCollege = colleges.find(
+    (college) => college.collegeId === selectedCollegeId,
   );
 
   return (
@@ -157,212 +174,179 @@ export default function MajorManagementPage() {
       <header className="major-page__header">
         <div>
           <div className="major-page__title-row">
-            <h1>التخصصات حسب الكلية</h1>
+            <Heading level={1}>التخصصات حسب الكلية</Heading>
 
-            <span className="major-page__count">
-              {majorCount} {majorCount === 1 ? 'تخصص' : 'تخصصات'}
-            </span>
+            {activeCollege && (
+              <Badge variant="soft" className="major-page__count">
+                {activeCollege.majors.length}{' '}
+                {activeCollege.majors.length === 1 ? 'تخصص' : 'تخصصات'}
+              </Badge>
+            )}
           </div>
 
-          <p>
-            يختار الطالب تخصصه من تخصصات كليته عند إنشاء الحساب أو تعديل ملفه
-            الشخصي.
-          </p>
+          <Text tone="muted">
+            اختر كلية لعرض تخصصاتها وإضافة تخصص جديد أو تعديل تخصص موجود.
+          </Text>
         </div>
 
-        <button
+        <Button
           className="major-page__add-button"
-          type="button"
-          onClick={() => openCreateModal()}
-          disabled={isLoading || colleges.length === 0}
+          onClick={openCreateModal}
+          disabled={isLoading || colleges.length === 0 || !activeCollegeId}
         >
           <PlusIcon />
           إضافة تخصص
-        </button>
+        </Button>
       </header>
 
-      {!isLoading && colleges.length > 0 && (
+      {!isLoading && !error && colleges.length > 0 && (
         <div className="major-page__toolbar">
-          <label htmlFor="college-filter">عرض تخصصات</label>
-
-          <select
+          <SelectField
             id="college-filter"
-            value={collegeFilter}
-            onChange={(event) => setCollegeFilter(event.target.value)}
-          >
-            <option value="all">جميع الكليات</option>
-
-            {colleges.map((college) => (
-              <option key={college.collegeId} value={college.collegeId}>
-                {college.collegeName}
-              </option>
-            ))}
-          </select>
+            label="اختر الكلية"
+            options={colleges.map((college) => ({
+              value: college.collegeId,
+              label: college.collegeName,
+            }))}
+            placeholder="اختر كلية لعرض تخصصاتها"
+            value={activeCollegeId}
+            onChange={handleCollegeChange}
+          />
         </div>
       )}
 
       {isLoading && (
-        <p className="major-page__message">جارٍ تحميل التخصصات...</p>
+        <Card className="major-page__message">
+          <LoadingIndicator label="جارٍ تحميل التخصصات..." />
+        </Card>
       )}
 
       {!isLoading && error && (
-        <div className="major-page__error">
-          <p>{error}</p>
+        <Card className="major-page__error">
+          <Text>{error}</Text>
 
-          <button type="button" onClick={reloadColleges}>
+          <Button variant="secondary" size="sm" onClick={reloadColleges}>
             إعادة المحاولة
-          </button>
-        </div>
+          </Button>
+        </Card>
       )}
 
       {!isLoading && !error && colleges.length === 0 && (
-        <div className="major-page__empty">
+        <Card className="major-page__empty">
           <CollegeIcon />
-          <h2>أضف كلية أولًا</h2>
-          <p>تُضاف التخصصات داخل الكليات، لذلك أضف كلية قبل إنشاء تخصص.</p>
-        </div>
+          <Heading level={2}>أضف كلية أولًا</Heading>
+          <Text tone="muted">تُضاف التخصصات داخل الكليات، لذلك أضف كلية قبل إنشاء تخصص.</Text>
+        </Card>
       )}
 
-      {!isLoading && !error && visibleColleges.length > 0 && (
+      {!isLoading && !error && colleges.length > 0 && !activeCollege && (
+        <Card className="major-page__empty">
+          <CollegeIcon />
+          <Heading level={2}>اختر كلية</Heading>
+          <Text tone="muted">اختر كلية من القائمة بالأعلى لعرض تخصصاتها وإدارتها.</Text>
+        </Card>
+      )}
+
+      {!isLoading && !error && activeCollege && (
         <div className="major-groups">
-          {visibleColleges.map((college) => (
-            <article className="major-group" key={college.collegeId}>
-              <header className="major-group__header">
-                <div className="major-group__heading">
-                  <span className="major-group__icon">
-                    <CollegeIcon />
-                  </span>
+          <Card className="major-group" key={activeCollege.collegeId} role="article">
+            <header className="major-group__header">
+              <div className="major-group__heading">
+                <span className="major-group__icon">
+                  <CollegeIcon />
+                </span>
 
-                  <div>
-                    <h2>{college.collegeName}</h2>
+                <div>
+                  <Heading level={2}>{activeCollege.collegeName}</Heading>
 
-                    <p>
-                      {college.majors.length}{' '}
-                      {college.majors.length === 1 ? 'تخصص' : 'تخصصات'}
-                    </p>
-                  </div>
+                  <Text tone="muted">
+                    {activeCollege.majors.length}{' '}
+                    {activeCollege.majors.length === 1 ? 'تخصص' : 'تخصصات'}
+                  </Text>
                 </div>
-
-                <button
-                  className="major-group__add-button"
-                  type="button"
-                  onClick={() => openCreateModal(college.collegeId)}
-                >
-                  <PlusIcon />
-                  إضافة تخصص
-                </button>
-              </header>
-
-              {college.majors.length === 0 ? (
-                <div className="major-group__empty">
-                  لا توجد تخصصات في هذه الكلية بعد.
-                </div>
-              ) : (
-                <ul className="major-list">
-                  {college.majors.map((major) => (
-                    <li className="major-row" key={major.majorId}>
-                      <span className="major-row__name">
-                        <MajorIcon />
-                        {major.majorName}
-                      </span>
-
-                      <button
-                        className="major-row__edit-button"
-                        type="button"
-                        onClick={() => openEditModal(major, college)}
-                      >
-                        <EditIcon />
-                        تعديل
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </article>
-          ))}
-        </div>
-      )}
-
-      {isModalOpen && (
-        <div className="major-modal-backdrop" onMouseDown={closeModal}>
-          <form
-            className="major-modal"
-            onSubmit={handleSubmit}
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <header className="major-modal__header">
-              <div>
-                <h2>{editingMajor ? 'تعديل التخصص' : 'إضافة تخصص'}</h2>
-
-                <p>
-                  {editingMajor
-                    ? 'عدّل اسم التخصص ثم احفظ التغييرات.'
-                    : 'اختر الكلية ثم أضف اسم التخصص الجديد.'}
-                </p>
               </div>
 
-              <button type="button" onClick={closeModal} aria-label="إغلاق">
-                ×
-              </button>
+              <Button
+                className="major-group__add-button"
+                variant="secondary"
+                size="sm"
+                onClick={openCreateModal}
+              >
+                <PlusIcon />
+                إضافة تخصص
+              </Button>
             </header>
 
-            {!editingMajor && (
-              <label className="major-modal__field">
-                <span>الكلية</span>
+            {activeCollege.majors.length === 0 ? (
+              <Text tone="muted" className="major-group__empty">
+                لا توجد تخصصات في هذه الكلية بعد.
+              </Text>
+            ) : (
+              <ul className="major-list">
+                {activeCollege.majors.map((major) => (
+                  <li className="major-row" key={major.majorId}>
+                    <span className="major-row__name">
+                      <MajorIcon />
+                      {major.majorName}
+                    </span>
 
-                <select
-                  value={selectedCollegeId}
-                  onChange={(event) =>
-                    setSelectedCollegeId(event.target.value)
-                  }
-                >
-                  {colleges.map((college) => (
-                    <option key={college.collegeId} value={college.collegeId}>
-                      {college.collegeName}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                    <Button
+                      className="major-row__edit-button"
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => openEditModal(major, activeCollege)}
+                    >
+                      <EditIcon />
+                      تعديل
+                    </Button>
+                  </li>
+                ))}
+              </ul>
             )}
-
-            <label className="major-modal__field">
-              <span>اسم التخصص</span>
-
-              <input
-                value={majorName}
-                onChange={(event) => setMajorName(event.target.value)}
-                placeholder="مثال: هندسة البرمجيات"
-                maxLength="200"
-                autoFocus
-              />
-            </label>
-
-            {formError && <p className="major-modal__error">{formError}</p>}
-
-            <footer className="major-modal__footer">
-              <button
-                className="major-modal__cancel"
-                type="button"
-                onClick={closeModal}
-              >
-                إلغاء
-              </button>
-
-              <button
-                className="major-modal__save"
-                type="submit"
-                disabled={isSaving}
-              >
-                {isSaving
-                  ? 'جارٍ الحفظ...'
-                  : editingMajor
-                    ? 'حفظ التغييرات'
-                    : 'إضافة التخصص'}
-              </button>
-            </footer>
-          </form>
+          </Card>
         </div>
       )}
+
+      <Dialog
+        open={isModalOpen}
+        onClose={closeModal}
+        title={editingMajor ? 'تعديل التخصص' : 'إضافة تخصص'}
+        description={
+          editingMajor
+            ? 'عدّل اسم التخصص ثم احفظ التغييرات.'
+            : `سيُضاف التخصص إلى كلية ${selectedCollege?.collegeName || ''}.`
+        }
+        busy={isSaving}
+        initialFocusRef={majorNameRef}
+        footer={
+          <>
+            <Button variant="secondary" size="md" onClick={closeModal} disabled={isSaving}>
+              إلغاء
+            </Button>
+            <Button type="submit" form="major-dialog-form" size="md" loading={isSaving}>
+              {isSaving
+                ? 'جارٍ الحفظ...'
+                : editingMajor
+                  ? 'حفظ التغييرات'
+                  : 'إضافة التخصص'}
+            </Button>
+          </>
+        }
+      >
+        <form id="major-dialog-form" onSubmit={handleSubmit}>
+          <InputField
+            ref={majorNameRef}
+            id="major-name"
+            label="اسم التخصص"
+            value={majorName}
+            error={formError}
+            onChange={(event) => setMajorName(event.target.value)}
+            placeholder="مثال: هندسة البرمجيات"
+            maxLength="200"
+            disabled={isSaving}
+          />
+        </form>
+      </Dialog>
     </section>
   );
 }

@@ -1,4 +1,12 @@
 import { useEffect, useState } from 'react';
+import Badge from '@student/Components/Badge';
+import Button from '@student/Components/Button';
+import Card from '@student/Components/Card';
+import ConfirmDialog from '@student/Components/ConfirmDialog';
+import Heading from '@student/Components/Heading';
+import LoadingIndicator from '@student/Components/LoadingIndicator';
+import Text from '@student/Components/Text';
+import { useToast } from '@student/Components/ToastContext';
 
 import {
   downloadAdminFile,
@@ -28,6 +36,7 @@ function getStatusLabel(status) {
 }
 
 export default function FileReviewPage() {
+  const { notify } = useToast();
   const [files, setFiles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -39,7 +48,6 @@ export default function FileReviewPage() {
   const [reviewStatus, setReviewStatus] = useState('');
   const [isReviewing, setIsReviewing] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
 
   useEffect(() => {
     async function loadPendingFiles() {
@@ -128,11 +136,13 @@ export default function FileReviewPage() {
         currentFiles.filter((file) => file.fileId !== selectedFile.fileId),
       );
 
-      setToastMessage(
+      notify({
+        type: 'info',
+        message:
         reviewStatus === 'APPROVED'
           ? `تم اعتماد «${selectedFile.fileName}».`
           : `تم رفض «${selectedFile.fileName}».`,
-      );
+      });
 
       setReviewStatus('');
       setSelectedFile(null);
@@ -150,42 +160,42 @@ export default function FileReviewPage() {
           <header className="file-review-page__header">
             <div>
               <div className="file-review-page__title-row">
-                <h1>الملفات بانتظار المراجعة</h1>
+                <Heading level={1}>الملفات بانتظار المراجعة</Heading>
                 {!isLoading && (
-                  <span className="file-review-page__count">
+                  <Badge variant="soft" className="file-review-page__count">
                     {files.length} ملف
-                  </span>
+                  </Badge>
                 )}
               </div>
 
-              <p>
+              <Text tone="muted">
                 ملفات رفعها الطلاب، ولن تظهر في صفحات المقررات قبل اعتمادها.
                 الأقدم أولًا.
-              </p>
+              </Text>
             </div>
           </header>
 
           {isLoading && (
-            <p className="file-review-page__status">
-              جارٍ تحميل الملفات بانتظار المراجعة...
-            </p>
+            <Card className="file-review-page__status">
+              <LoadingIndicator label="جارٍ تحميل الملفات بانتظار المراجعة..." />
+            </Card>
           )}
 
-          {error && <p className="file-review-page__error">{error}</p>}
+          {error && <Text className="file-review-page__error">{error}</Text>}
 
           {!isLoading && !error && files.length === 0 && (
-            <section className="file-review-empty">
+            <Card className="file-review-empty">
               <div className="file-review-empty__icon">✓</div>
-              <h2>لا توجد ملفات بانتظار المراجعة</h2>
-              <p>
+              <Heading level={2}>لا توجد ملفات بانتظار المراجعة</Heading>
+              <Text tone="muted">
                 راجعت جميع الملفات. ستظهر هنا الملفات الجديدة فور رفعها من
                 الطلاب.
-              </p>
-            </section>
+              </Text>
+            </Card>
           )}
 
           {!isLoading && !error && files.length > 0 && (
-            <section className="file-review-list-card">
+            <Card className="file-review-list-card">
               <ul className="file-review-list">
                 {files.map((file) => (
                   <li key={file.fileId} className="file-review-row">
@@ -207,21 +217,25 @@ export default function FileReviewPage() {
                       </div>
                     </div>
 
-                    <span className="file-review-row__status">
+                    <Badge
+                      variant="soft"
+                      className="file-review-row__status"
+                    >
                       {getStatusLabel(file.status)}
-                    </span>
+                    </Badge>
 
-                    <button
-                      type="button"
+                    <Button
                       className="file-review-button file-review-button--secondary"
+                      variant="secondary"
+                      size="sm"
                       onClick={() => openReviewPanel(file.fileId)}
                     >
                       مراجعة
-                    </button>
+                    </Button>
                   </li>
                 ))}
               </ul>
-            </section>
+            </Card>
           )}
         </section>
 
@@ -240,13 +254,13 @@ export default function FileReviewPage() {
         >
           <header className="file-review-panel__header">
             <div>
-              <h2>مراجعة ملف</h2>
+              <Heading level={2}>مراجعة ملف</Heading>
               {selectedFile?.course && (
-                <p>
+                <Text tone="muted">
                   <span dir="ltr">{selectedFile.course.courseCode}</span>
                   {' · '}
                   {selectedFile.course.courseName}
-                </p>
+                </Text>
               )}
             </div>
 
@@ -263,13 +277,11 @@ export default function FileReviewPage() {
 
           <div className="file-review-panel__content">
             {isDetailLoading && (
-              <p className="file-review-page__status">
-                جارٍ تحميل بيانات الملف...
-              </p>
+              <LoadingIndicator label="جارٍ تحميل بيانات الملف..." />
             )}
 
             {panelError && (
-              <p className="file-review-page__error">{panelError}</p>
+              <Text className="file-review-page__error">{panelError}</Text>
             )}
 
             {selectedFile && (
@@ -278,15 +290,15 @@ export default function FileReviewPage() {
                   <div className="review-file-heading__type">PDF</div>
 
                   <div>
-                    <h3>{selectedFile.fileName}</h3>
-                    <span className="file-review-row__status">
+                    <Heading level={3}>{selectedFile.fileName}</Heading>
+                    <Badge variant="soft" className="file-review-row__status">
                       {getStatusLabel(selectedFile.status)}
-                    </span>
+                    </Badge>
                   </div>
                 </section>
 
                 <section className="review-file-section">
-                  <h3>بيانات الملف</h3>
+                  <Heading level={3}>بيانات الملف</Heading>
 
                   <dl className="review-file-details">
                     <div>
@@ -318,17 +330,19 @@ export default function FileReviewPage() {
                 </section>
 
                 <section className="review-file-section">
-                  <h3>مراجعة المحتوى</h3>
-                  <p>نزّل الملف وتحقق من محتواه قبل اتخاذ القرار.</p>
+                  <Heading level={3}>مراجعة المحتوى</Heading>
+                  <Text tone="muted">نزّل الملف وتحقق من محتواه قبل اتخاذ القرار.</Text>
 
-                  <button
-                    type="button"
+                  <Button
                     className="file-review-button file-review-button--secondary"
+                    variant="secondary"
+                    size="sm"
                     onClick={handleDownload}
                     disabled={isDownloading}
+                    loading={isDownloading}
                   >
                     {isDownloading ? 'جارٍ تجهيز التنزيل...' : 'تنزيل الملف'}
-                  </button>
+                  </Button>
                 </section>
 
                 <p className="review-file-note">
@@ -341,87 +355,44 @@ export default function FileReviewPage() {
 
           {selectedFile?.status === 'PENDING' && (
             <footer className="file-review-panel__footer">
-              <button
-                type="button"
+              <Button
                 className="file-review-button file-review-button--reject"
+                variant="danger"
+                size="md"
                 onClick={() => setReviewStatus('REJECTED')}
                 disabled={isReviewing}
               >
                 رفض
-              </button>
+              </Button>
 
-              <button
-                type="button"
+              <Button
                 className="file-review-button file-review-button--approve"
+                size="md"
                 onClick={() => setReviewStatus('APPROVED')}
                 disabled={isReviewing}
               >
                 اعتماد
-              </button>
+              </Button>
             </footer>
           )}
         </aside>
 
-        {reviewStatus && selectedFile && (
-          <div className="file-review-confirmation-overlay">
-            <section
-              className="file-review-confirmation"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="review-confirmation-title"
-            >
-              <h2 id="review-confirmation-title">
-                {reviewStatus === 'APPROVED'
-                  ? 'اعتماد هذا الملف؟'
-                  : 'رفض هذا الملف؟'}
-              </h2>
-
-              <p>
-                {reviewStatus === 'APPROVED'
-                  ? `سيظهر «${selectedFile.fileName}» لجميع الطلاب المسجلين في المقرر.`
-                  : `لن يظهر «${selectedFile.fileName}» للطلاب وسيزال من قائمة المراجعة.`}
-              </p>
-
-              <div className="file-review-confirmation__actions">
-                <button
-                  type="button"
-                  className="file-review-button file-review-button--secondary"
-                  onClick={() => setReviewStatus('')}
-                  disabled={isReviewing}
-                >
-                  تراجع
-                </button>
-
-                <button
-                  type="button"
-                  className={
-                    reviewStatus === 'APPROVED'
-                      ? 'file-review-button file-review-button--approve'
-                      : 'file-review-button file-review-button--reject'
-                  }
-                  onClick={confirmReview}
-                  disabled={isReviewing}
-                >
-                  {isReviewing
-                    ? 'جارٍ الحفظ...'
-                    : reviewStatus === 'APPROVED'
-                      ? 'اعتماد الملف'
-                      : 'رفض الملف'}
-                </button>
-              </div>
-            </section>
-          </div>
-        )}
-
-        {toastMessage && (
-          <button
-            type="button"
-            className="file-review-toast"
-            onClick={() => setToastMessage('')}
-          >
-            {toastMessage}
-          </button>
-        )}
+        <ConfirmDialog
+          open={Boolean(reviewStatus && selectedFile)}
+          onClose={() => setReviewStatus('')}
+          onConfirm={confirmReview}
+          title={reviewStatus === 'APPROVED' ? 'اعتماد هذا الملف؟' : 'رفض هذا الملف؟'}
+          message={
+            reviewStatus === 'APPROVED'
+              ? `سيظهر «${selectedFile?.fileName || ''}» لجميع الطلاب المسجلين في المقرر.`
+              : `لن يظهر «${selectedFile?.fileName || ''}» للطلاب وسيزال من قائمة المراجعة.`
+          }
+          confirmLabel={reviewStatus === 'APPROVED' ? 'اعتماد الملف' : 'رفض الملف'}
+          cancelLabel="تراجع"
+          loadingLabel="جارٍ الحفظ..."
+          destructive={reviewStatus === 'REJECTED'}
+          loading={isReviewing}
+        />
       </main>
   );
 }
