@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import Button from "../../../Components/Button";
 import ChatRoomList from "./ChatRoomList";
 import "./ChatWorkspace.css";
@@ -53,9 +54,10 @@ export default function ChatWorkspace({
               variant="secondary"
               size="sm"
               className="chat-workspace-back-button"
+              aria-label="الرجوع إلى المحادثات"
               onClick={() => setIsMobileChatOpen(false)}
             >
-              <span aria-hidden="true">→</span> رجوع
+              <ArrowRight size={20} aria-hidden="true" />
             </Button>
 
             <h2>{activeRoom?.name || "المحادثات"}</h2>

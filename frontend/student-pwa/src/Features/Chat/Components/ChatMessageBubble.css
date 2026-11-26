@@ -64,40 +64,43 @@
 
 /* Message options */
 .chat-message-actions {
-  display: flex;
-  align-items: center;
-  align-self: center;
-  flex-shrink: 0;
-  margin-left: 8px;
+  /* Keep the trigger and menu grouped for click handling without taking up row space. */
+  display: contents;
+}
+
+.chat-message-actions + .chat-bubble .chat-sender {
+  /* Reserve the top corner on reportable bubbles and keep the body below the hit area. */
+  padding-inline-end: 40px;
+  min-block-size: 32px;
 }
 
 .chat-message-options-button {
+  position: absolute;
+  inset-block-start: 4px;
+  inset-inline-end: 4px;
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  inline-size: 44px;
+  block-size: 44px;
   padding: 0;
-  background: var(--color-white);
+  background: transparent;
   color: var(--color-primary);
-  border: 1px solid var(--color-neutral-200);
-  border-radius: 16px;
-  font: inherit;
-  font-size: 22px;
+  border: 0;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
 }
 
 .chat-message-options-button:hover {
-  background: var(--color-primary-subtle);
-  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
 }
 
 /* Message dropdown */
 .chat-message-menu {
   position: absolute;
-  /* The 36px options button is centered on the row; keep an 8px gap below it. */
-  top: calc(50% + 18px + 8px);
-  inset-inline-start: 0;
+  /* Open below the trigger and keep the menu inside the left edge of the RTL row. */
+  inset-block-start: 54px;
+  inset-inline-end: 0;
   z-index: 30;
   min-width: min(215px, 100%);
   max-width: 100%;
@@ -106,12 +109,6 @@
   border: 1px solid var(--color-neutral-200);
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(23, 32, 51, 0.12);
-}
-
-/* Anchor incoming menus to the left edge of the full row, keeping them inside it. */
-.chat-message.incoming .chat-message-menu {
-  inset-inline-start: auto;
-  inset-inline-end: 0;
 }
 
 /* Destructive report option - Figma */

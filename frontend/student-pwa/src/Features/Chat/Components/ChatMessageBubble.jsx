@@ -1,5 +1,6 @@
 
 import { useEffect, useRef, useState } from "react";
+import { Ellipsis } from "lucide-react";
 
 // Import the report dialog component
 import ReportMessageDialog from "./ReportMessageDialog";
@@ -67,7 +68,7 @@ export default function ChatMessageBubble({ message, isOutgoing }) {
               aria-expanded={isMenuOpen}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              ⋯
+              <Ellipsis size={18} aria-hidden="true" />
             </button>
 
             {/* Render the dropdown only when the menu is open */}
