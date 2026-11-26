@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import Button from "../../Components/Button";
 import LoadingIndicator from "../../Components/LoadingIndicator";
 import { getEnrolledCourses } from "../Courses/coursesApi";
@@ -109,8 +110,8 @@ export default function CourseFilesPage() {
   return (
     <div className="course-files-page" dir="rtl">
       <header className="course-files-header">
-        <Button variant="secondary" size="sm" onClick={handleBack}>
-          <span aria-hidden="true">→</span> رجوع
+        <Button variant="secondary" size="sm" className="course-files-back" onClick={handleBack} aria-label="رجوع">
+          <ArrowRight size={20} aria-hidden="true" />
         </Button>
         <h1>{courseName || "ملفات المقرر"}</h1>
       </header>
@@ -118,10 +119,7 @@ export default function CourseFilesPage() {
       <main className="course-files-content">
         <div className="course-files-heading">
           <div>
-            <div className="course-files-title">
-              <h2>ملفات المقرر</h2>
-              {!loading && !error && <span className="course-files-count">{files.length} ملفات</span>}
-            </div>
+            <h2>ملفات المقرر</h2>
             <p>مساحة لمشاركة الملفات والمواد الدراسية الخاصة بالمقرر</p>
           </div>
           <Button size="md" className="course-files-upload" onClick={() => setUploadCourseId(courseId)}>
@@ -136,10 +134,7 @@ export default function CourseFilesPage() {
         {error && <p role="alert">{error}</p>}
 
         {!loading && !error && files.length === 0 && (
-          <div className="course-files-empty">
-            <h3>لا توجد ملفات بعد</h3>
-            <p>لا توجد ملفات معتمدة لهذا المقرر حاليًا</p>
-          </div>
+          <p className="course-files-empty">لا توجد ملفات معتمدة لهذا المقرر حاليًا</p>
         )}
 
         {!loading && !error && files.length > 0 && (

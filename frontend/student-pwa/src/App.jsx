@@ -23,6 +23,10 @@ import ProfilePage from "./Features/Students/ProfilePage";
 import CoursesPage from './Features/Courses/CoursesPage';
 import CourseFilesPage from "./Features/Materials/CourseFilesPage";
 
+import LandingPage from "./Features/Landing/LandingPage";
+
+
+
 // Redirect unauthenticated users to login.(home page is protected)
 function ProtectedRoute({ children }) {
   const token = useSyncExternalStore(subscribeToAuthChanges, getAccessToken);
@@ -84,8 +88,15 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Start at Home; its existing guard redirects unauthenticated students. */}
-        <Route path="/" element={<Navigate to="/home" replace />} />
+        {/* Show the landing page to guests and redirect signed-in students to Home. */}
+        <Route
+          path="/"
+          element={
+            <GuestRoute>
+              <LandingPage />
+            </GuestRoute>
+          }
+        />
         {/* Check for a saved session before mounting the login form. */}
         <Route
           path="/login"
@@ -97,7 +108,7 @@ export default function App() {
         />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/verify-email" element={<OtpVerification />} />
-        {/* Use the existing Courses page as the protected student homepage. */}
+        { }
         <Route
           path="/home"
           element={

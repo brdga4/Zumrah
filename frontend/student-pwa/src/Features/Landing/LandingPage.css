@@ -1,0 +1,381 @@
+/* Page foundation and shared spacing */
+.landing-page {
+  --landing-gutter: clamp(16px, 5vw, 56px);
+  --landing-section-space: clamp(52px, 7vw, 96px);
+  background: var(--color-background);
+  color: var(--color-neutral-900);
+  font-family: var(--sans);
+  line-height: 1.7;
+}
+
+.landing-page *,
+.landing-page *::before,
+.landing-page *::after {
+  box-sizing: border-box;
+}
+
+.landing-page .landing-container {
+  width: min(100%, 1312px);
+  padding-inline: var(--landing-gutter);
+  margin-inline: auto;
+}
+
+/* Header and account links */
+.landing-page .landing-header,
+.landing-page .landing-footer {
+  background: var(--color-white);
+}
+
+.landing-page .landing-header {
+  border-block-end: 1px solid var(--color-neutral-200);
+}
+
+.landing-page .landing-header-content {
+  /* RTL places the wordmark on the right and account actions on the left. */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 72px;
+  gap: 16px;
+  padding-block: 12px;
+}
+
+.landing-page .landing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.landing-page .landing-auth-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-neutral-900);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.landing-page .landing-auth-link:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.landing-page .landing-header-actions {
+  justify-content: end;
+}
+
+/* Use the shared Button variants on links and style their content here. */
+.landing-page .landing-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+}
+
+.landing-page .landing-action svg {
+  flex-shrink: 0;
+}
+
+.landing-page a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* Reveal the skip link when keyboard focus reaches it. */
+.landing-page .landing-skip-link {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 8px;
+  inset-inline-start: 8px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: var(--color-white);
+  color: var(--color-primary-dark);
+}
+
+.landing-page .landing-skip-link:not(:focus) {
+  clip-path: inset(50%);
+}
+
+/* Hero copy and preview share the available width on desktop. */
+.landing-page .landing-hero {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  padding-block: var(--landing-section-space);
+  gap: clamp(32px, 4vw, 56px);
+}
+
+.landing-page .landing-hero-copy {
+  display: grid;
+  gap: 24px;
+  justify-items: start;
+}
+
+.landing-page .landing-title {
+  max-width: none;
+  margin: 0;
+  font-size: clamp(30px, 3.8vw, 56px);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.32;
+}
+
+/* Each phrase starts its own line and can wrap on a narrow screen. */
+.landing-page .landing-title span {
+  display: block;
+}
+
+.landing-page .landing-title span + span {
+  color: var(--color-primary);
+}
+
+.landing-page .landing-hero-description {
+  max-width: 48ch;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.9;
+}
+
+/* Portal preview scales the existing welcome panel and course cards. */
+.landing-page .landing-preview {
+  min-width: 0;
+  padding: clamp(12px, 1.6vw, 24px);
+  border: 1px solid var(--color-primary-border);
+  border-radius: 24px;
+  background: var(--color-primary-subtle);
+}
+
+.landing-page .landing-preview-portal {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgb(50 35 105 / 7%);
+}
+
+.landing-page .landing-preview-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 16px 6px;
+  border-inline-end: 1px solid var(--color-neutral-200);
+}
+
+.landing-page .landing-preview-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--color-neutral-600);
+}
+
+.landing-page .landing-preview-icons svg {
+  width: 36px;
+  height: 36px;
+  padding: 9px;
+}
+
+.landing-page .landing-preview-current {
+  border-radius: 10px;
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+
+.landing-page .landing-preview-content {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+  padding: clamp(12px, 1.5vw, 20px);
+  background: var(--color-background);
+}
+
+.landing-page .landing-preview-content .welcome-section {
+  padding: 16px;
+  gap: 12px;
+}
+
+.landing-page .landing-preview-content .welcome-title {
+  font-size: 20px;
+}
+
+.landing-page .landing-preview-content .welcome-meta {
+  font-size: 12px;
+}
+
+.landing-page .landing-preview-heading {
+  font-size: 14px;
+}
+
+.landing-page .landing-preview-courses {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(162px, 100%), 1fr));
+  gap: 10px;
+}
+
+.landing-page .landing-preview-courses .course-card {
+  padding: 12px;
+  gap: 8px;
+}
+
+.landing-page .landing-preview-courses .course-card-title {
+  font-size: 14px;
+}
+
+.landing-page .landing-preview-courses .course-card-primary-actions .zumrah-button {
+  padding-inline: 6px;
+}
+
+/* Center the features heading and let the three cards share a row. */
+.landing-page .landing-features {
+  padding-block: clamp(40px, 5.5vw, 72px);
+  border-block: 1px solid var(--color-neutral-200);
+  background: var(--color-white);
+  scroll-margin-block-start: 16px;
+}
+
+.landing-page .landing-section-title {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.landing-page .landing-features .landing-section-title {
+  text-align: center;
+}
+
+.landing-page .landing-feature-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 24px 0 0;
+  padding: 0;
+  gap: 16px;
+  list-style: none;
+}
+
+.landing-page .landing-feature-card {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  height: 100%;
+  gap: 10px;
+  padding: clamp(18px, 2.5vw, 28px);
+}
+
+.landing-page .landing-feature-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-block-end: 4px;
+  border-radius: 12px;
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+
+.landing-page .landing-feature-title {
+  font-size: 18px;
+}
+
+/* Center the signup invitation on the brand's primary surface. */
+.landing-page .landing-cta {
+  padding-block: var(--landing-section-space);
+}
+
+.landing-page .landing-cta-panel {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: clamp(24px, 5vw, 56px);
+  border-radius: 20px;
+  background: var(--color-primary);
+  text-align: center;
+}
+
+.landing-page .landing-cta-panel .landing-section-title {
+  color: var(--color-white);
+}
+
+.landing-page .landing-cta-description {
+  color: var(--color-primary-subtle);
+}
+
+.landing-page .landing-cta-panel .landing-action:focus-visible {
+  /* The white focus ring stays visible against the purple panel. */
+  outline-color: var(--color-white);
+}
+
+/* Keep the footer compact with just the wordmark and tagline. */
+.landing-page .landing-footer {
+  border-block-start: 1px solid var(--color-neutral-200);
+}
+
+.landing-page .landing-footer-brand {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  padding-block: 16px 20px;
+}
+
+/* Tablet stacks the hero so the portal preview keeps its readable width. */
+@media (max-width: 1024px) {
+  .landing-page .landing-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-page .landing-preview {
+    width: min(100%, 720px);
+  }
+}
+
+/* Mobile uses one feature card per row and a smaller portal preview. */
+@media (max-width: 640px) {
+  .landing-page .landing-header-content {
+    gap: 12px;
+    padding-block: 8px;
+  }
+
+  .landing-page .landing-header-actions {
+    gap: 8px;
+  }
+
+  .landing-page .landing-hero-copy {
+    gap: 16px;
+  }
+
+  .landing-page .landing-hero-copy .landing-action {
+    flex: 1 1 auto;
+    min-height: 52px;
+    padding: 12px 16px;
+  }
+
+  .landing-page .landing-preview-portal,
+  .landing-page .landing-feature-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .landing-page .landing-preview-rail {
+    /* Match the portal's mobile navigation by moving the rail above its content. */
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 12px;
+    border-inline-end: none;
+    border-block-end: 1px solid var(--color-neutral-200);
+  }
+
+  .landing-page .landing-preview-icons {
+    flex-direction: row;
+  }
+
+  .landing-page .landing-preview-courses > :not(:first-child) {
+    /* One sample card shows the same controls with less vertical scrolling. */
+    display: none;
+  }
+}
