@@ -37,40 +37,20 @@
 }
 
 .major-page__count {
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: #f0ecff;
-  color: #6847e8;
-  font-weight: 700;
   white-space: nowrap;
 }
 
 .major-page__add-button,
 .major-group__add-button,
-.major-row__edit-button,
-.major-modal__cancel,
-.major-modal__save {
+.major-row__edit-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border-radius: 14px;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
 }
 
 .major-page__add-button {
   flex-shrink: 0;
-  padding: 16px 24px;
-  border: 0;
-  background: #6847e8;
-  color: #ffffff;
-}
-
-.major-page__add-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
 }
 
 .major-page__add-button svg,
@@ -92,32 +72,8 @@
   margin-bottom: 28px;
 }
 
-.major-page__toolbar label,
-.major-modal__field span {
-  display: block;
-  margin-bottom: 8px;
-  color: #504a5d;
-  font-weight: 700;
-}
-
-.major-page__toolbar select,
-.major-modal__field select,
-.major-modal__field input {
+.major-page__toolbar select {
   min-width: 250px;
-  padding: 13px 15px;
-  border: 1px solid #ddd7e9;
-  border-radius: 12px;
-  outline: none;
-  color: #211c34;
-  background: #ffffff;
-  font: inherit;
-}
-
-.major-page__toolbar select:focus,
-.major-modal__field select:focus,
-.major-modal__field input:focus {
-  border-color: #6847e8;
-  box-shadow: 0 0 0 3px rgb(104 71 232 / 14%);
 }
 
 .major-groups {
@@ -128,9 +84,6 @@
 
 .major-group {
   padding: 28px;
-  border: 1px solid #e8e4f0;
-  border-radius: 24px;
-  background: #ffffff;
 }
 
 .major-group__header {
@@ -175,10 +128,6 @@
 
 .major-group__add-button {
   flex-shrink: 0;
-  padding: 10px 14px;
-  border: 1px solid #e2ddec;
-  color: #6847e8;
-  background: #ffffff;
 }
 
 .major-list {
@@ -224,10 +173,6 @@
 }
 
 .major-row__edit-button {
-  padding: 10px 14px;
-  border: 1px solid #e2ddec;
-  color: #6847e8;
-  background: #ffffff;
 }
 
 .major-group__empty {
@@ -243,9 +188,6 @@
 .major-page__empty,
 .major-page__error {
   padding: 42px 24px;
-  border: 1px solid #e8e4f0;
-  border-radius: 24px;
-  background: #ffffff;
   text-align: center;
 }
 
@@ -260,118 +202,20 @@
   margin-bottom: 8px;
 }
 
-.major-page__empty p {
+.major-page__empty .text {
   color: #716b80;
 }
 
 .major-page__error {
   border-color: #f2c8cf;
+}
+
+.major-page__error .text {
   color: #b62f45;
 }
 
-.major-page__error button {
+.major-page__error .zumrah-button {
   margin-top: 14px;
-  padding: 10px 16px;
-  border: 1px solid currentColor;
-  border-radius: 10px;
-  color: inherit;
-  background: transparent;
-  font: inherit;
-  cursor: pointer;
-}
-
-.major-modal-backdrop {
-  position: fixed;
-  z-index: 30;
-  inset: 0;
-  display: grid;
-  padding: 24px;
-  place-items: center;
-  background: rgb(33 28 52 / 45%);
-}
-
-.major-modal {
-  width: min(100%, 520px);
-  padding: 28px;
-  border-radius: 24px;
-  background: #ffffff;
-  box-shadow: 0 24px 64px rgb(33 28 52 / 26%);
-}
-
-.major-modal__header {
-  display: flex;
-  align-items: start;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 24px;
-}
-
-.major-modal__header h2 {
-  font-size: 26px;
-}
-
-.major-modal__header p {
-  margin-top: 7px;
-  color: #716b80;
-  line-height: 1.7;
-}
-
-.major-modal__header button {
-  width: 36px;
-  height: 36px;
-  border: 0;
-  border-radius: 50%;
-  color: #716b80;
-  background: #f4f1f8;
-  font-size: 28px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.major-modal__field {
-  display: block;
-  margin-bottom: 18px;
-}
-
-.major-modal__field select,
-.major-modal__field input {
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.major-modal__error {
-  margin: 0 0 16px;
-  color: #c63c52;
-  font-weight: 700;
-}
-
-.major-modal__footer {
-  display: flex;
-  justify-content: flex-start;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.major-modal__cancel,
-.major-modal__save {
-  padding: 13px 20px;
-}
-
-.major-modal__cancel {
-  border: 1px solid #e2ddec;
-  color: #625b6f;
-  background: #ffffff;
-}
-
-.major-modal__save {
-  border: 0;
-  color: #ffffff;
-  background: #6847e8;
-}
-
-.major-modal__save:disabled {
-  cursor: wait;
-  opacity: 0.65;
 }
 
 @media (max-width: 850px) {
@@ -399,11 +243,8 @@
   }
 
   .major-page__toolbar,
+  .major-page__toolbar .zumrah-field,
   .major-page__toolbar select {
     width: 100%;
-  }
-
-  .major-modal {
-    padding: 22px;
   }
 }

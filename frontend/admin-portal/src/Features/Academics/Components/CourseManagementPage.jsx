@@ -1,4 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Badge from '@student/Components/Badge';
+import Button from '@student/Components/Button';
+import Card from '@student/Components/Card';
+import Dialog from '@student/Components/Dialog';
+import Heading from '@student/Components/Heading';
+import InputField from '@student/Components/InputField';
+import LoadingIndicator from '@student/Components/LoadingIndicator';
+import Text from '@student/Components/Text';
 import {
   createCourse,
   getCourses,
@@ -18,6 +26,7 @@ export default function CourseManagementPage() {
   const [courseName, setCourseName] = useState('');
   const [formError, setFormError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const courseCodeRef = useRef(null);
 
   async function loadCourses() {
     try {
@@ -171,35 +180,33 @@ export default function CourseManagementPage() {
       <header className="course-page__header">
         <div>
           <div className="course-page__title-row">
-            <h1>جميع المقررات</h1>
+            <Heading level={1}>جميع المقررات</Heading>
 
-            <span className="course-page__count">
+            <Badge variant="soft" className="course-page__count">
               {courses.length} {courses.length === 1 ? 'مقرر' : 'مقررات'}
-            </span>
+            </Badge>
           </div>
 
-          <p>
+          <Text tone="muted">
             كتالوج المقررات في زمرة. أسند المقرر إلى تخصص ليظهر لطلابه.
-          </p>
+          </Text>
         </div>
 
-        <button
+        <Button
           className="course-page__add-button"
-          type="button"
           onClick={openCreateModal}
           disabled={isLoading}
         >
           <PlusIcon />
           إضافة مقرر
-        </button>
+        </Button>
       </header>
 
       {!isLoading && !error && courses.length > 0 && (
         <div className="course-page__toolbar">
-          <label htmlFor="course-search">البحث في المقررات</label>
-
-          <input
+          <InputField
             id="course-search"
+            label="البحث في المقررات"
             type="search"
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
@@ -207,45 +214,47 @@ export default function CourseManagementPage() {
           />
 
           {searchQuery.trim() && (
-            <span>
+            <Text tone="muted" className="course-page__results-count">
               {visibleCourses.length}{' '}
               {visibleCourses.length === 1 ? 'نتيجة' : 'نتائج'}
-            </span>
+            </Text>
           )}
         </div>
       )}
 
       {isLoading && (
-        <p className="course-page__message">جارٍ تحميل المقررات...</p>
+        <Card className="course-page__message">
+          <LoadingIndicator label="جارٍ تحميل المقررات..." />
+        </Card>
       )}
 
       {!isLoading && error && (
-        <div className="course-page__error">
-          <p>{error}</p>
+        <Card className="course-page__error">
+          <Text>{error}</Text>
 
-          <button type="button" onClick={reloadCourses}>
+          <Button variant="secondary" size="sm" onClick={reloadCourses}>
             إعادة المحاولة
-          </button>
-        </div>
+          </Button>
+        </Card>
       )}
 
       {!isLoading && !error && courses.length === 0 && (
-        <div className="course-page__empty">
+        <Card className="course-page__empty">
           <CourseIcon />
-          <h2>لا توجد مقررات بعد</h2>
-          <p>أضف أول مقرر إلى الكتالوج، ثم أسنده إلى التخصصات المناسبة.</p>
+          <Heading level={2}>لا توجد مقررات بعد</Heading>
+          <Text tone="muted">أضف أول مقرر إلى الكتالوج، ثم أسنده إلى التخصصات المناسبة.</Text>
 
-          <button type="button" onClick={openCreateModal}>
+          <Button size="sm" onClick={openCreateModal}>
             <PlusIcon />
             إضافة مقرر
-          </button>
-        </div>
+          </Button>
+        </Card>
       )}
 
       {!isLoading && !error && courses.length > 0 && (
         <>
           {visibleCourses.length > 0 ? (
-            <div className="course-table-wrapper">
+            <Card className="course-table-wrapper">
               <table className="course-table">
                 <thead>
                   <tr>
@@ -259,117 +268,95 @@ export default function CourseManagementPage() {
                   {visibleCourses.map((course) => (
                     <tr key={course.courseId}>
                       <td>
-                        <span className="course-code" dir="ltr">
+                        <Badge variant="soft" className="course-code" dir="ltr">
                           {course.courseCode}
-                        </span>
+                        </Badge>
                       </td>
 
                       <td>{course.courseName}</td>
 
                       <td>
-                        <button
+                        <Button
                           className="course-table__edit-button"
-                          type="button"
+                          variant="secondary"
+                          size="sm"
                           onClick={() => openEditModal(course)}
                         >
                           تعديل
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            </div>
+            </Card>
           ) : (
-            <div className="course-page__empty">
+            <Card className="course-page__empty">
               <SearchIcon />
-              <h2>لا توجد مقررات مطابقة</h2>
-              <p>
+              <Heading level={2}>لا توجد مقررات مطابقة</Heading>
+              <Text tone="muted">
                 لم نعثر على مقرر يطابق “{searchQuery.trim()}”. جرّب رمزًا أو
                 اسمًا آخر.
-              </p>
+              </Text>
 
-              <button type="button" onClick={() => setSearchQuery('')}>
+              <Button size="sm" onClick={() => setSearchQuery('')}>
                 مسح البحث
-              </button>
-            </div>
+              </Button>
+            </Card>
           )}
         </>
       )}
 
-      {isModalOpen && (
-        <div className="course-modal-backdrop" onMouseDown={closeModal}>
-          <form
-            className="course-modal"
-            onSubmit={handleSubmit}
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <header className="course-modal__header">
-              <div>
-                <h2>{editingCourse ? 'تعديل المقرر' : 'إضافة مقرر'}</h2>
-
-                <p>
-                  {editingCourse
-                    ? 'عدّل رمز المقرر أو اسمه، ثم احفظ التغييرات.'
-                    : 'بعد الإضافة، تستطيع لاحقًا إسناد المقرر إلى تخصص مناسب.'}
-                </p>
-              </div>
-
-              <button type="button" onClick={closeModal} aria-label="إغلاق">
-                ×
-              </button>
-            </header>
-
-            <label className="course-modal__field">
-              <span>رمز المقرر</span>
-
-              <input
-                dir="ltr"
-                value={courseCode}
-                onChange={(event) => setCourseCode(event.target.value)}
-                placeholder="CSC 111"
-                maxLength="30"
-                autoFocus
-              />
-            </label>
-
-            <label className="course-modal__field">
-              <span>اسم المقرر</span>
-
-              <input
-                value={courseName}
-                onChange={(event) => setCourseName(event.target.value)}
-                placeholder="مثال: هياكل البيانات"
-                maxLength="200"
-              />
-            </label>
-
-            {formError && <p className="course-modal__error">{formError}</p>}
-
-            <footer className="course-modal__footer">
-              <button
-                className="course-modal__cancel"
-                type="button"
-                onClick={closeModal}
-              >
-                إلغاء
-              </button>
-
-              <button
-                className="course-modal__save"
-                type="submit"
-                disabled={isSaving}
-              >
-                {isSaving
-                  ? 'جارٍ الحفظ...'
-                  : editingCourse
-                    ? 'حفظ التعديلات'
-                    : 'إضافة المقرر'}
-              </button>
-            </footer>
-          </form>
-        </div>
-      )}
+      <Dialog
+        open={isModalOpen}
+        onClose={closeModal}
+        title={editingCourse ? 'تعديل المقرر' : 'إضافة مقرر'}
+        description={
+          editingCourse
+            ? 'عدّل رمز المقرر أو اسمه، ثم احفظ التغييرات.'
+            : 'بعد الإضافة، تستطيع لاحقًا إسناد المقرر إلى تخصص مناسب.'
+        }
+        busy={isSaving}
+        initialFocusRef={courseCodeRef}
+        footer={
+          <>
+            <Button variant="secondary" size="md" onClick={closeModal} disabled={isSaving}>
+              إلغاء
+            </Button>
+            <Button type="submit" form="course-dialog-form" size="md" loading={isSaving}>
+              {isSaving
+                ? 'جارٍ الحفظ...'
+                : editingCourse
+                  ? 'حفظ التعديلات'
+                  : 'إضافة المقرر'}
+            </Button>
+          </>
+        }
+      >
+        <form id="course-dialog-form" onSubmit={handleSubmit} className="course-dialog-form">
+          <InputField
+            ref={courseCodeRef}
+            id="course-code"
+            label="رمز المقرر"
+            dir="ltr"
+            value={courseCode}
+            onChange={(event) => setCourseCode(event.target.value)}
+            placeholder="CSC 111"
+            maxLength="30"
+            disabled={isSaving}
+          />
+          <InputField
+            id="course-name"
+            label="اسم المقرر"
+            value={courseName}
+            onChange={(event) => setCourseName(event.target.value)}
+            placeholder="مثال: هياكل البيانات"
+            maxLength="200"
+            disabled={isSaving}
+          />
+          {formError && <p className="zumrah-dialog-error" role="alert">{formError}</p>}
+        </form>
+      </Dialog>
     </section>
   );
 }

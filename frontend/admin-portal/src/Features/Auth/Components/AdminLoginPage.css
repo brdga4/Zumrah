@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&display=swap');
-
 /* Prevent Vite default styles from changing the layout */
 body:has(.zumrah-login) {
   margin: 0;
@@ -156,91 +154,24 @@ body:has(.zumrah-login) {
   margin: 0 0 38px;
 }
 
-/* Form fields */
-.zumrah-login .signup-field {
+/* Field spacing is page layout; the fields themselves come from the student component. */
+.zumrah-login .admin-login-fields {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 20px;
   min-width: 0;
-  margin-bottom: 20px;
 }
 
-.zumrah-login .signup-field label {
-  color: var(--ink);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.zumrah-login .signup-field input {
-  height: 49px;
-  width: 100%;
-  min-width: 0;
-  padding: 0 14px;
-  border: 1px solid var(--line);
-  border-radius: 11px;
-  color: var(--ink);
-  background: #fff;
-  outline: none;
-  font: inherit;
-  font-size: 12px;
-}
-
-.zumrah-login .signup-field input::placeholder {
-  color: #9B9DAA;
-}
-
-.zumrah-login .signup-field input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px #6847E817;
-}
-
-.zumrah-login .field-error {
-  display: block;
-  color: #C52C45;
-  font-size: 11px;
-  line-height: 1.8;
-  margin-top: 1px;
-}
-
-.zumrah-login .field-error:empty {
-  display: none;
-}
-
-.zumrah-login .signup-field input[aria-invalid='true'] {
-  border-color: #C52C45;
-  box-shadow: 0 0 0 2px #C52C4518;
-}
-
-/* Shared Button component styling */
+/* The button itself comes from the student component. */
 .zumrah-login .login-card .zumrah-button {
-  width: 100%;
-  min-height: 58px;
   margin-top: 10px;
-  padding: 16px 24px;
-  background: var(--primary);
-  color: #fff;
-  border: 1px solid var(--primary);
-  border-radius: 12px;
+}
+
+.admin-login-submit-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: inherit;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0 10px 24px #6847e820;
-  transition: background .15s, transform .15s, box-shadow .15s;
-}
-
-.zumrah-login .login-card .zumrah-button:hover {
-  background: var(--primary-dark);
-  box-shadow: 0 12px 25px #6847e82e;
-  transform: translateY(-1px);
-}
-
-.zumrah-login .login-card .zumrah-button:focus-visible {
-  outline: 3px solid #B9ACFF;
-  outline-offset: 3px;
+  gap: 10px;
 }
 
 .zumrah-login .message {

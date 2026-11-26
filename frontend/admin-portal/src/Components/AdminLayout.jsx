@@ -1,17 +1,60 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import './AdminLayout.css';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import {
+  BookOpen,
+  Building2,
+  FileCheck2,
+  Flag,
+  LayoutDashboard,
+  Link2,
+} from 'lucide-react';
+import PlatformLayout from '@student/Components/Platform/PlatformLayout';
+
+const adminItems = [
+  {
+    id: 'dashboard',
+    label: 'لوحة التحكم',
+    href: '/dashboard',
+    icon: LayoutDashboard,
+  },
+  {
+    id: 'colleges',
+    label: 'الكليات',
+    href: '/academics/colleges',
+    icon: Building2,
+  },
+  {
+    id: 'courses',
+    label: 'المقررات',
+    href: '/academics/courses',
+    icon: BookOpen,
+  },
+  {
+    id: 'course-assignments',
+    label: 'إسناد المقررات',
+    href: '/academics/course-assignments',
+    icon: Link2,
+  },
+  {
+    id: 'files',
+    label: 'مراجعة الملفات',
+    href: '/moderation/files',
+    icon: FileCheck2,
+  },
+  {
+    id: 'reports',
+    label: 'بلاغات الرسائل',
+    href: '/moderation/reports',
+    icon: Flag,
+  },
+];
 
 export default function AdminLayout() {
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
-  const admin = getStoredAdmin();
-  const adminName = admin?.username || 'المسؤول';
-
-  function closeMenu() {
-    setIsMenuOpen(false);
-  }
+  const activeItem =
+    adminItems.find((item) => item.href === location.pathname)?.id ||
+    'dashboard';
 
   function handleLogout() {
     localStorage.removeItem('accessToken');
@@ -20,155 +63,17 @@ export default function AdminLayout() {
     navigate('/login', { replace: true });
   }
 
-  function getNavigationClass({ isActive }) {
-    return `navigation-item${isActive ? ' navigation-item--active' : ''}`;
-  }
-
   return (
-    <div
-      className={`admin-layout ${isMenuOpen ? 'admin-layout--menu-open' : ''}`}
-      dir="rtl"
+    <PlatformLayout
+      active={activeItem}
+      sidebarProps={{
+        items: adminItems,
+        brandHref: '/dashboard',
+        brandId: 'dashboard',
+        onLogout: handleLogout,
+      }}
     >
-      <header className="admin-header">
-        <div className="admin-brand">
-          <strong>زُمرة</strong>
-          <span>الإدارة</span>
-        </div>
-
-        <button
-          className="menu-button"
-          type="button"
-          onClick={() => setIsMenuOpen((open) => !open)}
-          aria-expanded={isMenuOpen}
-        >
-          {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
-          <span>القائمة</span>
-        </button>
-      </header>
-
-      <aside className="admin-sidebar">
-        <nav className="admin-navigation">
-          <p className="navigation-label">عام</p>
-
-          <NavLink
-            className={getNavigationClass}
-            to="/dashboard"
-            onClick={closeMenu}
-          >
-            لوحة التحكم
-          </NavLink>
-
-          <p className="navigation-label">الإدارة الأكاديمية</p>
-
-          <NavLink
-            className={getNavigationClass}
-            to="/academics/colleges"
-            onClick={closeMenu}
-          >
-            الكليات
-          </NavLink>
-
-          <NavLink
-            className={getNavigationClass}
-            to="/academics/majors"
-            onClick={closeMenu}
-          >
-            التخصصات
-          </NavLink>
-
-          <NavLink
-            className={getNavigationClass}
-            to="/academics/courses"
-            onClick={closeMenu}
-          >
-            المقررات
-          </NavLink>
-
-          <NavLink
-            className={getNavigationClass}
-            to="/academics/course-assignments"
-            onClick={closeMenu}
-          >
-            إسناد المقررات
-          </NavLink>
-
-          <p className="navigation-label">الإشراف على المحتوى</p>
-
-          <NavLink
-            className={getNavigationClass}
-            to="/moderation/files"
-            onClick={closeMenu}
-          >
-            مراجعة الملفات
-          </NavLink>
-
-          <NavLink
-            className={getNavigationClass}
-            to="/moderation/reports"
-            onClick={closeMenu}
-          >
-            بلاغات الرسائل
-          </NavLink>
-        </nav>
-
-        <div className="admin-sidebar__footer">
-          <div className="admin-sidebar__user">
-            <span className="admin-sidebar__avatar">
-              {adminName.charAt(0)}
-            </span>
-
-            <div>
-              <strong>{adminName}</strong>
-              <span>مشرف المنصة</span>
-            </div>
-          </div>
-
-          <button
-            className="logout-button"
-            type="button"
-            onClick={handleLogout}
-          >
-            تسجيل الخروج
-          </button>
-        </div>
-      </aside>
-
-      <main className="admin-content">
-        <Outlet />
-      </main>
-    </div>
+      <Outlet />
+    </PlatformLayout>
   );
 }
-
-function getStoredAdmin() {
-  const savedAdmin = localStorage.getItem('admin');
-
-  if (!savedAdmin) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(savedAdmin);
-  } catch {
-    return null;
-  }
-}
-
-function MenuIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M4 12h16" />
-      <path d="M4 6h16" />
-      <path d="M4 18h16" />
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
-  );
-}

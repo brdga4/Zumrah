@@ -9,40 +9,6 @@
   margin: 0;
 }
 
-.dashboard-welcome {
-  display: flex;
-  gap: 24px;
-  padding: 42px;
-  border: 1px solid #e8e4f0;
-  border-radius: 30px;
-  background: linear-gradient(270deg, #f3f0ff 0%, #ffffff 72%);
-}
-
-.dashboard-welcome__accent {
-  width: 6px;
-  flex-shrink: 0;
-  border-radius: 999px;
-  background: #6847e8;
-}
-
-.dashboard-welcome__eyebrow,
-.module-card__step {
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: 999px;
-  color: #6847e8;
-  background: #f0ecff;
-  font-weight: 700;
-}
-
-.dashboard-welcome p {
-  max-width: 800px;
-  margin-top: 14px;
-  color: #716b80;
-  font-size: 18px;
-  line-height: 1.9;
-}
-
 .dashboard-section {
   margin-top: 72px;
 }
@@ -77,9 +43,6 @@
   min-height: 270px;
   padding: 32px;
   flex-direction: column;
-  border: 1px solid #e8e4f0;
-  border-radius: 22px;
-  background: #ffffff;
 }
 
 .module-card__top {
@@ -115,22 +78,15 @@
   line-height: 1.8;
 }
 
-.module-card button {
+.module-card .zumrah-button {
   display: inline-flex;
   width: fit-content;
   margin-top: auto;
-  padding: 20px 0 0;
   align-items: center;
   gap: 8px;
-  border: 0;
-  color: #6847e8;
-  background: transparent;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
 }
 
-.module-card button svg {
+.module-card .zumrah-button svg {
   width: 20px;
   height: 20px;
   fill: none;
@@ -159,21 +115,9 @@
     grid-template-columns: 1fr;
   }
 
-  .dashboard-welcome {
-    padding: 30px;
-  }
 }
 
 @media (max-width: 550px) {
-  .dashboard-welcome {
-    gap: 16px;
-    padding: 24px;
-  }
-
-  .dashboard-welcome p {
-    font-size: 16px;
-  }
-
   .module-card {
     min-height: 0;
     padding: 24px;
@@ -208,18 +152,6 @@
   background: #ffffff;
 }
 
-.dashboard-page__admin > span {
-  display: grid;
-  width: 48px;
-  height: 48px;
-  place-items: center;
-  border-radius: 50%;
-  color: #6847e8;
-  background: #f0ecff;
-  font-size: 20px;
-  font-weight: 700;
-}
-
 .dashboard-page__admin > div {
   display: flex;
   flex-direction: column;
@@ -233,16 +165,6 @@
 .dashboard-page__admin small {
   color: #716b80;
   font-size: 13px;
-}
-
-.dashboard-welcome h2 {
-  margin-top: 16px;
-  font-size: clamp(34px, 4vw, 52px);
-  line-height: 1.25;
-}
-
-.dashboard-welcome h2 span {
-  color: #6847e8;
 }
 
 @media (max-width: 650px) {
