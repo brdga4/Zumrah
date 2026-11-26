@@ -179,11 +179,12 @@
   }
 
   /* Back button using Zumrah's secondary button style */
-  .chat-workspace-back-button {
-    display: inline-flex;
-    align-items: center;
+  .chat-workspace-header .chat-workspace-back-button {
+    display: grid;
+    place-items: center;
+    inline-size: 44px;
     flex-shrink: 0;
-    gap: 4px;
+    padding: 0;
   }
 
   /* Keep the files button compact */
