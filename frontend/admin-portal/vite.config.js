@@ -15,7 +15,7 @@ export default defineConfig({
       '@student': studentSource,
     },
 
-    dedupe: ['react', 'react-dom', 'react-router-dom'],
+    dedupe: ['react', 'react-dom', 'react-router-dom', 'lucide-react'],
   },
 
   server: {
